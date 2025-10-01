@@ -7394,17 +7394,17 @@ IFNULL((SELECT DATE_FORMAT(c.fecha, '%Y/%m/%d %H:%i:%s') FROM control_calibracio
                 IFNULL((SELECT cl.telefono1  FROM clientes cl WHERE v.idcliente = cl.idcliente  LIMIT 1),'') AS 'telefono_propietario',
                 IFNULL((SELECT ci.cod_ciudad  FROM clientes cl, ciudades ci WHERE v.idcliente = cl.idcliente AND ci.cod_ciudad = cl.cod_ciudad  LIMIT 1),'') AS 'ciudad',
                 'NA' AS 'nombre_empresa',
-                CASE 
+CASE 
     WHEN v.migrateLineaMarca <> 1 THEN
    		IFNULL((SELECT lr.idlineaRUNT FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea LIMIT 1),'SIN LINEA')
     ELSE 
-        IFNULL((SELECT nl.codigo_ws FROM newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
+        IFNULL((SELECT nl.codigo_ws FROM Newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
 END as linea,
 CASE 
     WHEN v.migrateLineaMarca <> 1 THEN
         IFNULL((SELECT mr.idmarcaRUNT FROM marcarunt mr WHERE mr.idmarcaRUNT=(SELECT lr.idmarcarunt FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea)),0)
     ELSE 
-        IFNULL((SELECT nm.idmarcas FROM newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM newlineas nl WHERE nl.idlineas=v.idlinea)),0)
+        IFNULL((SELECT nm.idmarcas FROM Newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM Newlineas nl WHERE nl.idlineas=v.idlinea)),0)
 END AS marca,
                 v.ano_modelo AS 'ano_modelo',
                 v.numero_placa AS 'placa',
@@ -7413,7 +7413,7 @@ END AS marca,
                 if(v.tiempos = 2, '2', '1' ) AS 'tipo_motor',
                 v.idclase AS 'clase',
                 v.idservicio AS 'servicio',
-                IFNULL((SELECT mo.idmodoTransporte FROM modotransporte mo WHERE v.idmodoTransporte = mo.idmodoTransporte LIMIT 1),'1') AS 'modo_transporte',
+                IFNULL((SELECT mo.modo_transporte FROM modoTransporte mo WHERE v.idmodoTransporte = mo.idmodoTransporte LIMIT 1),'1') AS 'modo_transporte',
                 IFNULL((SELECT t.idtipocombustible FROM tipo_combustible t WHERE v.idtipocombustible = t.idtipocombustible LIMIT 1), '') AS 'combustible',
                 v.numejes AS 'numero_ejes',
                 v.num_pasajeros AS 'capacidad',
@@ -7629,17 +7629,17 @@ IFNULL(
 ) AS 'ciudad',
 
 'NA' AS 'nombre_empresa',
- CASE 
+CASE 
     WHEN v.migrateLineaMarca <> 1 THEN
    		IFNULL((SELECT lr.idlineaRUNT FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea LIMIT 1),'SIN LINEA')
     ELSE 
-        IFNULL((SELECT nl.codigo_ws FROM newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
+        IFNULL((SELECT nl.codigo_ws FROM Newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
 END as linea,
 CASE 
     WHEN v.migrateLineaMarca <> 1 THEN
         IFNULL((SELECT mr.idmarcaRUNT FROM marcarunt mr WHERE mr.idmarcaRUNT=(SELECT lr.idmarcarunt FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea)),0)
     ELSE 
-        IFNULL((SELECT nm.idmarcas FROM newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM newlineas nl WHERE nl.idlineas=v.idlinea)),0)
+        IFNULL((SELECT nm.idmarcas FROM Newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM Newlineas nl WHERE nl.idlineas=v.idlinea)),0)
 END AS marca,
 
 v.ano_modelo AS 'ano_modelo',
@@ -7649,7 +7649,7 @@ if(v.scooter = 1, '2', '1') AS 'diseno',
 if(v.tiempos = 2, '2', '1' ) AS 'tipo_motor',
 v.idclase AS 'clase',
 v.idservicio AS 'servicio',
-IFNULL((SELECT mo.idmodoTransporte FROM modotransporte mo WHERE v.idmodoTransporte = mo.idmodoTransporte LIMIT 1),'1') AS 'modo_transporte',
+IFNULL((SELECT mo.modo_transporte FROM modoTransporte mo WHERE v.idmodoTransporte = mo.idmodoTransporte LIMIT 1),'1') AS 'modo_transporte',
 IFNULL((SELECT t.idtipocombustible FROM tipo_combustible t WHERE v.idtipocombustible = t.idtipocombustible LIMIT 1), '') AS 'combustible',
 v.numejes AS 'numero_ejes',
 v.num_pasajeros AS 'capacidad',
@@ -7859,13 +7859,13 @@ CASE
     WHEN v.migrateLineaMarca <> 1 THEN
    		IFNULL((SELECT lr.idlineaRUNT FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea LIMIT 1),'SIN LINEA')
     ELSE 
-        IFNULL((SELECT nl.codigo_ws FROM newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
+        IFNULL((SELECT nl.codigo_ws FROM Newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
 END as linea,
 CASE 
     WHEN v.migrateLineaMarca <> 1 THEN
         IFNULL((SELECT mr.idmarcaRUNT FROM marcarunt mr WHERE mr.idmarcaRUNT=(SELECT lr.idmarcarunt FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea)),0)
     ELSE 
-        IFNULL((SELECT nm.idmarcas FROM newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM newlineas nl WHERE nl.idlineas=v.idlinea)),0)
+        IFNULL((SELECT nm.idmarcas FROM Newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM Newlineas nl WHERE nl.idlineas=v.idlinea)),0)
 END AS marca,
 v.ano_modelo AS 'ano_modelo',
 v.numero_placa AS 'placa',
@@ -7874,7 +7874,7 @@ if(v.scooter = 1, '2', '1') AS 'diseno',
 if(v.tiempos = 2, '2', '1' ) AS 'tipo_motor',
 v.idclase AS 'clase',
 v.idservicio AS 'servicio',
-IFNULL((SELECT mo.idmodoTransporte FROM modotransporte mo WHERE v.idmodoTransporte = mo.idmodoTransporte LIMIT 1),'1') AS 'modo_transporte',
+IFNULL((SELECT mo.modo_transporte FROM modoTransporte mo WHERE v.idmodoTransporte = mo.idmodoTransporte LIMIT 1),'1') AS 'modo_transporte',
 IFNULL((SELECT t.idtipocombustible FROM tipo_combustible t WHERE v.idtipocombustible = t.idtipocombustible LIMIT 1), '') AS 'combustible',
 v.numejes AS 'numero_ejes',
 v.num_pasajeros AS 'capacidad',
