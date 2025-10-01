@@ -1,33 +1,28 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
-LU4Veb5D0XENhe/4msG=
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Mlinea extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    function get($data) {
+        $this->db->where("idlineaRUNT", $data['idlineaRUNT']);
+        $query = $this->db->get('linearunt');
+        return $query;
+    }
+
+    function get2($data) {
+        $this->db->where("idlinea", $data['idlinea']);
+        $query = $this->db->get('linea');
+        return $query;
+    }
+    function getmigrateLineaMarca($data) {
+        $this->db->where("idlineas", $data['idlinea']);
+        $query = $this->db->get('Newlineas');
+        return $query;
+    }
+    
+}
