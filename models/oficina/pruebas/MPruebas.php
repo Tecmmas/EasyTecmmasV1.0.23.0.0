@@ -1,80 +1,185 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class MPruebas extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    function consultarPlaca($placa) {
+        $query = <<<EOF
+            SELECT 
+            v.numero_placa,
+            v.aplicares2703,
+            v.autoregulado,
+            tp.nombre tipo_vehiculo,
+            v.tipo_vehiculo idtipo_vehiculo,
+            tc.idtipocombustible,
+            tc.nombre tipo_combustible,
+            cla.nombre clase,
+            v.idclase,
+            v.idservicio,
+            ifnull(
+            (SELECT 
+            h.idhojapruebas
+            FROM 
+            hojatrabajo h
+            WHERE 
+            h.estadototal=7 AND
+            h.reinspeccion = 0 AND
+            v.idvehiculo=h.idvehiculo AND
+            v.numero_placa = '$placa' AND
+            TIMESTAMPDIFF(minute,h.fechainicial,NOW())<=22320 LIMIT 1)
+            ,IFNULL((SELECT 
+            '2'
+            FROM 
+            hojatrabajo h
+            WHERE 
+            h.estadototal=1 AND
+            (h.reinspeccion = 0 or h.reinspeccion = 1) AND
+            v.idvehiculo=h.idvehiculo AND
+            v.numero_placa = '$placa' AND
+            DATEDIFF(NOW(),h.fechainicial)=0  LIMIT 1)
+            ,'0')) RTEMecReins,
+            ifnull(
+            (SELECT 
+            h.idhojapruebas
+            FROM 
+            hojatrabajo h
+            WHERE 
+            h.estadototal=3 AND
+            h.reinspeccion = 4444 AND
+            v.idvehiculo=h.idvehiculo AND
+            v.numero_placa = '$placa' AND
+            TIMESTAMPDIFF(minute,h.fechainicial,NOW())<=22320 LIMIT 1)
+            ,IFNULL((SELECT 
+            '2'
+            FROM 
+            hojatrabajo h
+            WHERE 
+            h.estadototal=1 AND
+            (h.reinspeccion = 4444 or h.reinspeccion = 44441) AND
+            v.idvehiculo=h.idvehiculo AND
+            v.numero_placa = '$placa' AND
+            DATEDIFF(NOW(),h.fechainicial)=0  LIMIT 1)
+            ,'0')) PreventivaReins,
+            (SELECT 
+               COUNT(*)
+            from 
+                visor v
+            where 
+               v.reinspeccion='8888' and
+               v.placa = '$placa' and
+                v.estadototal = 1 and v.sicov = 0 and v.certificado = 0 AND 
+                 (
+                v.luces = 0 OR 
+                v.gases = 0 OR 
+                v.opacidad = 0 OR 
+                v.sonometro = 0 OR 
+                v.visual = 0 OR 
+                v.camara0 = 0 OR 
+                v.camara1 = 0 OR 
+                v.alineacion = 0 OR 
+                v.frenos = 0 OR 
+                v.suspension = 0 OR 
+                v.taximetro = 0
+                ) and
+                date_format(fecha,"%Y-%m-%d") =CURDATE() LIMIT 1
+                ) PruebaLibreReins,
+            v.taximetro,
+            v.idvehiculo,
+            if(v.registrorunt='0',(select l.nombre from linea l where l.idlinea=v.idlinea limit 1),(select l.nombre from linearunt l where l.idlinearunt=v.idlinea limit 1)) linea,
+            if(v.registrorunt='0',(select m.nombre from linea l,marca m where l.idlinea=v.idlinea and l.idmarca=m.idmarca limit 1),(select m.nombre from linearunt l,marcarunt m where l.idlinearunt=v.idlinea and m.idmarcarunt=l.idmarcarunt limit 1)) marca,
+            v.ano_modelo,
+            if(v.registrorunt='0',(select co.nombre from color co where co.idcolor=v.idcolor limit 1),(select co.nombre from colorrunt co where co.idcolorrunt=v.idcolor limit 1)) color
+            FROM
+            vehiculos v,tipo_vehiculo tp,clase cla,tipo_combustible tc
+            WHERE 
+            v.numero_placa = '$placa' AND
+            tp.idtipo_vehiculo=v.tipo_vehiculo AND
+            cla.idclase=v.idclase and
+            tc.idtipocombustible=v.idtipocombustible
+EOF;
+        $rta = $this->db->query($query);
+        return $rta;
+    }
+
+    function getUltimaFactura() {
+        $query = <<<EOF
+            select factura 
+            from hojatrabajo 
+            where factura<>'0' and 
+                  factura<>'' and 
+                  factura REGEXP '^[0-9]+$' 
+                  order by idhojapruebas desc limit 1
+EOF;
+        $rta = $this->db->query($query);
+        $r = $rta->result();
+        return $r[0]->factura;
+    }
+
+    function validarPrerevision($numero_placa) {
+        $query = <<<EOF
+            SELECT
+            * 
+            FROM 
+                pre_prerevision pp 
+            WHERE
+                pp.numero_placa_ref = '$numero_placa' AND
+                DATE_FORMAT(pp.fecha_prerevision,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d') AND
+                pp.tipo_inspeccion=1
+EOF;
+        $rta = $this->db->query($query);
+        return $rta->num_rows();
+    }
+
+    function validarFactura($noFactura) {
+        $query = <<<EOF
+            select *
+            from hojatrabajo 
+            where factura='$noFactura'
+EOF;
+        $rta = $this->db->query($query);
+        return $rta->num_rows();
+    }
+
+    function getPruebas($idhojaprueba) {
+        $query = <<<EOF
+            SELECT 
+                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=1 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") luxometro,
+                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=2 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") opacidad,
+                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=3 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") gases,
+                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=6 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") taximetro,
+                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=7 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") frenometro,
+                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=9 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") suspension,
+                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=10 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") alineacion,
+                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=4 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") sonometro,
+                IFNULL((SELECT h.pin0 FROM hojatrabajo h WHERE h.idhojapruebas=$idhojaprueba AND h.estadototal<>5 ORDER BY 1 DESC LIMIT 1),"") pin
+EOF;
+        $rta = $this->db->query($query);
+        return $rta;
+    }
+
+    function getEvalTH() {
+        $query = $this->db->query("
+            SELECT 
+            COUNT(*) res
+            FROM 
+            config_maquina c,maquina m 
+            WHERE 
+            c.idmaquina=m.idmaquina AND 
+            m.idtipo_prueba=12 AND
+            c.tipo_parametro='Last Update' AND
+            DATE_FORMAT(c.parametro, '%Y-%m-%d')=CURDATE() AND
+            (JSON_CONTAINS(JSON_OBJECT(
+            'idmaquina',CAST(c.idmaquina AS CHAR(100000)),
+            'tipo_parametro',CAST(c.tipo_parametro AS CHAR(100000)),
+            'parametro',CAST(c.parametro AS CHAR(100000)),
+            'idconfiguracion',CAST(c.idconfiguracion AS CHAR(100000))),
+            AES_DECRYPT(c.descripcion,'3b9a9ca61545411284988f889b9f3d33')))=0");
+        return $query;
+    }
+
+}

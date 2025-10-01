@@ -1,32 +1,42 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Mth extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    function get($idmaquina) {
+        $rta = $this->db->query("SELECT 
+                                    c.tipo_parametro,
+                                    ifnull(AES_DECRYPT(c.parametro ,'353E9D61B66D77CAE6BF97DE8F7CAWYJFLLD2D765SD4894165SD81SD'), c.parametro) AS parametro
+                                    FROM
+                                    config_maquina c
+                                    WHERE
+                                    c.idmaquina=$idmaquina;");
+        return $rta;
+    }
+    function getDiff($idmaquina) {
+        $rta = $this->db->query("SELECT 
+                                    IFNULL(
+        TIMESTAMPDIFF(
+            SECOND,
+            STR_TO_DATE(
+                IFNULL(AES_DECRYPT(c.parametro, '353E9D61B66D77CAE6BF97DE8F7CAWYJFLLD2D765SD4894165SD81SD'), c.parametro),
+                '%Y-%m-%d %H:%i:%s'
+            ),
+            NOW()
+        ),
+        0
+    ) AS diferencia
+                                    FROM
+                                    config_maquina c
+                                    WHERE
+                                    c.tipo_parametro='Last Update' and
+                                    c.idmaquina=$idmaquina limit 1;");
+        return $rta;
+    }
+
+}

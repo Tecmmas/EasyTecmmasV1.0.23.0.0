@@ -7398,13 +7398,13 @@ CASE
     WHEN v.migrateLineaMarca <> 1 THEN
    		IFNULL((SELECT lr.idlineaRUNT FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea LIMIT 1),'SIN LINEA')
     ELSE 
-        IFNULL((SELECT nl.codigo_ws FROM Newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
+        IFNULL((SELECT nl.codigo_ws FROM newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
 END as linea,
 CASE 
     WHEN v.migrateLineaMarca <> 1 THEN
         IFNULL((SELECT mr.idmarcaRUNT FROM marcarunt mr WHERE mr.idmarcaRUNT=(SELECT lr.idmarcarunt FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea)),0)
     ELSE 
-        IFNULL((SELECT nm.idmarcas FROM Newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM Newlineas nl WHERE nl.idlineas=v.idlinea)),0)
+        IFNULL((SELECT nm.idmarcas FROM newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM newlineas nl WHERE nl.idlineas=v.idlinea)),0)
 END AS marca,
                 v.ano_modelo AS 'ano_modelo',
                 v.numero_placa AS 'placa',
@@ -7633,13 +7633,13 @@ CASE
     WHEN v.migrateLineaMarca <> 1 THEN
    		IFNULL((SELECT lr.idlineaRUNT FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea LIMIT 1),'SIN LINEA')
     ELSE 
-        IFNULL((SELECT nl.codigo_ws FROM Newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
+        IFNULL((SELECT nl.codigo_ws FROM newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
 END as linea,
 CASE 
     WHEN v.migrateLineaMarca <> 1 THEN
         IFNULL((SELECT mr.idmarcaRUNT FROM marcarunt mr WHERE mr.idmarcaRUNT=(SELECT lr.idmarcarunt FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea)),0)
     ELSE 
-        IFNULL((SELECT nm.idmarcas FROM Newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM Newlineas nl WHERE nl.idlineas=v.idlinea)),0)
+        IFNULL((SELECT nm.idmarcas FROM newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM newlineas nl WHERE nl.idlineas=v.idlinea)),0)
 END AS marca,
 
 v.ano_modelo AS 'ano_modelo',
@@ -7859,13 +7859,13 @@ CASE
     WHEN v.migrateLineaMarca <> 1 THEN
    		IFNULL((SELECT lr.idlineaRUNT FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea LIMIT 1),'SIN LINEA')
     ELSE 
-        IFNULL((SELECT nl.codigo_ws FROM Newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
+        IFNULL((SELECT nl.codigo_ws FROM newlineas nl WHERE nl.idlineas=v.idlinea LIMIT 1),'SIN LINEA')
 END as linea,
 CASE 
     WHEN v.migrateLineaMarca <> 1 THEN
         IFNULL((SELECT mr.idmarcaRUNT FROM marcarunt mr WHERE mr.idmarcaRUNT=(SELECT lr.idmarcarunt FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea)),0)
     ELSE 
-        IFNULL((SELECT nm.idmarcas FROM Newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM Newlineas nl WHERE nl.idlineas=v.idlinea)),0)
+        IFNULL((SELECT nm.idmarcas FROM newmarcas nm WHERE nm.idmarcas=(SELECT nl.idmarcas FROM newlineas nl WHERE nl.idlineas=v.idlinea)),0)
 END AS marca,
 v.ano_modelo AS 'ano_modelo',
 v.numero_placa AS 'placa',

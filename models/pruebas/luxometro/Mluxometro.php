@@ -1,35 +1,37 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Mluxometro extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+        $this->load->library('Opensslencryptdecrypt');
+    }
+
+    function getHojaPruebas($idprueba) {
+        $rta = $this->db->query("SELECT 
+                'setHojaPruebas' funcionSet,h.* 
+                FROM 
+                pruebas p,hojatrabajo h 
+                WHERE 
+                h.idhojapruebas=p.idhojapruebas AND 
+                p.idprueba=$idprueba");
+        $r = $rta->result();
+        return $r[0];
+    }
+
+    function getLuxometro($idprueba) {
+        $rta = $this->db->query("
+            SELECT 
+                                'setLuxometro' funcionSet,p.* 
+                                FROM 
+                                pruebas p 
+                                WHERE 
+                                p.idprueba=$idprueba LIMIT 1");
+        $r = $rta->result();
+        $r[0]->enc = "";
+        return $r[0];
+    }
+
+}

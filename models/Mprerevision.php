@@ -176,27 +176,26 @@ class Mprerevision extends CI_Model
     
     -- Optimizado: línea del vehículo
     CASE 
-        WHEN v.migrateLineaMarca <> 1 THEN
-            IF(v.registrorunt = '0', 
-                COALESCE(linea_runt.nombre, linea_normal.nombre), 
-                COALESCE(linea_runt.nombre, 'SIN LINEA')
-            )
-        ELSE 
-            COALESCE((SELECT UPPER(nl.nombre) FROM Newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1), 'SIN LINEA')
-    END AS idlinea,
+    WHEN v.migrateLineaMarca <> 1 THEN
+        IF(v.registrorunt = '0', 
+            COALESCE(linea_runt.nombre, linea_normal.nombre), 
+            COALESCE(linea_runt.nombre, 'SIN LINEA')
+        )
+    ELSE 
+        IFNULL((SELECT UPPER(nl.nombre) FROM newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1), 'SIN LINEA')
+END AS idlinea,
 
-    -- Optimizado: marca del vehículo
-    CASE 
-        WHEN v.migrateLineaMarca <> 1 THEN
-            IF(v.registrorunt = '0',
-                COALESCE(marca_normal.nombre, 'SIN MARCA'),
-                COALESCE(marca_runt.nombre, 'SIN MARCA')
-            )
-        ELSE 
-            COALESCE((SELECT UPPER(nm.nombre) FROM Newmarcas nm 
-                     WHERE nm.idmarcas = (SELECT nl.idmarcas FROM Newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1) 
-                     LIMIT 1), 'SIN MARCA')
-    END AS idmarca,
+CASE 
+    WHEN v.migrateLineaMarca <> 1 THEN
+        IF(v.registrorunt = '0',
+            COALESCE(marca_normal.nombre, 'SIN MARCA'),
+            COALESCE(marca_runt.nombre, 'SIN MARCA')
+        )
+    ELSE 
+        IFNULL((SELECT UPPER(nm.nombre) FROM newmarcas nm 
+                 WHERE nm.idmarcas = (SELECT nl.idmarcas FROM newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1) 
+                 LIMIT 1), 'SIN MARCA')
+END AS idmarca,
     
     IFNULL(c.nombre, '') idclase,
     COALESCE(color_runt.nombre, color_normal.nombre, '') idcolor,

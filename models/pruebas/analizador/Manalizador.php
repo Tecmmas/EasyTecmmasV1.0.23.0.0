@@ -1,64 +1,99 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Manalizador extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    function getGases($idprueba) {
+        $rta = $this->db->query("SELECT 
+                                'ana' tipo_consulta,p.* 
+                                FROM 
+                                pruebas p 
+                                WHERE 
+                                p.idprueba=$idprueba LIMIT 1;");
+        $r =  $rta->result();
+        $r[0]->enc="";
+        return $r[0];
+    }
+
+    function getHojaPruebas($idprueba) {
+        $rta = $this->db->query("SELECT 
+                'setHojaPruebas' funcionSet,h.* 
+                FROM 
+                pruebas p,hojatrabajo h 
+                WHERE 
+                h.idhojapruebas=p.idhojapruebas AND 
+                p.idprueba=$idprueba");
+        $r = $rta->result();
+        return $r[0];
+    }
+
+
+    function get1024() {
+        $rta = $this->db->query("SELECT 
+                c.valor
+                FROM 
+                config_prueba c
+                WHERE 
+                c.idconfig_prueba=1024 limit 1");
+        $r = $rta->result();
+        return $r[0];
+    }
+
+    function get1025() {
+        $rta = $this->db->query("SELECT 
+                c.valor
+                FROM 
+                config_prueba c
+                WHERE 
+                c.idconfig_prueba=1025 limit 1");
+        $r = $rta->result();
+        return $r[0];
+    }
+
+    function getDatosGenerales($idmaquina) {
+        $rta = $this->db->query("SELECT 
+        (SELECT numero_id FROM cda limit 1) num_cda,
+        (SELECT nombre_cda FROM cda limit 1) nombre_cda,
+        (SELECT COUNT(*) FROM certificados limit 1) num_certificados,
+        (SELECT c.fecha FROM control_fugas c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_fugas DESC LIMIT 1) fecha_fugas,
+        (SELECT DATE_ADD(c.fecha, INTERVAL 1 DAY) FROM control_fugas c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_fugas DESC LIMIT 1) fecha_fugas_proxima,
+        (SELECT c.idcontrol_calibracion FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) idcontrol_calibracion,
+            
+        (SELECT c.span_alto_co FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) span_alto_co,    
+        (SELECT c.span_alto_co2 FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) span_alto_co2,    
+        (SELECT c.span_alto_hc FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) span_alto_hc,    
+        (SELECT c.span_bajo_co FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) span_bajo_co,    
+        (SELECT c.span_bajo_co2 FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) span_bajo_co2,    
+        (SELECT c.span_bajo_hc FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) span_bajo_hc,    
+        (SELECT c.cal_alto_co FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) cal_alto_co,    
+        (SELECT c.cal_alto_co2 FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) cal_alto_co2,    
+        (SELECT c.cal_alto_o2 FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) cal_alto_o2,    
+        (SELECT c.cal_alto_hc FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) cal_alto_hc,    
+        (SELECT c.cal_bajo_co FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) cal_bajo_co,    
+        (SELECT c.cal_bajo_co2 FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) cal_bajo_co2,    
+        (SELECT c.cal_bajo_o2 FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) cal_bajo_o2,    
+        (SELECT c.cal_bajo_hc FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) cal_bajo_hc,    
+            
+        (SELECT c.fecha FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) fecha_calibracion,
+        (SELECT DATE_ADD(c.fecha, INTERVAL 3 DAY) FROM control_calibracion c WHERE c.idmaquina=$idmaquina ORDER BY c.idcontrol_calibracion DESC LIMIT 1) fecha_calibracion_proxima");
+        $r = $rta->result();
+        return $r[0];
+    }
+
+    function update1024() {
+        echo $this->db->query("UPDATE 
+                config_prueba c 
+                SET 
+                c.valor='' 
+                WHERE 
+                c.idconfig_prueba=1024");
+//        $r = $rta->result();
+//        return $r[0];
+    }
+
+}

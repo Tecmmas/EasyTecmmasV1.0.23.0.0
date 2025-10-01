@@ -1,38 +1,33 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
-AwwGSQMuNlMFHAAo45suiZfBsJC=
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Mcontrol_verificacion extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    function insertar($data) {
+        $this->db->insert('control_verificacion', $data);
+    }
+
+    function get($idmaquina) {
+        $query = $this->db->query("select 
+            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_hc_bajo' order by idconfig_maquina desc limit 1) audi_hc_bajo, 
+            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_hc_alto' order by idconfig_maquina desc limit 1) audi_hc_alto, 
+            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co_alto' order by idconfig_maquina desc limit 1) audi_co_alto, 
+            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co_bajo' order by idconfig_maquina desc limit 1) audi_co_bajo, 
+            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co2_bajo' order by idconfig_maquina desc limit 1) audi_co2_bajo, 
+            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co2_alto' order by idconfig_maquina desc limit 1) audi_co2_alto, 
+            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_hc_medio' order by idconfig_maquina desc limit 1) audi_hc_medio, 
+            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co_medio' order by idconfig_maquina desc limit 1) audi_co_medio, 
+            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co2_medio' order by idconfig_maquina desc limit 1) audi_co2_medio");
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return "";
+        }
+    }
+
+}

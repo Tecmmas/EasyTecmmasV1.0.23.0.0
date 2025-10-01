@@ -1,30 +1,54 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
-DG==
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of MarcaModel
+ *
+ * @author arman
+ */
+class MarcaModel extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+        $this->load->database();
+    }
+    
+    public function get($idmarca) {
+        $data = $this->db->query("
+            SELECT
+                *
+            FROM
+                marca m
+            WHERE
+                m.idmarca='$idmarca'
+            LIMIT
+                1 ");
+        if ($data->num_rows() > 0) {
+            return $data;
+        } else {
+            return FALSE;
+        }
+    }
+    
+    public function getMarcaRunt($idmarca) {
+        $data = $this->db->query("
+            SELECT
+                idmarcarunt idmarca,nombre
+            FROM
+                marcarunt m
+            WHERE
+                m.idmarcarunt='$idmarca'
+            LIMIT
+                1 ");
+        if ($data->num_rows() > 0) {
+            return $data;
+        } else {
+            return FALSE;
+        }
+    }
+}

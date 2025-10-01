@@ -1,54 +1,50 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
-vHCxUfooi23dOW==
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Mcertificados extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    function get($data) {
+        $this->db->where("idcertificado", $data['idcertificado']);
+        $query = $this->db->get('certificados');
+        return $query;
+    }
+
+    function getHT($data) {
+        $this->db->where("idhojapruebas", $data['idhojapruebas']);
+        $this->db->where("estado", $data['estado']);
+        $query = $this->db->get('certificados');
+        return $query;
+    }
+
+    function insert($data) {
+        $rta = $this->getHT($data);
+        if ($rta->num_rows() > 0) {
+            $cert = $rta->result();
+            $this->db->where("id_certificado", $cert[0]->id_certificado);
+            $this->db->update('certificados', $data);
+        } else {
+            $this->db->insert('certificados', $data);
+        }
+        $this->cerrtificadoVisor($data);
+    }
+    
+    function cerrtificadoVisor($data){
+        $idhojapruebas = $data['idhojapruebas']; 
+        $query = <<<EOF
+                    UPDATE visor v set v.fecha = v.fecha, v.certificado = 1 where v.idhojapruebas =  $idhojapruebas
+EOF;
+        $rta = $this->db->query($query);
+    }
+
+    function delete($data) {
+        $this->db->where("idhojaprueba", $data["idhojaprueba"]);
+        $this->db->where("estado", $data["estado"]);
+        $this->db->update('certificados');
+    }
+
+}

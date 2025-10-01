@@ -21,7 +21,7 @@ class Mlinea extends CI_Model {
     }
     function getmigrateLineaMarca($data) {
         $this->db->where("idlineas", $data['idlinea']);
-        $query = $this->db->get('Newlineas');
+        $query = $this->db->get('newlineas');
         return $query;
     }
     

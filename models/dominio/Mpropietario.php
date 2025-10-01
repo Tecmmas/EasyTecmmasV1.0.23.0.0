@@ -1,46 +1,47 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
-egW0H4j6
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Mpropietario extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    function get($data) {
+        $this->db->where("idcliente", $data['idcliente']);
+        $query = $this->db->get('clientes');
+        return $query;
+    }
+
+    function getAll() {
+        $query = $this->db->get('clientes');
+        return $query;
+    }
+
+    function getMatch($match) {
+        $result = $this->db->query("SELECT 
+            * 
+            FROM 
+            clientes c
+            WHERE
+            c.numero_identificacion LIKE '%$match%' OR
+            c.nombre1 LIKE '%$match%' OR
+            c.nombre2 LIKE '%$match%' OR
+            c.apellido1 LIKE '%$match%' OR
+            c.apellido2 LIKE '%$match%' OR
+            c.telefono1 LIKE '%$match%'");
+        return $result;
+    }
+
+    function insert($cliente) {
+        $this->db->insert('clientes', $cliente);
+        return $this->db->insert_id();
+    }
+
+    function update($cliente) {
+        $this->db->where('idcliente', $cliente['idcliente']);
+        echo $this->db->update('clientes', $cliente);
+    }
+    
+}

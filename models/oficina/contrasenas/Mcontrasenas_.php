@@ -1,51 +1,57 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Mcontrasenas extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    public function getuser($iduser) {
+        $query = $this->db->query("SELECT u.IdUsuario, u.idperfil, u.nombres, u.apellidos, u.fecha_actualizacion FROM usuarios u WHERE u.IdUsuario = $iduser");
+        return $query;
+    }
+
+    public function getpassword($iduser, $contrasenna) {
+        $query = $this->db->query("SELECT * FROM historico_pass h WHERE h.idusuario=$iduser AND h.password='$contrasenna'");
+        return $query;
+    }
+
+    public function updatecontraadmin($iduser, $contrasenna, $fecha) {
+        $query = $this->db->query("UPDATE usuarios  SET fecha_actualizacion = DATE_ADD(DATE_FORMAT(NOW(), '%Y/%m/%d'), INTERVAL 15 DAY), passwd='$contrasenna'  WHERE IdUsuario= $iduser");
+        if ($query) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function insertcontraadmin($iduser, $contrasenna) {
+        $query = $this->db->query("INSERT INTO historico_pass VALUES (NULL,$iduser,CURRENT_TIMESTAMP(),'$contrasenna')");
+        if ($query) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function updatecontra($iduser, $contrasenna, $fecha) {
+        $query = $this->db->query("UPDATE usuarios  SET fecha_actualizacion = DATE_ADD(DATE_FORMAT(NOW(), '%Y/%m/%d'), INTERVAL 30 DAY), passwd='$contrasenna'  WHERE IdUsuario= $iduser");
+        if ($query) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function insertcontra($iduser, $contrasenna) {
+        $query = $this->db->query("INSERT INTO historico_pass VALUES (NULL,$iduser,CURRENT_TIMESTAMP(),'$contrasenna')");
+        if ($query) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+}

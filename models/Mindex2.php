@@ -1,53 +1,55 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-HR+cPprhgsmt+oz3pgS+Jv5r3KTujnOUyK8i+fAuhBGVcTAJaL8ODYWdpJ6JN8PmeBqXjEhCHTo+
-XNZr0n5+ruBNtfNeS4gv0xXaPJegyZPA0T5D3TXenqE4di601FvtN/gi0Ruj3uycI3Z81hu+r2nH
-zxMkiUC+mgD+ip3bncHiMpshwvVkGjAtLM7el/vHSdMdZYpghzdBVOweMd0WBo57PkrdGVw+YYb5
-c5oddvjBXycgriO/WWW/WCaKlJzKj8Imm1s97O3IYKK215JR7q+/BAs7RHzeNCSgrFeK1wWWL9Tt
-RGnq/xtVOXVRbXsWGV8TnDRbOH4BAOwEfa3u3sqOiZ+kwuWP2xnRIqLV3wjXH9PI5Ipjr2EfdxuS
-ncsLLLyL5AcIde3QOX/x1+qctvh9eY+LV/5LLgqBjhCauHFeb0ByJP1bltyw5XoG011eiZeEJp8h
-DdofWyFZg1ITCVshZg6vb3UKC5F7ZCzcnWAMJforcsKOGaBCWYU1Sky+CqRNh34PN1wpjLlciisI
-2Uh/vVnRGwSI21IW4vTaMj4vxjqxu24+fh/++NyVievD5yhDq9W+v3iesUCsW/UhQfnTQt3OWlfk
-Vc4hybPjINe50hfTq/EoZfY7z6Hecx3HXu8xwF8quaV/nYwsH3BJhOweCBM/9wV0l7TmorSIWae+
-4LJPKHX9CU2UHyD4J5FNgXzcIyjOvahOPlwmIafJq9YJ+DLBr1owWsQ/fxfC34NVHGRIRUkgmGmU
-GGmtlFSCIn0OsZ56g+J1UkTg1SfD5d+HWjzxsOcbB+Kl/pc8nBFcW4idpopJRhFzDc69KJO0nWz/
-ZFaDS2g9zKcpK7QX0x/H+uWs63xEWcpaFi7cXKNa0brZ/kFXQaW+jwNg99HkiKKcghhIQe12b0ue
-PsYO8rJKEaQ+uFaJcqm9uxMS3bgALX5rNyjmHsQ8ZbMtfD//VdPr8E+YllqOSmn/WJA9njoSGbik
-SzgjJV+WNuwSTbjezDf/giGmlWL1/DNqk0tS97r2e43IJRMapN74xygRJbx5heMhEDO0kesQn20m
-+HOTvxlCkUX9J7SRieKXv6ziIoz+V6umj9cudpuimtpMM2axGZcJcXsuAkV+6roOClWYnP/K/M5a
-IJFB5YeDQSYgBuAzC9bKZwUivcmEgTtLKTmWJPfVr3Y+ReEhJl6WGUbPfci+5j0pjA6Rc0Uhip1F
-pyMZDYgVl9PBczvzijqtk9AlCQtzjtam65Atx1JO36HJU5Gm0/SNCnGcERoBmn6vBkSM9GzgvY2F
-INhcmMnT2PMpj10qZMiu2s4l0E3M2T7vN3C0WeAbpTeP8m6bGK7EyTEB2YVSlTK8/jdJuExipzX1
-YhqDRZdpYwX+ElFhcMbts+8tVDCJeQSHij05mz5rDH2st7xMFUdHJWpui+esiTF6tWVHoL24Yute
-DfmwKACgK9wxjitg19T6KK6C81vVbpHQ2qsPvojUnZ46jbM93BBrh3WW13gB5Jq7WTO71vvjE4+f
-AmJk6RC7oLfJbPAouEPNGZ79Fy5QW4QUwTtc80ysBM6WAov1WFb7tKvycupCCcgtQ86LRdjdqWqW
-N132izAYH0Dd7P4kdl6vQiw0Mj/dLscseej9nxH9VHPosxxpcUWVNMesfnQaP6f22OYt8oO4wQ7Y
-xsF9RcxFxMd/2ANnyX3hmr973SMG9L4PdNdCCHlwJD6U32fWi2GEtqVarGeF9XL/s59VjPzzO2QW
-ixGXMuPad45WKGpVRM7+cee92qcMDslubb8v6SilyDNyNpqC8LHc19xU9/nRspOFEa1HKC86A6v/
-089dQjFmOP43DR5GjBbcrhGTLLWmPxR9z34htAAbXesd0hWnd5TKXhTpAus6gWiPOaKsa8mpbw4Z
-5tBxEAH+dud7C7mvAWBpy18O4grrouBX8OpjLy5Rl1d6vG3FZzGM3sdOQYdFZWW9RfLxxqEBl0je
-8vh0GTyaZ1FWk03lmrRiJus/L6zkaewfpJbybzo0iAnWOBFITvlf3i+h6jRyZqEe/pUSoOxORPZE
-Ct1BBEnVrGPIRRtLrInsmEJQWLbuZ4FE3QspduScT7hZ/N9GGbKoqFTpmNDlNitRU9Sr0cA3+Zd0
-5PllvkCgr9thfm7XhtDx+CQ+r2/vliloxKEXaIq2mGAgdJYWy+0ChvRc06yb65yxDRUIqLQeHOXi
-8Ve1eH5+zwddLxGtjKlk58QROtBBhvVf2sF1EcLi4CjM+s3XKyiD0J6DrhCmEFohNGAUdrFTG1vW
-QK8nvjVBpCMHMd+YZJ3roi48HRqoQX00h4GskLSwXFSMyEmCH/1YeF/48IBVFTY1bqHYHhKrZbb6
-SrLc0Bn6qm2DXOL+Uyr45uXJBfc4ELvtD2NjlujHEdtNgvGxgoIRClDSJ/SPxIk5PEjj+ATxG4Ej
-pCdyoEi60InLmAFNjUi7lVk/mD0A2X9U3PepPVylV4PF1JOxSr2UMwwPnM9K5v0+Qu0PPWKYnX98
-fY7ETdz1MIFPhkueihCPl9M+EW+v6fxL3ajmrfOo3rl3Y3lv5RhTyzrvNjSzDlMlwSkkelAo1Rcz
-qBI6P4JXtyAl6fEHMWcEablYRO4DmyWod0FY2eVVi3vDMOZrbjzt+oH/3r6ETnyKj018oHP2V6qo
-Seh6evkuq7EQ+TUVP3iYrdkaAA9ZxdTwc2qNAnV3kdENadIloFeapsrFtxL8lylYMtKh4gf78llu
-dwAr9Gi9EF9GTvxciAGMRRTd8fQDUpGvaslntpToIVssNI6189NeU3wBpFLR9pXOTSJVv2UJ6aqK
-5wOsWrSqCCh8WaGV/sHMWxNWc5/9x5dBJoG2OgtUesY0StUweUyoLREosCpNcvZe8pjfKGxd3Lu5
-JG5B87gbK2tuJAkXhAQqf0p0Kz9x3tOGrVEHezWKM8YXu8yEP9ORJ49LHoZFsR0VwrLGb1u1/9xo
-SrVmx0EfeSseSpWQ1KinWOkSAvNw3e7Y6uZAQX+6eB7Z1qxhHeYUcwCFepthRKF+JXvyXwJxjQ+C
-jgG2/kny1Xgpbgxtdod4Ipg1aIWpPZMOvMkK7s3Kkgap/zJ4SggMNai9LjmgEatiChKHJsHfY8mA
-utixnBhUBx8WoAfwfTKV37Td1vBbTtB/IepzyS7U2jc6LsIWnV1Rwq9XXj4GFXyjJCkZHPzD5Kho
-9KgQYr7WhrSbwMQgbM5s92H0yaTqUMOJbpsU+cLCK5ro4Fi2vyRS5QtoTedfpTUYow/v8H2H/KnN
-CyPYTkrPL+Gsea/LrhHeeZ2zAM9UfKanyJwlXMMiMr1V9iqQY3MTvkqx5vqZOmOsLPgeo5rgmAYd
-+1CBWBzWv/SdBUoVGs1xZPdxUpJpGrqblg99uaFYagOWy4UPe9aDFW8IFRiQk8qlJza/O82+ofqK
-9AjWl4tn5B5RaZ5m3ezlLSsASFa4OjxtqrVJsvPZgbEZB+etpX6hJUhcA/oWJyXmspLR5WqMAAa9
-S50tSKC95Ckjy/VgXq0qkVxyKQSf8qb17HsCP7ckKrzgCIFgRNkAstt3D3skw4ihB46sBkuue7lO
-oalXmxbQooMpzUMMclZojAUdhylpnDmhnYYzv/gatI/YVX2jWy2ztlnbflpX0XQmcXfHwVGsLoFl
-nOlVmcznGjkMCrb1+U/P5O7ciKwcIzwZugssgL53rgE8Mr2gWlJH1bit4Yl3/5m/tbKfOokrT3z3
-n7bbVOuh0DNeCX5inn2sv+F808rs2WqQwx0eiOUFb1gRIYvu
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Mindex extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+        $this->load->dbutil();
+    }
+
+    public function mDatabase() {
+        $result = $this->dbutil->optimize_database();
+        if ($result !== FALSE) {
+            
+            echo '<pre>';
+            print_r($result);
+            echo '</pre>';
+        }
+    }
+
+    function puede_entrar($usuario, $contrasena) {
+        $this->db->where('username', $usuario);
+        $this->db->where('passwd', $contrasena);
+        $query = $this->db->get('usuarios');
+        return $query;
+    }
+
+    function validar_vigencia($idUsuario) {
+        $result = $this->db->query("select 1 from usuarios u WHERE u.fecha_actualizacion<CURDATE() AND u.IdUsuario=" . $idUsuario);
+        if ($result->num_rows() > 0) {
+            return "1";
+        } else {
+            return "0";
+        }
+    }
+
+    function parametroGases() {
+//        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '4.0', p.hc = '650' WHERE p.rango_final = 1984 AND p.idtipo_combustible = 2 AND p.tipo_vehiculo = 1");
+//        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '3.0', p.hc = '400' WHERE p.rango_final = 1997 AND p.idtipo_combustible = 2 AND p.tipo_vehiculo = 1");    
+//        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '1.0', p.hc = '200' WHERE p.rango_final = 2009 AND p.idtipo_combustible = 2 AND p.tipo_vehiculo = 1");    
+//        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '0.8', p.hc = '160' WHERE p.rango_inicial = 1998 AND p.idtipo_combustible = 2 AND p.tipo_vehiculo = 1");    
+//        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '3.5', p.hc = '8000' WHERE p.rango_final = 2009 AND p.idtipo_combustible = 2 AND p.tipo_vehiculo = 3");    
+//        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '3.5', p.hc = '1.600' WHERE p.rango_inicial = 1600 AND p.idtipo_combustible = 2 AND p.tipo_vehiculo = 3");    
+//        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '3.5', p.hc = '1.300' WHERE p.tiempos = 4 AND  p.idtipo_combustible = 2 AND p.tipo_vehiculo = 3");    
+        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '4.0', p.hc = '650', p.rango_inicial=0, p.rango_final=1984 WHERE  p.id_parametro=1");
+        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '3.0', p.hc = '400', p.rango_inicial=1985, p.rango_final=1997 WHERE  p.id_parametro=2");
+        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '1.0', p.hc = '200', p.rango_inicial=1998, p.rango_final=2009 WHERE  p.id_parametro=3");
+        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '0.8', p.hc = '160', p.rango_inicial=2010, p.rango_final=3000 WHERE  p.id_parametro=4");
+        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '3.5', p.hc = '8000' WHERE  p.id_parametro=5");
+        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '3.5', p.hc = '1600' WHERE  p.id_parametro=15");
+        $this->db->query("UPDATE parametros_ano_modelo p SET p.co = '3.5', p.hc = '1300' WHERE  p.id_parametro=6");
+    }
+
+}

@@ -296,7 +296,7 @@ class Mvehiculo extends CI_Model
                 IFNULL((SELECT upper(lr.nombre) FROM linearunt lr WHERE lr.idlinearunt = v.idlinea LIMIT 1), 'SIN LINEA')
             )
         ELSE 
-            IFNULL((SELECT upper(nl.nombre) FROM Newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1), 'SIN LINEA')
+            IFNULL((SELECT upper(nl.nombre) FROM newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1), 'SIN LINEA')
     END as idlinea,
     
     -- ID de línea RUNT corregido:
@@ -307,7 +307,7 @@ class Mvehiculo extends CI_Model
                 IFNULL((SELECT lr.idlinearunt FROM linearunt lr WHERE lr.idlinearunt = v.idlinea LIMIT 1), 0)
             )
         ELSE 
-            IFNULL((SELECT nl.idlineas FROM Newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1), 0)
+            IFNULL((SELECT nl.idlineas FROM newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1), 0)
     END AS idlineaRUNT,
     
     -- Marca corregida:
@@ -322,8 +322,8 @@ class Mvehiculo extends CI_Model
                        LIMIT 1), 'SIN MARCA')
             )
         ELSE 
-            IFNULL((SELECT upper(nm.nombre) FROM Newmarcas nm 
-                   WHERE nm.idmarcas = (SELECT nl.idmarcas FROM Newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1) 
+            IFNULL((SELECT upper(nm.nombre) FROM newmarcas nm 
+                   WHERE nm.idmarcas = (SELECT nl.idmarcas FROM newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1) 
                    LIMIT 1), 'SIN MARCA')
     END AS idmarca,
     
@@ -339,7 +339,7 @@ class Mvehiculo extends CI_Model
                        LIMIT 1), 0)
             )
         ELSE 
-            IFNULL((SELECT nm.idmarcas FROM Newmarcas nm 
+            IFNULL((SELECT nm.idmarcas FROM newmarcas nm 
                    WHERE nm.idmarcas = (SELECT nl.idmarcas FROM newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1) 
                    LIMIT 1), 0)
     END AS idmarcaRUNT,
@@ -721,7 +721,7 @@ EOF;
            SELECT
                 l.idlineas
             FROM
-                Newlineas l
+                newlineas l
             WHERE
                 l.idlineas=$idlinearunt
                 ");
@@ -881,7 +881,7 @@ EOF;
     {
         $lineas = false;
         $marcas = false;
-        $query = $this->db->query("SELECT * FROM Newlineas WHERE idlineas = $idlinea");
+        $query = $this->db->query("SELECT * FROM newlineas WHERE idlineas = $idlinea");
         if ($query->num_rows() > 0) {
             $res =  $query->result();
             $lineas = true;
@@ -890,7 +890,7 @@ EOF;
         }
 
         $idmarcas = $res[0]->idmarcas;
-        $query = $this->db->query("SELECT * FROM Newmarcas WHERE idmarcas = $idmarcas");
+        $query = $this->db->query("SELECT * FROM newmarcas WHERE idmarcas = $idmarcas");
         if ($query->num_rows() > 0) {
             $marcas = true;
         } else {
@@ -912,7 +912,7 @@ EOF;
 
         if (!$lineas) {
             // echo "No existen lineas";
-            $this->db->insert('Newlineas', array(
+            $this->db->insert('newlineas', array(
                 'idlineas' => $idlineas,
                 'nombre' => $nombre,
                 'idmarcas' => $idmarcas,
@@ -921,7 +921,7 @@ EOF;
         }
 
         if (!$marcas) {
-            $this->db->insert('Newmarcas', array(
+            $this->db->insert('newmarcas', array(
                 'idmarcas' => $idmarcas,
                 'nombre' => $nombreMarca
             ));

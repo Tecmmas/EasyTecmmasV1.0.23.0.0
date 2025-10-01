@@ -1,29 +1,35 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-HR+cPs3mA31aM947SKQz4rh93L/jTIY3Yx0u2eMuXk/SjOVBhdYGoDy/uZb0QKam8ohpHUKIAEiH
-dNje+UIzDzbOM3s977pW1yI4dSL+li2mA9HrBvU/sx20M6miSIJdTktvub7b/AnLXJ0ZmCnO2gBm
-sifQI9W6dLhpwuilGaeq+ef/2a9ljayT4tHI0/xhsDYt5BPQfkQ581HNXMCaBXTI+GUsbOD3WqNz
-I8YPa4guQUwQexNnj4e7XlzhNeb8JjWNFt567O3IYKK215JR7q+/BAs7RPPcpkdLjOFNw/0EzzTv
-m/mF92zNZs8tPTuIR4pBNPqXJMgP3UCXXwlzvfWpAz/bm28/vNtjxu+L1XyJa5KpiHlfRDpJneIy
-6SUe3WGFQcnfkXLWkFC/rcxCXe1dkeI7rg6CWnBPWKqLrXu8SPzwLcVlg7nhoFz5ZV6oAhvy76IT
-uR2Z4voJwrSAqMtYrDX+4AZxPeZPoENUyXT9MidtsuT5+BpiM1OvQaEbsjJpzJ8VzfQRnVz4ZrWG
-eHE5PhkI9o5q6MgZ1AwkL113mnBmsAhe5qOppzKlcf23NXb2CjLnaTOv61hPMhZgtY+FS4qrN/mt
-BnTqbiI9ZxF+UYzw1pMa2cr+ByoZfW85KsB6+araLx0UY/7Ls1RRVp9wFPj+XCp5iD1kYTMfxdr4
-Z0jHVlVaJDkxd4adDw41eOcY7ASN7Uh15sH+3yn2L2lhmAivOUanmhLB2C6usWXTybCINm9NET1/
-0ZOM2Fe6bL48ruvugonQI1UEP8t7ruakSgQozSJ/F+bzNMs+LTHHxGleFl6iRCMxV7s70CQYxpfj
-6d4M0axXAff9FXSYHg0a8Le4i5J3cTmlcrmmi9+Jf99YTVdznFQOKhzjMPimjw61oj2m9jV2H4Vf
-CiBpvucKgFYfvviEeo36FYDytfBFl1Hb6ePNlUuabWfS8y5MRw1sNhgxFVavTrDvgEtvaOiBT+RW
-LQd/r37TRGpjfT7v0l+hS/0b5bRW5XmSXMujisDWi88UkDn8iQTE1QGOlrcBVbEUfwgITuiwDvrf
-lu1se8zfmnWkqxHqpmXxmP2myZGWdqbsaTV5XUStcLoXNX8F+5G1SP3aGuuOPwUwSjHz6/kAPnSP
-0Df+4yE1lzT+Bk71YV3LUmzRBghG1TBdk+wOzaE8aSEa8K5qmwM6rbJMqq3QdBs4piHyBw+BY4Xc
-5LFJyhls0l+sZyMGESC8NKS9YKzMZnBqSuXgjkk8FyMSjwShhqZ1ZUHBDd7jGk1e6fOIGBLdnTSJ
-JNNpNg/w8dE7HMJ4NcvHBTeuPlC7ZDwdYLCsVadZRhfXlYpBrsDuLD5y/rzTPtH2h8+IczWpXHMF
-OvEAR1bqzXw3C+IPGLljRw5sNNYD/BlIDVUqDX/uSxLAHZcfHDOuMZ1q+6lpi4Ngebb094zvbLxh
-BdqzLhQ4zVe9vuCH7BWG+lKmWhAN7GfnlVshcKDgObWkn4QNmZ7SGG8j7E6ajiQ/spdZpV+C1+dC
-C6opftU5inEiJoMWXtvl7BJ+xfg/E56lABgnOtu3Ws8cYUJyUf7g6o9uRLaK+GiWdnG8NlPsODas
-Brvq29upkI0+ROPOKctIfkbcDPmDiBU52DJf2sXBWsKGPJN12uPPn/vPQoj+kYXBT7h0DaNsGquD
-9MzRvioKTx0z7zxGILcrUXX63o5kpOLHrkHfYP0EnBJxk8euC9xJ8/KMNuMSbmEqMNs/9yLUJ8/x
-tN2uanX1v9nzqDK/Vzo1d2RcIhyO00nwc1AiHmQ9SY16ecSaWS++HxUNMPZMwM+1IfwSLvO54V8Y
-qZr3ay8zyKHyr2u0hx0LhiAuZwA0Fqu8QZrn5iq77RIqHsFTy3NebZsQQNfPOKGSPPSV9AAYLjhq
-uu4WGiTdewcuS/PZVHzcWrzdnT+7dcIYaxPbO76m
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Mposrevision extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    function buscarPrerevision($numero_placa_ref) {
+        $result = $this->db->query("select
+                        idpre_prerevision,
+                        consecutivo,
+                        fecha_prerevision,
+                        numero_placa_ref,
+                         CASE
+                           WHEN tipo_inspeccion = '1' THEN 'TECNICOMECANICA'
+                           WHEN tipo_inspeccion = '2' THEN 'PREVENTIVA'
+                           WHEN tipo_inspeccion = '3' THEN 'PRUEBA LIBRE'
+                        END tipo_inspeccion,
+                        CASE
+                           WHEN reinspeccion = '0' THEN 'PRIMERA VEZ'
+                           WHEN reinspeccion = '1' THEN 'SEGUNDA VEZ'
+                        END reinspeccion
+                        from 
+                        pre_prerevision 
+                        where 
+                        numero_placa_ref='$numero_placa_ref' and
+                        DATE_FORMAT(fecha_prerevision,'%Y%M%d') = DATE_FORMAT(now(),'%Y%M%d') 
+                        order by consecutivo desc limit 1");
+        return $result;
+    }
+
+}

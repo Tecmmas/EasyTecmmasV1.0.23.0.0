@@ -1,65 +1,67 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
-vzmDXh3/DHVukRGsQNO=
+<?php
+
+class PruebasModel extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+        $this->load->database();
+    }
+
+    var $key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJVadQssw5c';
+
+    public function get($estado, $idtipo_prueba, $idhojapruebas) {
+        $data = $this->db->query("
+            SELECT 
+                p.idprueba
+            FROM 
+                pruebas p
+            WHERE 
+                p.estado=$estado and
+                p.idtipo_prueba=$idtipo_prueba and
+                p.idhojapruebas=$idhojapruebas
+            ORDER BY
+                1 desc
+            LIMIT
+                1");
+        if ($data->num_rows() > 0) {
+            return $data;
+        } else {
+            return FALSE;
+        }
+    }
+
+    public function update($data) {
+        $this->db->set('fechafinal', 'NOW()', FALSE);
+        $this->db->set('fechainicial', 'fechainicial', FALSE);
+        $this->db->where('idprueba', $data['idprueba']);
+        $this->db->update('pruebas', $data);
+        $this->updateEnc($data['idprueba']);
+    }
+
+    function updateEnc($id) {
+        $pruebas['idprueba'] = $id;
+        $idprueba = $pruebas['idprueba'];
+        $query2 = $this->db->query("SELECT * FROM pruebas p WHERE p.idprueba = $idprueba LIMIT 1");
+        $pru = $query2->result();
+        $dat['idhojapruebas'] = $pru[0]->idhojapruebas;
+        $dat['fechainicial'] = $pru[0]->fechainicial;
+        $dat['prueba'] = $pru[0]->prueba;
+        $dat['estado'] = $pru[0]->estado;
+        $dat['fechafinal'] = $pru[0]->fechafinal;
+        $dat['idmaquina'] = $pru[0]->idmaquina;
+        $dat['idusuario'] = $pru[0]->idusuario;
+        $dat['idtipo_prueba'] = $pru[0]->idtipo_prueba;
+        $enc = json_encode($dat);
+        $key = $this->key;
+        $Q = <<<EOF
+                UPDATE
+                pruebas
+                SET
+                fechainicial=fechainicial, enc=(SELECT AES_ENCRYPT('$enc','$key'))
+                WHERE
+                idprueba=$idprueba;
+EOF;
+        $this->db->query($Q);
+    }
+
+}

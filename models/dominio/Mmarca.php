@@ -28,7 +28,7 @@ class Mmarca extends CI_Model
     {
         // var_dump($data);
         $this->db->where("idmarcas", $data['idmarca']);
-        $query = $this->db->get('Newmarcas');
+        $query = $this->db->get('newmarcas');
         return $query;
     }
 }

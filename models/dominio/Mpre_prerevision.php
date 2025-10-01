@@ -1,69 +1,69 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
-2d/Elv/d3wchaABziGiB
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Mpre_prerevision extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    function get($data) {
+        $this->db->where("idpre_prerevision", $data['idpre_prerevision']);
+        $query = $this->db->get('pre_prerevision');
+        return $query;
+    }
+
+    function getHistoVehiculo($idpre_prerevision) {
+        $this->db->where("idpre_prerevision", $idpre_prerevision);
+        $query = $this->db->get('histo_vehiculo');
+        return $query;
+    }
+
+    function getXidPre($data) {
+        $this->db->where("numero_placa_ref", $data['numero_placa_ref']);
+        $this->db->where("reinspeccion", $data['reinspeccion']);
+        $this->db->where("tipo_inspeccion", $data['tipo_inspeccion']);
+        $this->db->order_by('idpre_prerevision', 'desc');
+        $this->db->limit(1);
+        $query = $this->db->get('pre_prerevision');
+        $rta = $query->result();
+        return $rta[0]->idpre_prerevision;
+    }
+
+    function getXofi($data) {
+//        $this->db->where("idpre_prerevision", $data['idpre_prerevision']);
+        $this->db->where('date_format(fecha_prerevision,"%Y-%m-%d")', 'date_format("' . $data['fecha'] . '","%Y-%m-%d")', FALSE);
+        $this->db->where("numero_placa_ref", $data['numero_placa_ref']);
+        $this->db->where("reinspeccion", $data['reinspeccion']);
+        $this->db->select_max('idpre_prerevision');
+        $query = $this->db->get('pre_prerevision');
+        return $query;
+    }
+
+    function getDatos($data) {
+        $placa = $data['numero_placa_ref'];
+        $reinspeccion = $data['reinspeccion'];
+        $fecha = $data['fecha_prerevision'];
+        $tipo = $data['tipo_inspeccion'];
+        $r = $this->db->query("
+            SELECT 
+                pa.id,pd.valor,p.actualizado,p.idpre_prerevision
+                FROM 
+                pre_prerevision p,pre_atributo pa, pre_dato pd
+                WHERE
+                p.idpre_prerevision=pd.idpre_prerevision AND
+                pd.idpre_atributo=pa.idpre_atributo AND
+                p.numero_placa_ref='$placa' AND
+                p.reinspeccion=$reinspeccion AND
+                p.tipo_inspeccion=$tipo AND
+                DATE_FORMAT(p.fecha_prerevision,'%Y%M%d') = DATE_FORMAT('$fecha','%Y%M%d')
+                ");
+        if ($r->num_rows() > 0) {
+            return $r;
+        } else {
+            return FALSE;
+        }
+    }
+
+}

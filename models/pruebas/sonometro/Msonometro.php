@@ -1,37 +1,47 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Msonometro extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    function getSonometro_ht_fecha($idprueba) {
+        $rta = $this->db->query("SELECT 
+                                'son' tipo_consulta,p.* 
+                                FROM 
+                                pruebas p 
+                                WHERE 
+                                (SELECT 
+                                idhojapruebas 
+                                FROM 
+                                pruebas 
+                                WHERE 
+                                idprueba=$idprueba LIMIT 1)=p.idhojapruebas  AND
+                                p.idtipo_prueba=4  and
+                                p.estado=0
+                                LIMIT 1");
+        if ($rta->num_rows() > 0) {
+            $r = $rta->result();
+            $r[0]->enc="";
+            return $r[0];
+        } else {
+            return (object) array('tipo_consulta' => 'son');
+        }
+    }
+
+    function getSonometria($idprueba) {
+        $rta = $this->db->query("SELECT 
+                                'son' tipo_consulta,p.* 
+                                FROM 
+                                pruebas p 
+                                WHERE 
+                                p.idprueba=$idprueba LIMIT 1;");
+        $r = $rta->result();
+        $r[0]->enc="";
+        return $r[0];
+    }
+
+}

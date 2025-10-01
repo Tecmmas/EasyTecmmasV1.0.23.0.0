@@ -1,107 +1,111 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Musuarios extends CI_Model {
+
+    var $key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+
+    function __construct() {
+        parent::__construct();
+    }
+
+    public function infoUsuarios() {
+        $data = $this->db->query("SELECT u.IdUsuario, u.nombres, u.apellidos, u.identificacion,
+                                p.nombre AS perfil,
+                                IF(u.estado = 1, 'Activo','Inactivo') AS estado 
+                                FROM usuarios u, perfiles p
+                                WHERE u.idperfil=p.idperfil");
+        if ($data->num_rows() > 0) {
+            $data = $data->result();
+            return $data;
+        }
+    }
+
+    function getUsuarios($idusuario) {
+        if ($idusuario) {
+            $where = "AND u.IdUsuario=$idusuario";
+        } else {
+            $where = "ORDER BY 1 DESC LIMIT 1";
+        }
+        $data = $this->db->query("SELECT u.IdUsuario,  u.nombres, u.apellidos, u.identificacion,u.username AS usuario,
+                               AES_DECRYPT(u.passwd,'$this->key') as 'passwd',
+                                p.nombre AS perfil,
+                                p.idperfil AS idperfil,
+                                IFNULL((SELECT t.nombre FROM tipo_identificacion t  WHERE u.tipo_identificacion = t.tipo_identificacion LIMIT 1),'---') AS nombreidentificacion,
+                                IFNULL((SELECT t.tipo_identificacion FROM tipo_identificacion t  WHERE u.tipo_identificacion = t.tipo_identificacion LIMIT 1),'---') AS tipoidentificacion,
+                                IF(u.estado = 1, 'Activo','Inactivo') AS estado,
+                                IF(u.estado = 1, 1, 0) AS idestado,
+                                IFNULL(u.equipo_asignado,'') AS equipo_asignado
+                                FROM usuarios u, perfiles p
+                                WHERE u.idperfil=p.idperfil $where");
+        if ($data->num_rows() > 0) {
+            $data = $data->result();
+            return $data;
+        }
+    }
+
+    function insert($tipo_identificacion, $identificacion, $nombres, $apellidos, $idperfil, $username, $passwd, $estado,$equipo_asignado, $idusuarioUpdate) {
+        if ($idperfil == 1) {
+            $data = $this->db->query("INSERT usuarios VALUES (Null,$tipo_identificacion,$idperfil,'$nombres','$apellidos',$identificacion,'$username','$passwd',$estado,DATE_ADD(DATE_FORMAT(NOW(), '%Y-%m-%d'), INTERVAL 15 DAY),'0','$equipo_asignado', $idusuarioUpdate) ");
+            $this->encripta($this->db->insert_id());
+        } else {
+            $data = $this->db->query("INSERT usuarios VALUES (Null,$tipo_identificacion,$idperfil,'$nombres','$apellidos',$identificacion,'$username','$passwd',$estado,DATE_ADD(DATE_FORMAT(NOW(), '%Y-%m-%d'), INTERVAL 30 DAY),'0','$equipo_asignado', $idusuarioUpdate) ");
+            $this->encripta($this->db->insert_id());
+        }
+    }
+
+    function update($IdUsuario, $tipo_identificacion, $identificacion, $nombres, $apellidos, $idperfil, $username, $passwd, $estado, $contrasenaold,$equipo_asignado, $idusuarioUpdate) {
+        $data = $this->db->query("UPDATE usuarios u 
+                                    SET u.tipo_identificacion=$tipo_identificacion ,u.idperfil=$idperfil ,u.nombres='$nombres',u.apellidos='$apellidos',u.identificacion=$identificacion ,
+                                    u.username='$username',u.passwd='$passwd',u.estado= $estado,u.fecha_actualizacion = u.fecha_actualizacion,u.equipo_asignado='$equipo_asignado', u.userUpdate = $idusuarioUpdate
+                                    WHERE u.IdUsuario=$IdUsuario");
+        $this->insertcontrasenaold($IdUsuario, $contrasenaold);
+        $this->encripta($IdUsuario);
+    }
+
+    function insertcontrasenaold($IdUsuario, $contrasenaold) {
+        $query = $this->db->query("INSERT INTO historico_pass VALUES (NULL,$IdUsuario,CURRENT_TIMESTAMP(),'$contrasenaold')");
+    }
+
+    function gettipoIdentificacion($tipo_identificacion) {
+        $data = $this->db->query("SELECT t.nombre FROM tipo_identificacion t WHERE t.tipo_identificacion=$tipo_identificacion");
+        if ($data->num_rows() > 0) {
+            $data = $data->result();
+            return $data[0]->nombre;
+        }
+    }
+
+    function gettipoIdperfil($idperfil) {
+        $data = $this->db->query("SELECT p.nombre FROM perfiles p WHERE p.idperfil=$idperfil");
+        if ($data->num_rows() > 0) {
+            $data = $data->result();
+            return $data[0]->nombre;
+        }
+    }
+
+    public function encripta($iduser) {
+        $consulta = <<<EOF
+               UPDATE usuarios u SET u.passwd =  AES_ENCRYPT(u.passwd,'$this->key')
+               WHERE u.IdUsuario = $iduser
+EOF;
+        $rta = $this->db->query($consulta);
+//        $consulta = <<<EOF
+//               UPDATE usuarios u SET 
+//u.enc = 
+//AES_ENCRYPT(CONCAT('{"IdUsuario"',': "', u.IdUsuario, '"',
+//', "tipo_identificacion"',': "', u.tipo_identificacion, '"',
+//', "idperfil"',': "', u.idperfil, '"',
+//', "nombres"',': "', u.nombres,'"',
+//', "apellidos"',': "', u.apellidos, '"',
+//', "identificacion"',': "', u.identificacion, '"',
+//', "username"',': "', u.username,'"',
+//', "estado"',': "', u.estado, '"',
+//', "fecha_actualizacion"',': "', u.fecha_actualizacion, '"}'),
+//'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c')
+//                WHERE u.IdUsuario = $iduser
+//EOF;
+//        $rta = $this->db->query($consulta);
+    }
+
+}

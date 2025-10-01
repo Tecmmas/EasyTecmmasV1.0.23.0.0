@@ -1,64 +1,119 @@
-<?php //004fb
-if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
-?>
-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
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Mauditorias extends CI_Model {
+
+    function __construct() {
+        parent::__construct();
+        $this->load->dbutil();
+//        $this->db = $this->load->database('default', true);
+//        $this->myforge = $this->load->dbforge($this->db, TRUE);
+    }
+
+    function getDatosFrenos($where) {
+        $consulta = <<<EOF
+               SELECT * FROM control_frenos c WHERE c.vector IS NOT NULL $where          
+EOF;
+        $rta = $this->db->query($consulta);
+        if ($rta->num_rows() > 0) {
+            $rta = $rta->result();
+            return $rta;
+        } else {
+            return [];
+        }
+    }
+
+    function getVectorFrenos($id) {
+        $consulta = <<<EOF
+               SELECT c.vector, c.eje, c.llanta, c.valor FROM control_frenos c WHERE c.id = $id        
+EOF;
+        $rta = $this->db->query($consulta);
+        if ($rta->num_rows() > 0) {
+            $rta = $rta->result();
+            return $rta;
+        } else {
+            return [];
+        }
+    }
+
+    function getDatosAlineacion($where) {
+        $consulta = <<<EOF
+               SELECT * FROM control_alineacion c WHERE c.vector IS NOT NULL $where          
+EOF;
+        $rta = $this->db->query($consulta);
+        if ($rta->num_rows() > 0) {
+            $rta = $rta->result();
+            return $rta;
+        } else {
+            return [];
+        }
+    }
+
+    function getVectorAlineacion($id) {
+        $consulta = <<<EOF
+               SELECT c.vector, c.eje, c.valor FROM control_alineacion c WHERE c.id = $id        
+EOF;
+        $rta = $this->db->query($consulta);
+        if ($rta->num_rows() > 0) {
+            $rta = $rta->result();
+            return $rta;
+        } else {
+            return [];
+        }
+    }
+
+    function getDatosSuspension($where) {
+        $consulta = <<<EOF
+               SELECT * FROM control_suspension c WHERE c.vector IS NOT NULL $where          
+EOF;
+        $rta = $this->db->query($consulta);
+        if ($rta->num_rows() > 0) {
+            $rta = $rta->result();
+            return $rta;
+        } else {
+            return [];
+        }
+    }
+
+    function getDatosTaximetro($where) {
+        $consulta = <<<EOF
+               SELECT DISTINCT
+                v.numero_placa AS 'placa',
+                p.idmaquina AS 'idmaquina',
+                p.fechainicial AS 'fecha',
+                IFNULL((SELECT r.valor FROM resultados r WHERE r.idprueba = p.idprueba AND r.tiporesultado = 'error_tiempo_nuevo' LIMIT 1),'---') AS 'error_tiempo_nuevo',
+                IFNULL((SELECT r.valor FROM resultados r WHERE r.idprueba = p.idprueba AND r.tiporesultado = 'error_distancia_nuevo' LIMIT 1),'---') AS 'error_distancia_nuevo',
+                IFNULL((SELECT r.valor FROM resultados r WHERE r.idprueba = p.idprueba AND r.tiporesultado = 'vector_tiempo' LIMIT 1),'---') AS 'vector_tiempo',
+                IFNULL((SELECT r.valor FROM resultados r WHERE r.idprueba = p.idprueba AND r.tiporesultado = 'vector_distancia' LIMIT 1),'---') AS 'vector_distancia'
+
+                FROM 
+                vehiculos v, hojatrabajo h, pruebas p
+                WHERE 
+                v.idvehiculo = h.idvehiculo AND h.idhojapruebas = p.idhojapruebas AND 
+                (h.reinspeccion = 0 OR h.reinspeccion = 1) AND p.idtipo_prueba = 6
+                  AND (p.estado <> 5 AND p.estado <> 9)  $where          
+EOF;
+        $rta = $this->db->query($consulta);
+        if ($rta->num_rows() > 0) {
+            $rta = $rta->result();
+            return $rta;
+        } else {
+            return [];
+        }
+    }
+
+    function getVectorSuspension($id) {
+        $consulta = <<<EOF
+               SELECT c.vector, c.valor_minimo, c.peso FROM control_suspension c WHERE c.id = $id        
+EOF;
+        $rta = $this->db->query($consulta);
+        if ($rta->num_rows() > 0) {
+            $rta = $rta->result();
+            return $rta;
+        } else {
+            return [];
+        }
+    }
+
+}
