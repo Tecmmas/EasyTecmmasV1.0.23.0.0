@@ -1,4 +1,4 @@
-INSERT INTO NewLineas (idlineas, nombre, idmarcas, codigo_ws) VALUES
+INSERT INTO newlineas (idlineas, nombre, idmarcas, codigo_ws) VALUES
 (0,'SIN LINEA',0,1),
 (1,'TAXI 7:24',1,1),
 (2,'454 SS',1,2),

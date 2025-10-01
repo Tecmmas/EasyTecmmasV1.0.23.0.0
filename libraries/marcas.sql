@@ -1,4 +1,4 @@
-INSERT INTO NewMarcas (idmarcas, nombre) VALUES
+INSERT INTO newmarcas (idmarcas, nombre) VALUES
 (0,'SIN MARCA'),
 (1,'CHEVROLET'),
 (2,'DAEWOO'),
