@@ -721,7 +721,7 @@ EOF;
            SELECT
                 l.idlineas
             FROM
-                newlineas l
+                Newlineas l
             WHERE
                 l.idlineas=$idlinearunt
                 ");
@@ -881,7 +881,7 @@ EOF;
     {
         $lineas = false;
         $marcas = false;
-        $query = $this->db->query("SELECT * FROM newlineas WHERE idlineas = $idlinea");
+        $query = $this->db->query("SELECT * FROM Newlineas WHERE idlineas = $idlinea");
         if ($query->num_rows() > 0) {
             $res =  $query->result();
             $lineas = true;
