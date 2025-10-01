@@ -1,33 +1,37 @@
-<?php
-
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Mcontrol_verificacion extends CI_Model {
-
-    function __construct() {
-        parent::__construct();
-    }
-
-    function insertar($data) {
-        $this->db->insert('control_verificacion', $data);
-    }
-
-    function get($idmaquina) {
-        $query = $this->db->query("select 
-            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_hc_bajo' order by idconfig_maquina desc limit 1) audi_hc_bajo, 
-            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_hc_alto' order by idconfig_maquina desc limit 1) audi_hc_alto, 
-            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co_alto' order by idconfig_maquina desc limit 1) audi_co_alto, 
-            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co_bajo' order by idconfig_maquina desc limit 1) audi_co_bajo, 
-            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co2_bajo' order by idconfig_maquina desc limit 1) audi_co2_bajo, 
-            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co2_alto' order by idconfig_maquina desc limit 1) audi_co2_alto, 
-            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_hc_medio' order by idconfig_maquina desc limit 1) audi_hc_medio, 
-            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co_medio' order by idconfig_maquina desc limit 1) audi_co_medio, 
-            (select parametro FROM config_maquina WHERE idconfiguracion=14 And idmaquina = $idmaquina AND tipo_parametro='audi_co2_medio' order by idconfig_maquina desc limit 1) audi_co2_medio");
-        if ($query->num_rows() > 0) {
-            return $query->result();
-        } else {
-            return "";
-        }
-    }
-
-}
+<?php //004fb
+if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
+?>
+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

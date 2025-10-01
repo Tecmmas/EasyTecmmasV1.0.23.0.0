@@ -1,351 +1,156 @@
-<?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of OFCConsultarRuntModel
- *
- * @author arman
- */
-class OFCConsultarRuntModel extends CI_Model {
-
-    function __construct() {
-        parent::__construct();
-        $this->load->database();
-    }
-
-    function BuscarTablaMarca() {
-        $data = $this->db->query("
-            show tables like '%marcarunt%' ");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function BuscarTablaLinea() {
-        $data = $this->db->query("
-            show tables like '%linearunt%' ");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function BuscarTablaColor() {
-        $data = $this->db->query("
-            show tables like '%colorrunt%' ");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function BuscarRegistroRunt() {
-        $data = $this->db->query("
-            show columns from vehiculos where Field='registrorunt'");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function CrearTablaMarca() {
-        if (!$this->BuscarTablaMarca()) {
-            try {
-                $query = "CREATE TABLE `marcarunt` (
-                            `idmarcaRUNT` INT(11) NOT NULL,
-                            `nombre` VARCHAR(100) NOT NULL,
-                            PRIMARY KEY (`idmarcaRUNT`))
-                            ENGINE = MyISAM;";
-                $this->db->query($query);
-            } catch (Exception $ex) {
-                echo($ex->getMessage());
-                return false;
-            }
-        }
-    }
-
-    function CrearTablaLinea() {
-        if (!$this->BuscarTablaLinea()) {
-            try {
-                $query = "CREATE TABLE `linearunt` (
-                            `idlineaRUNT` INT(11) NOT NULL AUTO_INCREMENT,
-                            `idmarcaRUNT` INT(11) NOT NULL,
-                            `codigo` INT(11) NOT NULL,
-                            `nombre` VARCHAR(100) NOT NULL,
-                            PRIMARY KEY (`idlineaRUNT`))
-                            ENGINE = MyISAM;";
-                $this->db->query($query);
-            } catch (Exception $ex) {
-                echo($ex->getMessage());
-                return false;
-            }
-        }
-    }
-
-    function CrearTablaColor() {
-        if (!$this->BuscarTablaColor()) {
-            try {
-                $query = "CREATE TABLE `colorrunt` (
-                            `idcolorRUNT` INT NOT NULL,
-                            `nombre` VARCHAR(100) NOT NULL,
-                            PRIMARY KEY (`idcolorRUNT`))ENGINE = MyISAM";
-                $this->db->query($query);
-            } catch (Exception $ex) {
-                echo($ex->getMessage());
-                return false;
-            }
-        }
-    }
-
-    function CrearRegistroRunt() {
-        if (!$this->BuscarRegistroRunt()) {
-            try {
-                $query = "ALTER TABLE `vehiculos` 
-                        ADD COLUMN `registrorunt` VARCHAR(1) NULL DEFAULT '0' AFTER `numejes`;";
-                $this->db->query($query);
-            } catch (Exception $ex) {
-                echo($ex->getMessage());
-                return false;
-            }
-        }
-    }
-
-    function InsertarColorRunt($colorrunt) {
-        if (!$this->BuscarColor($colorrunt['idcolorRUNT'])) {
-            return $this->db->insert('colorrunt', $colorrunt);
-        }
-    }
-
-    function BuscarColor($idcolor) {
-        $data = $this->db->query("
-            SELECT
-                idcolorRUNT
-            FROM
-                colorrunt c
-            WHERE
-                c.idcolorRUNT=$idcolor");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function InsertarColorLocal($color) {
-        if (!$this->BuscarColorLocal($color['idcolor'])) {
-            return $this->db->insert('color', $color);
-        }
-    }
-
-    function BuscarColorLocal($idcolor) {
-        $data = $this->db->query("
-            SELECT
-                idcolor
-            FROM
-                color c
-            WHERE
-                c.idcolor=$idcolor");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function InsertarMarcaRunt($marcarunt) {
-        if (!$this->BuscarMarca($marcarunt['idmarcaRUNT'])) {
-            return $this->db->insert('marcarunt', $marcarunt);
-        }
-    }
-
-    function BuscarMarca($idmarca) {
-        $data = $this->db->query("
-            SELECT
-                idmarcaRUNT
-            FROM
-                marcarunt m
-            WHERE
-                m.idmarcaRUNT=$idmarca");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function InsertarMarcaLocal($marcarunt) {
-        if (!$this->BuscarMarcaLocal($marcarunt['idmarca'])) {
-            return $this->db->insert('marca', $marcarunt);
-        }
-    }
-
-    function BuscarMarcaLocal($idmarca) {
-        $data = $this->db->query("
-            SELECT
-                idmarca
-            FROM
-                marca m
-            WHERE
-                m.idmarca=$idmarca");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function InsertarLineaRunt($linearunt) {
-        if (!$this->BuscarLinea($linearunt['idmarcaRUNT'], $linearunt['codigo'])) {
-            return $this->db->insert('linearunt', $linearunt);
-        }
-    }
-
-    function InsertarLineaRunt2($linearunt) {
-        $rta = $this->BuscarLinea($linearunt['idmarcaRUNT'], $linearunt['codigo']);
-        if (!$rta) {
-            $this->db->insert('linearunt', $linearunt);
-            return $this->db->insert_id();
-        }else{
-            $rta = $rta->result();
-            return $rta[0]->idlineaRunt;
-        }
-    }
-
-    function BuscarLinea($idmarca, $codigo) {
-        $data = $this->db->query("
-            SELECT
-                idlineaRunt
-            FROM
-                linearunt l
-            WHERE
-                l.idmarcaRUNT=$idmarca and l.codigo=$codigo");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function InsertarLineaLocal($linea) {
-        if (!$this->BuscarLinea($linea['idmarca'], $linea['idmintrans'])) {
-            return $this->db->insert('linea', $linea);
-        }
-    }
-
-    function BuscarLineaLocal($idmarca, $codigo) {
-        $data = $this->db->query("
-            SELECT
-                idlinea
-            FROM
-                linea l
-            WHERE
-                l.idmarca=$idmarca and l.idmintrans=$codigo");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function InsertarClase($clase) {
-        if (!$this->BuscarClase($clase['idclase'])) {
-            return $this->db->insert('clase', $clase);
-        }
-    }
-
-    function BuscarClase($idclase) {
-        $data = $this->db->query("
-            SELECT
-                idclase
-            FROM
-                clase c
-            WHERE
-                c.idclase=$idclase");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function InsertarAseguradora($aseguradora) {
-        if (!$this->BuscarAseguradora($aseguradora['nombre'])) {
-            return $this->db->insert('aseguradoras', $aseguradora);
-        }
-    }
-
-    function BuscarAseguradora($nombre) {
-        $data = $this->db->query("
-            SELECT
-                a.idaseguradora
-            FROM
-                aseguradoras a
-            WHERE
-                a.nombre='$nombre'");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function InsertarVehiculo($vehiculo) {
-        if (!$this->BuscarVehiculo($vehiculo['numero_placa'])) {
-            echo $this->db->insert('vehiculos', $vehiculo);
-        } else {
-            $this->db->where('numero_placa', $vehiculo['numero_placa']);
-            echo $this->db->update('vehiculos', $vehiculo);
-        }
-    }
-
-    function BuscarVehiculo($numero_placa) {
-        $data = $this->db->query("
-            SELECT
-                v.idvehiculo
-            FROM
-                vehiculos v
-            WHERE
-                v.numero_placa='$numero_placa'");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    function InsertarSoat($soat) {
-        if (!$this->BuscarSoat($soat['idaseguradora'], $soat['numero_soat'])) {
-            return $this->db->insert('soat', $soat);
-        } else {
-            $this->db->where('idaseguradora', $soat['idaseguradora']);
-            $this->db->where('numero_soat', $soat['numero_soat']);
-            return $this->db->update('soat', $soat);
-        }
-    }
-
-    function BuscarSoat($idaseguradora, $numero_soat) {
-        $data = $this->db->query("
-            SELECT
-                s.idsoat
-            FROM
-                soat s
-            WHERE
-                s.idaseguradora='$idaseguradora' and s.numero_soat='$numero_soat'");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-}
+<?php //004fb
+if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
+?>
+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

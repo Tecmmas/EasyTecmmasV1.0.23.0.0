@@ -1,603 +1,321 @@
-<?php
-
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Mprueba extends CI_Model {
-
-    function __construct() {
-        parent::__construct();
-        $this->db = $this->load->database('default', true);
-        $this->myforge = $this->load->dbforge($this->db, TRUE);
-    }
-
-    var $key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJVadQssw5c';
-
-    function get($data) {
-        $idhojapruebas = $data['idhojapruebas'];
-        $idtipo_prueba = $data['idtipo_prueba'];
-        $order = $data['order'];
-        $query = $this->db->query("
-            SELECT
-                p.idprueba, p.idhojapruebas, p.fechainicial, p.prueba, p.estado, p.fechafinal, p.idmaquina, p.idusuario, p.idtipo_prueba,JSON_CONTAINS(JSON_OBJECT(
-                'idhojapruebas',CAST(p.idhojapruebas AS CHAR(100000)),
-                'fechainicial',CAST(p.fechainicial AS CHAR(100000)),
-                'prueba',CAST(p.prueba AS CHAR(100000)),
-                'estado',CAST(p.estado AS CHAR(100000)),
-                'fechafinal',CAST(p.fechafinal AS CHAR(100000)),
-                'idmaquina',CAST(p.idmaquina AS CHAR(100000)),
-                'idusuario',CAST(p.idusuario AS CHAR(100000)),
-                'idtipo_prueba',CAST(p.idtipo_prueba AS CHAR(100000))),
-                AES_DECRYPT(p.enc,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJVadQssw5c')) autentico,
-                JSON_OBJECT(
-                'idhojapruebas',CAST(p.idhojapruebas AS CHAR(100000)),
-                'fechainicial',CAST(p.fechainicial AS CHAR(100000)),
-                'prueba',CAST(p.prueba AS CHAR(100000)),
-                'estado',CAST(p.estado AS CHAR(100000)),
-                'fechafinal',CAST(p.fechafinal AS CHAR(100000)),
-                'idmaquina',CAST(p.idmaquina AS CHAR(100000)),
-                'idusuario',CAST(p.idusuario AS CHAR(100000)),
-                'idtipo_prueba',CAST(p.idtipo_prueba AS CHAR(100000))) new,
-                AES_DECRYPT(p.enc,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJVadQssw5c') old
-            FROM
-                pruebas p
-            WHERE
-                p.idhojapruebas = $idhojapruebas and
-                p.idtipo_prueba = $idtipo_prueba and
-                (p.estado <> 5 and p.estado <> 9)
-            ORDER BY 1 $order
-            LIMIT 1");
-        return $query;
-    }
-
-    function getOperariosSensorial($idprueba) {
-        $count = <<<EOF
-               SELECT 
-                  u.IdUsuario
-                FROM 
-                operario_sensorial os,
-                usuarios u
-                WHERE
-                os.idprueba=$idprueba AND
-                os.idusuario=u.IdUsuario
-                GROUP BY 1                
-EOF;
-        $r = $this->db->query($count);
-        if ($r->num_rows() > 1) {
-            $consulta = <<<EOF
-               SELECT
-               CASE
-                   WHEN os.idsensorial=1  THEN "Inspección visual (Revision exterior)"
-                   WHEN os.idsensorial=2  THEN "Inspección visual (Vidrios)"
-                   WHEN os.idsensorial=3  THEN "Inspección visual (Rines y llantas)"
-                   WHEN os.idsensorial=4  THEN "Inspección visual (Dirección)"
-                   WHEN os.idsensorial=5  THEN "Inspección visual (Motor, tansmisión y combustible)"
-                   WHEN os.idsensorial=6  THEN "Inspección visual (Revisión interior)"
-                   WHEN os.idsensorial=7  THEN "Inspección visual (Emisiones(gases, elementos para producir ruido))"
-                   WHEN os.idsensorial=8  THEN "Inspección visual (Luces)"
-                   WHEN os.idsensorial=9  THEN "Inspección visual (Salida de emergencia)"
-                   WHEN os.idsensorial=10  THEN "Inspección visual (Frenos)"
-                   WHEN os.idsensorial=11  THEN "Inspección visual (Suspensión (suspensión, rines y llantas))"
-                   WHEN os.idsensorial=12  THEN "Inspección visual (Taxímetros)"
-                   WHEN os.idsensorial=13  THEN "Inspección visual (Placas laterales)"
-                   WHEN os.idsensorial=14  THEN "Inspección visual (Enseñanza)"
-                   WHEN os.idsensorial=15  THEN "Inspección visual (Profundidad de labrado)"
-                   ELSE "Inspección visual"
-                END sensorial ,
-                CONCAT( u.nombres,' ',u.apellidos) operario
-                FROM 
-                operario_sensorial os,
-                usuarios u
-                WHERE
-                os.idprueba=$idprueba AND
-                os.idusuario=u.IdUsuario
-EOF;
-            $rta = $this->db->query($consulta);
-            return $rta->result();
-        } else {
-            return '';
-        }
-    }
-
-    function getxId($idprueba) {
-        $query = $this->db->query("
-            SELECT
-                *,JSON_CONTAINS(JSON_OBJECT(
-                'idhojapruebas',CAST(p.idhojapruebas AS CHAR(100000)),
-                'fechainicial',CAST(p.fechainicial AS CHAR(100000)),
-                'prueba',CAST(p.prueba AS CHAR(100000)),
-                'estado',CAST(p.estado AS CHAR(100000)),
-                'fechafinal',CAST(p.fechafinal AS CHAR(100000)),
-                'idmaquina',CAST(p.idmaquina AS CHAR(100000)),
-                'idusuario',CAST(p.idusuario AS CHAR(100000)),
-                'idtipo_prueba',CAST(p.idtipo_prueba AS CHAR(100000))),
-                AES_DECRYPT(p.enc,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJVadQssw5c')) autentico,
-                JSON_OBJECT(
-                'idhojapruebas',CAST(p.idhojapruebas AS CHAR(100000)),
-                'fechainicial',CAST(p.fechainicial AS CHAR(100000)),
-                'prueba',CAST(p.prueba AS CHAR(100000)),
-                'estado',CAST(p.estado AS CHAR(100000)),
-                'fechafinal',CAST(p.fechafinal AS CHAR(100000)),
-                'idmaquina',CAST(p.idmaquina AS CHAR(100000)),
-                'idusuario',CAST(p.idusuario AS CHAR(100000)),
-                'idtipo_prueba',CAST(p.idtipo_prueba AS CHAR(100000))) new,
-                AES_DECRYPT(p.enc,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJVadQssw5c') old
-            FROM
-                pruebas p
-            WHERE
-                p.idprueba = $idprueba");
-        return $query;
-    }
-
-    function getMaq($data) {
-        $idhojapruebas = $data['idhojapruebas'];
-        $idtipo_prueba = $data['idtipo_prueba'];
-//        $fechainicial = $data['fechainicial'];
-        $order = $data['order'];
-        if ($order == 'DESC') {
-            $query = $this->db->query("
-            SELECT 
-            IF((SELECT COUNT(*) FROM pruebas p WHERE p.idhojapruebas=$idhojapruebas AND p.estado<>5 and p.estado <> 9 AND p.idtipo_prueba=$idtipo_prueba)>1,
-            (SELECT p.idmaquina FROM pruebas p WHERE p.idhojapruebas=$idhojapruebas AND p.estado<>5 and p.estado <> 9 AND p.estado<>3 AND p.idtipo_prueba=$idtipo_prueba ORDER BY p.idprueba DESC LIMIT 1),'') idmaquina,
-            IF((SELECT COUNT(*) FROM pruebas p WHERE p.idhojapruebas=$idhojapruebas AND p.estado<>5 and p.estado <> 9 AND p.idtipo_prueba=$idtipo_prueba)>1,
-            (SELECT p.idusuario FROM pruebas p WHERE p.idhojapruebas=$idhojapruebas AND p.estado<>5 and p.estado <> 9 AND p.estado<>3 AND p.idtipo_prueba=$idtipo_prueba ORDER BY p.idprueba DESC LIMIT 1),'') idusuario");
-        } else {
-            $query = $this->db->query("
-            SELECT 
-            (SELECT p.idmaquina FROM pruebas p WHERE p.idhojapruebas=$idhojapruebas AND p.estado<>5 and p.estado <> 9 AND p.idtipo_prueba=$idtipo_prueba ORDER BY p.idprueba LIMIT 1) idmaquina,
-            (SELECT p.idusuario FROM pruebas p WHERE p.idhojapruebas=$idhojapruebas AND p.estado<>5 and p.estado <> 9 AND p.idtipo_prueba=$idtipo_prueba ORDER BY p.idprueba LIMIT 1) idusuario");
-        }
-        return $query;
-    }
-
-//    function getMaq($data) {
-//        $idhojapruebas = $data['idhojapruebas'];
-//        $idtipo_prueba = $data['idtipo_prueba'];
-//        $fechainicial = $data['fechainicial'];
-//        $order = $data['order'];
-//        $query = $this->db->query("
-//            SELECT
-//                *
-//            FROM
-//                pruebas p
-//            WHERE
-//                p.idhojapruebas = $idhojapruebas and
-//                p.idtipo_prueba = $idtipo_prueba and
-//                p.fechainicial = '$fechainicial' and
-//                (p.estado <> 5)
-//            ORDER BY 1 $order
-//            LIMIT 1");
-//        return $query;
-//    }
-
-    function get5($data) {
-        $idhojapruebas = $data['idhojapruebas'];
-        $idtipo_prueba = $data['idtipo_prueba'];
-        $order = $data['order'];
-        $where = "(p.estado <> 0 and p.estado <> 5 and p.estado <> 9)";
-        if ($order === 'DESC') {
-            $where = "(p.estado <> 0 and p.estado <> 5 and p.estado <> 9 and p.estado <> 3)";
-        }
-        $query = $this->db->query("
-            SELECT
-                *
-            FROM
-                pruebas p
-            WHERE
-                p.idhojapruebas = $idhojapruebas and
-                p.idtipo_prueba = $idtipo_prueba and
-                 $where
-            ORDER BY p.fechainicial, p.prueba asc
-            LIMIT 2");
-        return $query;
-    }
-
-    function get55maquina($data) {
-        $idhojapruebas = $data['idhojapruebas'];
-        $idtipo_prueba = $data['idtipo_prueba'];
-        $order = $data['order'];
-        $query = $this->db->query("
-            SELECT
-                m.*
-            FROM
-                pruebas p, maquina m
-            WHERE
-                p.idhojapruebas = $idhojapruebas and
-                m.idmaquina=p.idmaquina and
-                m.idtipo_prueba=$idtipo_prueba and
-                p.idtipo_prueba = '55' and
-                (p.estado <> 0 and p.estado <> 5 and p.estado <> 9)
-            ORDER BY 1 $order
-            LIMIT 1");
-        return $query;
-    }
-
-    function getInspectores($data) {
-        $idhojapruebas = $data['idhojapruebas'];
-        $query = $this->db->query("
-            SELECT 
-                CONCAT(tp.nombre,'-',u.nombres,' ',u.apellidos) operarios
-            FROM 
-                pruebas p,usuarios u,tipo_prueba tp,maquina m
-            WHERE 
-                p.idhojapruebas=$idhojapruebas AND
-                m.idtipo_prueba=tp.idtipo_prueba AND
-                p.idmaquina=m.idmaquina AND
-                u.IdUsuario=p.idusuario 
-            GROUP BY 1");
-        return $query;
-    }
-
-    function getInspector($data) {
-        $idhojapruebas = $data['idhojapruebas'];
-        $query = $this->db->query("
-            SELECT 
-                CONCAT(tp.nombre,'-',u.nombres,' ',u.apellidos) operarios
-            FROM 
-                pruebas p,usuarios u,tipo_prueba tp,maquina m
-            WHERE 
-                p.idhojapruebas=$idhojapruebas AND
-                m.idtipo_prueba=tp.idtipo_prueba AND
-                p.idmaquina=m.idmaquina AND
-                u.IdUsuario=p.idusuario 
-            GROUP BY 1");
-        return $query;
-    }
-
-    function getLast($data) {
-        $idhojapruebas = $data['idhojapruebas'];
-        $query = $this->db->query("
-            SELECT
-                *
-            FROM
-                pruebas p
-            WHERE
-                p.idhojapruebas = $idhojapruebas and
-               (p.estado <> 0 and p.estado <> 5 and p.estado <> 9) and
-                p.idtipo_prueba<>21 AND p.idtipo_prueba<>22
-            ORDER BY p.fechainicial DESC
-            LIMIT 1");
-        return $query;
-    }
-
-    function getLastFecha($data, $order) {
-        $idhojapruebas = $data['idhojapruebas'];
-        $query = $this->db->query("
-            SELECT 
-                max(p.fechafinal) fechafinal
-                FROM 
-                pruebas p 
-                WHERE 
-                p.idhojapruebas=$idhojapruebas AND
-                (p.estado <> 0 and p.estado <> 5 and p.estado <> 9) and
-                p.idtipo_prueba<>21 AND p.idtipo_prueba<>22
-                GROUP BY p.fechainicial ORDER BY p.fechainicial $order LIMIT 1");
-        return $query;
-    }
-
-    function getFechaInicial($idhojapruebas, $reins) {
-        $l = '';
-        if ($reins == '1' || $reins == '44441') {
-            $l = ',1';
-        }
-        $query = $this->db->query("
-            SELECT  
-                p.fechainicial,COUNT(*) c
-            FROM 
-            pruebas p 
-            WHERE 
-            p.idhojapruebas=$idhojapruebas
-            GROUP BY 1 ORDER BY 2 DESC LIMIT 1$l");
-        $r = $query->result();
-        return $r[0]->fechainicial;
-    }
-
-    function insert($data, $juez) {
-        $this->db->trans_start();
-        $key = $this->key;
-        $idhojapruebas = $data['idhojapruebas'];
-        $fechainicial = $data['fechainicial'];
-        $prueba = $data['prueba'];
-        $estado = $data['estado'];
-        $fechafinal = $data['fechafinal'];
-        $idmaquina = null;
-        $idusuario = $data['idusuario'];
-        $idtipo_prueba = $data['idtipo_prueba'];
-        $pru['idhojapruebas'] = "$idhojapruebas";
-        $pru['fechainicial'] = $fechainicial;
-        $pru['prueba'] = $prueba;
-        $pru['estado'] = $estado;
-        $pru['fechafinal'] = $fechafinal;
-        $pru['idmaquina'] = $idmaquina;
-        $pru['idusuario'] = $idusuario;
-        $pru['idtipo_prueba'] = $idtipo_prueba;
-        $enc = json_encode($pru);
-        $Q = <<<EOF
-        INSERT INTO 
-        pruebas
-        VALUES
-        (null,'$idhojapruebas','$fechainicial','$prueba','$estado',NULL,NULL,'$idusuario','$idtipo_prueba', AES_ENCRYPT('$enc','$key'))
-EOF;
-        $this->db->query($Q);
-        $this->db->trans_complete();
-    }
-
-    function update($data) {
-        unset($data['fechainicial']);
-        unset($data['fechafinal']);
-        unset($data['idusuario']);
-//        unset($data['idmaquina']);
-        unset($data['estado']);
-        $this->db->set('fechainicial', 'fechainicial', FALSE);
-        $this->db->set('fechafinal', 'fechafinal', FALSE);
-        $this->db->set('idusuario', 'idusuario', FALSE);
-//        $this->db->set('idmaquina', 'idmaquina', FALSE);
-        $this->db->set('estado', '3', FALSE);
-        $this->db->where('idhojapruebas', $data['idhojapruebas']);
-        $this->db->where('idtipo_prueba', $data['idtipo_prueba']);
-        $this->db->where('prueba', $data['prueba']);
-        $this->db->where('estado', '1');
-        $this->db->where('estado <>', '5');
-        $this->db->where('estado <>', '9');
-        $this->db->update('pruebas', $data);
-        $this->updateEnc3($data['idhojapruebas'], $data['idtipo_prueba'], $data['prueba']);
-    }
-
-    function update_($data) {
-        unset($data['fechainicial']);
-        unset($data['fechafinal']);
-        unset($data['idusuario']);
-        unset($data['estado']);
-        $this->db->set('fechainicial', 'fechainicial', FALSE);
-        $this->db->set('fechafinal', 'fechafinal', FALSE);
-        $this->db->set('idusuario', 'idusuario', FALSE);
-        $this->db->set('estado', '3', FALSE);
-        $this->db->where('idhojapruebas', $data['idhojapruebas']);
-        $this->db->where('idtipo_prueba', $data['idtipo_prueba']);
-        $this->db->where('prueba', $data['prueba']);
-        $this->db->where('estado <>', '5');
-        $this->db->where('estado <>', '9');
-        $this->db->update('pruebas', $data);
-        $this->updateEnc3($data['idhojapruebas'], $data['idtipo_prueba'], $data['prueba']);
-    }
-
-    function update_B($idprueba) {
-        $this->db->set('fechainicial', 'fechainicial', FALSE);
-        $this->db->set('fechafinal', 'fechafinal', FALSE);
-        $this->db->set('idusuario', 'idusuario', FALSE);
-        $this->db->set('estado', '1', FALSE);
-        $this->db->where('idprueba', $idprueba);
-        $this->db->update('pruebas');
-        $this->updateEnc($idprueba);
-    }
-
-    function update_XExosto($valor, $idprueba, $idhojatrabajo) {
-        $this->db->query("
-            UPDATE 
-                pruebas 
-                SET 
-                prueba=$valor,fechainicial=fechainicial
-                WHERE 
-                idprueba=$idprueba and
-                idhojapruebas=$idhojatrabajo AND
-                idtipo_prueba=3 AND
-                (estado=1 OR estado=2) AND
-                prueba<>0;");
-//        $query->result();
-        $this->updateEnc($idprueba);
-    }
-
-    function actualizarEstado($idprueba, $estado) {
-        $this->db->set('fechainicial', 'fechainicial', FALSE);
-        $this->db->set('fechafinal', 'fechafinal', FALSE);
-        $this->db->set('idusuario', 'idusuario', FALSE);
-        $this->db->set('estado', $estado, FALSE);
-        $this->db->where('idprueba', $idprueba);
-        $this->db->update('pruebas');
-        $this->updateEnc($idprueba);
-    }
-
-    function eliminarPrueba($data) {
-        $this->db->where('idhojapruebas', $data['idhojapruebas']);
-        $this->db->where('fechainicial', $data['fechainicial']);
-        $this->db->where('idtipo_prueba', $data['idtipo_prueba']);
-        $this->db->delete('pruebas');
-    }
-
-    function eliminarPruebaID($data) {
-        $this->db->where('idprueba', $data['idprueba']);
-        $this->db->delete('pruebas');
-    }
-
-    function desencrypt_MULTI($string) {
-        $key = "Jik8ThGv5TrVkIolM45YtfvEdgYhjukL";
-        $iv = "hjsyduiohjsyduio";
-        $output = openssl_decrypt($string, 'AES-256-CBC', $key, 0, $iv);
-        return $output;
-    }
-
-    function encrypt_MULTI($string) {
-        $key = "Jik8ThGv5TrVkIolM45YtfvEdgYhjukL";
-        $iv = "hjsyduiohjsyduio";
-        $output = openssl_encrypt($string, 'AES-256-CBC', $key, 0, $iv);
-        return $output;
-    }
-
-    function insertVisor($vehiculo) {
-        $this->db->trans_start();
-        $cadena = $this->db->query("insert visor values (null, " . $vehiculo['idhojapruebas'] . ", " . $vehiculo['reinspeccion'] . "," . $vehiculo['servicio'] . ", '" . $vehiculo['placa'] . "'," . $vehiculo['luces'] . ", " . $vehiculo['gases'] . "," . $vehiculo['opacidad'] . ", " . $vehiculo['sonometro'] . ", " . $vehiculo['visual'] . ", " . $vehiculo['camara0'] . ", " . $vehiculo['camara1'] . ", " . $vehiculo['alineacion'] . ", " . $vehiculo['frenos'] . ", " . $vehiculo['suspension'] . ", " . $vehiculo['taximetro'] . ",0,0,1, NOW())");
-        $this->db->trans_complete();
-    }
-
-    public function creteTableVisor() {
-        $fields = array(
-            'idvisor' => array(
-                'type' => 'INT',
-                'constraint' => 5,
-                'unsigned' => TRUE,
-                'auto_increment' => TRUE
-            ),
-            'idhojapruebas' => array(
-                'type' => 'INT',
-                'constraint' => '10',
-                'null' => FALSE,
-            ),
-            'reinspeccion' => array(
-                'type' => 'INT',
-                'constraint' => '10',
-                'null' => FALSE,
-            ),
-            'servicio' => array(
-                'type' => 'INT',
-                'constraint' => '10',
-                'null' => FALSE,
-            ),
-            'placa' => array(
-                'type' => 'VARCHAR',
-                'constraint' => '200',
-                'null' => FALSE,
-            ),
-            'luces' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'gases' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'opacidad' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'sonometro' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'visual' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'camara0' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'camara1' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'alineacion' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'frenos' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'suspension' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'taximetro' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'certificado' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'sicov' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'estadototal' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => TRUE,
-            ),
-            'fecha' => array(
-                'type' => 'TIMESTAMP',
-                'null' => FALSE,
-            ),
-        );
-        $this->myforge->add_key('idvisor', TRUE);
-        $this->myforge->add_field($fields);
-        $attributes = array('ENGINE' => 'MyISAM');
-        $this->myforge->create_table('visor', TRUE, $attributes);
-    }
-
-    function getNow() {
-        $result = $this->db->query("select now() ahora");
-        $result = $result->result();
-        return $result[0]->ahora;
-    }
-
-    function updateEnc($id) {
-        $pruebas['idprueba'] = $id;
-        $idprueba = $pruebas['idprueba'];
-        $query2 = $this->db->query("SELECT * FROM pruebas p WHERE p.idprueba = $idprueba LIMIT 1");
-        $pru = $query2->result();
-        if ($query2->num_rows() !== 0) {
-            $dat['idhojapruebas'] = $pru[0]->idhojapruebas;
-            $dat['fechainicial'] = $pru[0]->fechainicial;
-            $dat['prueba'] = $pru[0]->prueba;
-            $dat['estado'] = $pru[0]->estado;
-            $dat['fechafinal'] = $pru[0]->fechafinal;
-            $dat['idmaquina'] = $pru[0]->idmaquina;
-            $dat['idusuario'] = $pru[0]->idusuario;
-            $dat['idtipo_prueba'] = $pru[0]->idtipo_prueba;
-            $enc = json_encode($dat);
-            $key = $this->key;
-            $Q = <<<EOF
-                UPDATE
-                pruebas
-                SET
-                fechainicial=fechainicial, enc=(SELECT AES_ENCRYPT('$enc','$key'))
-                WHERE
-                idprueba=$idprueba;
-EOF;
-            $this->db->query($Q);
-        }
-    }
-
-    function updateEnc3($idhojapruebas, $idtipo_prueba, $prueba) {
-        $query2 = $this->db->query("SELECT * FROM pruebas p WHERE p.idhojapruebas=$idhojapruebas and p.idtipo_prueba=$idtipo_prueba and p.prueba=$prueba and p.estado=3 LIMIT 1");
-//            echo "SELECT * FROM pruebas p WHERE p.idhojapruebas=$idhojapruebas and p.idtipo_prueba=$idtipo_prueba and p.prueba=$prueba and p.estado=3 LIMIT 1";
-        if ($query2->num_rows() !== 0) {
-            $pru = $query2->result();
-            $pruebas['idprueba'] = $pru[0]->idprueba;
-            $idprueba = $pruebas['idprueba'];
-            $dat['idhojapruebas'] = $pru[0]->idhojapruebas;
-            $dat['fechainicial'] = $pru[0]->fechainicial;
-            $dat['prueba'] = $pru[0]->prueba;
-            $dat['estado'] = $pru[0]->estado;
-            $dat['fechafinal'] = $pru[0]->fechafinal;
-            $dat['idmaquina'] = $pru[0]->idmaquina;
-            $dat['idusuario'] = $pru[0]->idusuario;
-            $dat['idtipo_prueba'] = $pru[0]->idtipo_prueba;
-            $enc = json_encode($dat);
-            $key = $this->key;
-            $Q = <<<EOF
-                UPDATE
-                pruebas
-                SET
-                fechainicial=fechainicial, enc=(SELECT AES_ENCRYPT('$enc','$key'))
-                WHERE
-                idprueba=$idprueba;
-EOF;
-            $this->db->query($Q);
-        }
-    }
-
-}
+<?php //004fb
+if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
+?>
+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
+fZsGjNgcl0pC8nu=

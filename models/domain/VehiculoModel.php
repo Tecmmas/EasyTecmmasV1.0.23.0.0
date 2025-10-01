@@ -1,32 +1,30 @@
-<?php
-
-class VehiculoModel extends CI_Model {
-
-    function __construct() {
-        parent::__construct();
-        $this->load->database();
-    }
-
-    public function get($numero_placa) {
-        $data = $this->db->query("
-            SELECT
-                *
-            FROM
-                vehiculos v
-            WHERE
-                v.numero_placa='" . $numero_placa . "'
-            LIMIT
-                1 ");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return FALSE;
-        }
-    }
-
-    public function update($data) {
-        $this->db->where("numero_placa", $data['numero_placa']);
-        $this->db->update('vehiculos', $data);
-    }
-
-}
+<?php //004fb
+if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
+?>
+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

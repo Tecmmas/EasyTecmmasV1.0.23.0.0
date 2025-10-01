@@ -1,717 +1,266 @@
-<?php
-
-defined('BASEPATH') or exit('No direct script access allowed');
-
-class Mindex extends CI_Model
-{
-
-    var $validVariableEspejo = 0;
-
-    function __construct()
-    {
-        parent::__construct();
-        $this->load->dbutil();
-        $this->myforge = $this->load->dbforge($this->db, TRUE);
-        $this->validVariableEspejo = validEspejo();
-        if ($this->validVariableEspejo == 1) {
-            $this->bdslave = $this->load->database('bdslave', true);
-            $this->borrarBd();
-        }
-    }
-
-    public function staTus()
-    {
-        $consulta = <<<EOF
-            SHOW SLAVE STATUS
-EOF;
-        $rta = $this->bdslave->query($consulta);
-        return $rta;
-    }
-
-    function borrarBd()
-    {
-        //$this->db->query("STOP SLAVE");
-        // $this->db->query("SET sql_log_bin = 0");
-
-        // $this->db->query("DELETE h,p,r
-        //                     FROM vehiculos v, hojatrabajo h, pruebas p, resultados r
-        //                     WHERE v.idvehiculo = h.idvehiculo AND h.idhojapruebas = p.idhojapruebas AND p.idprueba = r.idprueba AND 
-        //                     DATE_FORMAT(CURDATE(), '%Y-%m-%d')  <> DATE_FORMAT(p.fechafinal, '%Y-%m-%d') AND 
-        //                     (h.estadototal = 4 OR h.reinspeccion = 8888 OR h.reinspeccion = 4444 OR h.reinspeccion = 4441)");
-        // $this->db->query("DELETE p,pr 
-        //                 FROM pre_prerevision p, pre_dato pr WHERE p.idpre_prerevision = pr.idpre_prerevision AND    
-        //                 DATE_FORMAT(CURDATE(), '%Y-%m-%d')  <> DATE_FORMAT(p.fecha_prerevision, '%Y-%m-%d')");
-
-        // $this->db->query("SET sql_log_bin = 1");
-        // $this->db->query("START SLAVE");
-    }
-
-    // public function getresul_local()
-    // {
-    //     $query = true;
-    //     $mesaje = "";
-    //     $this->db2 = $this->load->database('bdrespaldo', true);
-    //     $tecmmas = $this->db->query("SHOW TABLES ");
-    //     $res = $tecmmas->result();
-    //     foreach ($res as $bd) {
-    //         if ($bd->Tables_in_tecmmas_bd !== 'backup') {
-    //             $rta = $this->db->query("SELECT COUNT(*) AS 'res' FROM $bd->Tables_in_tecmmas_bd");
-    //             $rta2 = $this->db2->query("SELECT COUNT(*) AS 'res' FROM $bd->Tables_in_tecmmas_bd");
-    //             $data = $rta->result();
-    //             $data2 = $rta2->result();
-    //             if ($data[0]->res !== $data2[0]->res) {
-    //                 $query = false;
-    //                 $mesaje = $mesaje . "Tabla $bd->Tables_in_tecmmas_bd registros no coinciden bd_local= " . $data[0]->res . ' bd_resplado= ' . $data2[0]->res . '<br/>';
-    //             }
-    //         }
-    //     }
-    //     $imagenesbd = $this->db->query("SHOW DATABASES  like 'imagenes_bd'");
-    //     if ($imagenesbd->num_rows() > 0) {
-    //         $image = $this->db->query("SHOW TABLES FROM imagenes_bd");
-    //         $r = $image->result();
-    //         foreach ($r as $bd) {
-    //             $rta = $this->db->query("SELECT COUNT(*) AS 'res' FROM imagenes_bd.$bd->Tables_in_imagenes_bd");
-    //             $rta2 = $this->db2->query("SELECT COUNT(*) AS 'res' FROM imagenes_bd.$bd->Tables_in_imagenes_bd");
-    //             $data = $rta->result();
-    //             $data2 = $rta2->result();
-    //             if ($data[0]->res !== $data2[0]->res) {
-    //                 $query = false;
-    //                 $mesaje = $mesaje . "En la base de datos imagenes_bd Tabla $bd->Tables_in_imagenes_bd registros no coinciden bd_local= " . $data[0]->res . ' bd_resplado= ' . $data2[0]->res . '<br/>';
-    //             }
-    //         }
-    //     }
-    //     if (!$query) {
-    //         return $mesaje;
-    //     } else {
-    //         return $query;
-    //     }
-    // }
-    //    function puede_entrar($usuario, $contrasena) {
-    //        $this->db->where('username', $usuario);
-    //        $this->db->where('passwd', $contrasena);
-    //        $query = $this->db->get('usuarios');
-    //        return $query;
-    //    }
-
-    function puede_entrar($usuario, $contrasena)
-    {
-        $consulta = <<<EOF
-               SELECT 
-                    u.IdUsuario,
-                    u.tipo_identificacion,
-                    u.idperfil,
-                    u.nombres,
-                    u.apellidos,
-                    u.identificacion,
-                    u.username,
-                    u.estado,
-                    u.fecha_actualizacion,
-                    u.userUpdate,
-                    AES_DECRYPT(u.passwd,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c') autentico,
-                    AES_DECRYPT(u.passwd,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c') passwd
-                    FROM 
-                    usuarios u 
-                    WHERE 
-                    u.username = '$usuario' and AES_DECRYPT(u.passwd,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c') = '$contrasena';
-EOF;
-        $rta = $this->db->query($consulta);
-        return $rta;
-    }
-
-    function validar_vigencia($idUsuario)
-    {
-        $result = $this->db->query("select 1 from usuarios u WHERE u.fecha_actualizacion<CURDATE() AND u.IdUsuario=" . $idUsuario);
-        if ($result->num_rows() > 0) {
-            return "1";
-        } else {
-            return "0";
-        }
-    }
-
-    function enc()
-    {
-        //$this->dbforge->drop_column('usuarios', 'enc');
-        if (!$this->db->field_exists('nombre_empresa', 'vehiculos')) {
-            $fields = array(
-                'nombre_empresa' => array('type' => 'VARCHAR(500)')
-            );
-            $this->dbforge->add_column('vehiculos', $fields);
-        }
-        if (!$this->db->field_exists('userUpdate', 'usuarios')) {
-            $fields = array(
-                'userUpdate' => array('type' => 'INT(11)', 'default' => 0)
-            );
-            $this->dbforge->add_column('usuarios', $fields);
-        }
-        if (!$this->db->field_exists('idmodoTransporte', 'vehiculos')) {
-            $fields = array(
-                'idmodoTransporte' => array('type' => 'INT(11)', 'null' => true)
-            );
-            $this->dbforge->add_column('vehiculos', $fields);
-            $this->createModoTransporte();
-        }
-        if (!$this->db->field_exists('equipo_asignado', 'usuarios')) {
-            $fields = array(
-                'equipo_asignado' => array('type' => 'VARCHAR(500)')
-            );
-            $this->dbforge->add_column('usuarios', $fields);
-        }
-        if (!$this->db->field_exists('nombre_empresa', 'vehiculos')) {
-            $fields = array(
-                'nombre_empresa' => array('type' => 'VARCHAR(500)')
-            );
-            $this->dbforge->add_column('vehiculos', $fields);
-        }
-        if (!$this->db->field_exists('aplicares2703', 'vehiculos')) {
-            $fields = array(
-                'aplicares2703' => array('type' => 'TINYINT', 'default' => '0')
-            );
-            $this->dbforge->add_column('vehiculos', $fields);
-        }
-        if (!$this->db->field_exists('autoregulado', 'vehiculos')) {
-            $fields = array(
-                'autoregulado' => array('type' => 'TINYINT', 'default' => '0')
-            );
-            $this->dbforge->add_column('vehiculos', $fields);
-        }
-
-        if (!$this->db->field_exists('actualizado', 'pre_prerevision')) {
-            $fields = array(
-                'actualizado' => array('type' => 'TINYINT', 'default' => '0')
-            );
-            $this->dbforge->add_column('pre_prerevision', $fields);
-        }
-        if (!$this->db->field_exists('enc', 'usuarios')) {
-            $fields = array(
-                'enc' => array('type' => 'VARBINARY(5000)')
-            );
-            $this->dbforge->add_column('usuarios', $fields);
-
-            $consulta = <<<EOF
-               UPDATE usuarios u SET u.passwd =  AES_ENCRYPT(u.passwd,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c')
-EOF;
-            $rta = $this->db->query($consulta);
-            $consulta = <<<EOF
-               UPDATE usuarios u SET 
-u.enc = 
-AES_ENCRYPT(CONCAT('{"IdUsuario"',': "', u.IdUsuario, '"',
-', "tipo_identificacion"',': "', u.tipo_identificacion, '"',
-', "idperfil"',': "', u.idperfil, '"',
-', "nombres"',': "', u.nombres,'"',
-', "apellidos"',': "', u.apellidos, '"',
-', "identificacion"',': "', u.identificacion, '"',
-', "username"',': "', u.username,'"',
-', "estado"',': "', u.estado, '"',
-', "fecha_actualizacion"',': "', u.fecha_actualizacion, '"}'),
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c')
-EOF;
-            $rta = $this->db->query($consulta);
-        }
-        if (!$this->db->field_exists('enc', 'pruebas')) {
-            $fields = array(
-                'enc' => array('type' => 'VARBINARY(5000)')
-            );
-            //            $consulta = <<<EOF
-            //               UPDATE usuarios u SET u.passwd =  AES_ENCRYPT(u.passwd,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c')
-            //EOF;
-            //            $rta = $this->db->query($consulta);
-            $this->dbforge->add_column('pruebas', $fields);
-            $this->db->query("ALTER TABLE visor  MODIFY luces VARCHAR(50) NULL;");
-            $this->db->query("ALTER TABLE visor  MODIFY gases VARCHAR(50) NULL;");
-            $this->db->query("ALTER TABLE visor  MODIFY opacidad VARCHAR(50) NULL;");
-            $this->db->query("ALTER TABLE visor  MODIFY sonometro VARCHAR(50) NULL;");
-            $this->db->query("ALTER TABLE visor  MODIFY visual VARCHAR(50) NULL;");
-            $this->db->query("ALTER TABLE visor  MODIFY camara0 VARCHAR(50) NULL;");
-            $this->db->query("ALTER TABLE visor  MODIFY camara1 VARCHAR(50) NULL;");
-            $this->db->query("ALTER TABLE visor  MODIFY alineacion VARCHAR(50) NULL;");
-            $this->db->query("ALTER TABLE visor  MODIFY frenos VARCHAR(50) NULL;");
-            $this->db->query("ALTER TABLE visor  MODIFY suspension VARCHAR(50) NULL;");
-            $this->db->query("ALTER TABLE visor  MODIFY taximetro VARCHAR(50) NULL;");
-        }
-        if (!$this->db->field_exists('enc', 'resultados')) {
-            $fields = array(
-                'enc' => array('type' => 'VARBINARY(5000)')
-            );
-            $this->dbforge->add_column('resultados', $fields);
-        }
-
-        //control para nuevas marcas lineas y ciudades
-        if (!$this->db->field_exists('migrateLineaMarca', 'vehiculos')) {
-            $fields = array(
-                'migrateLineaMarca' => array('type' => 'TINYINT', 'default' => '0')
-            );
-            $this->dbforge->add_column('vehiculos', $fields);
-            $this->db->query("ALTER TABLE sede  MODIFY cod_ciudad VARCHAR(30) NULL;");
-            $this->db->query("ALTER TABLE ciudades  MODIFY cod_ciudad VARCHAR(30) NULL;");
-            $this->db->query("ALTER TABLE clientes  MODIFY cod_ciudad VARCHAR(30) NULL;");
-            $this->db->query("DELETE FROM ciudades");
-
-            //gestion de tabla clase
-            $this->db->query("DELETE FROM clase");
-            $this->db->query("INSERT INTO clase (idclase, nombre, tipolux) VALUES
-                                (1, 'AUTOMOVIL', 'M1'),
-                                (2, 'BUS', 'M3'),
-                                (3, 'BUSETA', 'M3'),
-                                (4, 'CAMION', 'N2'),
-                                (5, 'CAMIONETA', 'N1G'),
-                                (6, 'CAMPERO', 'M1G'),
-                                (7, 'MICROBUS', 'M2'),
-                                (8, 'TRACTOCAMION', 'N3'),
-                                (42, 'VOLQUETA', 'N2'),
-                                (10, 'MOTOCICLETA', 'L3e'),
-                                (11, 'MAQ.AGRICOLA', 'N3'),
-                                (12, 'MAQ.INDUSTRIAL', 'N3'),
-                                (41, 'SEMIREMOLQUE', 'N3'),
-                                (14, 'MOTOCARRO', 'L6e'),
-                                (24, 'REMOLQUE', 'N3'),
-                                (43, 'SIN CLASE', 'M1'),
-                                (17, 'MOTOTRICICLO', 'L4e'),
-                                (19, 'CUATRIMOTO', ''),
-                                (163, 'CICLOMOTOR', ''),
-                                (164, 'TRICIMOTO', ''),
-                                (165, 'CUADRICICLO', ''),
-                                (160, 'MAQ. CONSTRUCCION O MINERA', 'N3'),
-                                (181, 'TRICIMÓVIL', 'L6e');");
-
-            $this->db->query("UPDATE vehiculos SET idclase = 42 WHERE idclase = 9;");
-            $this->db->query("UPDATE vehiculos SET idclase = 41 WHERE idclase = 13;");
-            $this->db->query("UPDATE vehiculos SET idclase = 24 WHERE idclase = 15;");
-            $this->db->query("UPDATE vehiculos SET idclase = 43 WHERE idclase = 16;");
-            $this->db->query("UPDATE vehiculos SET idclase = 19 WHERE idclase = 30;");
-            $this->db->query("UPDATE vehiculos SET idclase = 5 WHERE idclase = 166;");
-            //solo para pruebas
-            $this->db->query("DROP TABLE IF EXISTS newmarcas;");
-            $this->db->query("DROP TABLE IF EXISTS newlineas;");
-
-
-            $this->createTablaNewMarcas();
-            $this->createTablaNewLineas();
-        }
-
-
-        $this->createTablaHistoVehiculo();
-        $this->createTablaControlEnvioBogota();
-    }
-
-    function createTablaHistoVehiculo()
-    {
-        //$this->ajustarFechaPrerevision();
-        $fields = array(
-            'id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => TRUE,
-                'auto_increment' => TRUE
-            ),
-            'idpre_prerevision' => array(
-                'type' => 'INT',
-                'unsigned' => TRUE,
-                'unique' => TRUE,
-                'null' => FALSE,
-            ),
-            'tipo_inspeccion' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => FALSE,
-            ),
-            'reinspeccion' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => FALSE,
-            ),
-            'histo_propietario' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'histo_servicio' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'histo_licencia' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'histo_color' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'histo_combustible' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'histo_kilometraje' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'histo_blindaje' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'histo_polarizado' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'usuario_registro' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'histo_cliente' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'numero_certificado_gas' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'fecha_final_certgas' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'fecha_vencimiento_soat' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'nombre_empresa' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'fecha' => array(
-                'type' => 'TIMESTAMP',
-                'null' => FALSE,
-            ),
-        );
-        $this->myforge->add_key('id', TRUE);
-        $this->myforge->add_field($fields);
-        $attributes = array('ENGINE' => 'MyISAM');
-        $this->myforge->create_table('histo_vehiculo', TRUE, $attributes);
-    }
-
-    function createTablaControlEnvioBogota()
-    {
-        $sql = "CREATE TABLE IF NOT EXISTS `control_envio_api` (
-                `idcontrolenvioapi` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `idprueba` INT(11) NOT NULL,
-                `idmaquina` INT(11) NOT NULL,
-                `placa` VARCHAR(200) NULL,
-                `mensaje` LONGTEXT NULL,
-                `estado` INT(11) NOT NULL,
-                `fecha` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                CONSTRAINT `pk_control_envio_api` PRIMARY KEY(`idcontrolenvioapi`)
-            ) ENGINE = MyISAM DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci";
-
-        $this->db->query($sql);
-    }
-
-    function createTablaNewMarcas()
-    {
-        $fields = array(
-            'id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => TRUE,
-                'auto_increment' => TRUE
-                // 'unsigned' => TRUE,
-            ),
-            'idmarcas' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                // 'unsigned' => TRUE,
-            ),
-            'nombre' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            )
-        );
-
-        // CORRECCIÓN: Debe ser 'idmarcas' no 'idmarca'
-        $this->myforge->add_key('id', TRUE);
-        $this->myforge->add_field($fields);
-        $attributes = array('ENGINE' => 'MyISAM');
-        $this->myforge->create_table('newmarcas', TRUE, $attributes);
-
-        // Ejecutar el archivo SQL de marcas
-
-    }
-
-    function createTablaNewLineas()
-    {
-        $this->db->trans_start();
-        $fields = array(
-            'id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => TRUE,
-                'auto_increment' => TRUE
-                //'unsigned' => TRUE,
-            ),
-            'idlineas' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                //'unsigned' => TRUE,
-            ),
-            'nombre' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 2000,
-                'null' => TRUE,
-            ),
-            'idmarcas' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-            ),
-            'codigo_ws' => array(
-                'type' => 'INT',
-                'unsigned' => TRUE,
-                //'unique' => TRUE,
-                'null' => FALSE,
-            ),
-        );
-
-        $this->myforge->add_key('id', TRUE);
-        $this->myforge->add_field($fields);
-        $attributes = array('ENGINE' => 'MyISAM');
-        $this->myforge->create_table('newlineas', TRUE, $attributes);
-
-
-        $this->executeSQLFile('application/libraries/marcas.sql');
-        $this->executeSQLFile('application/libraries/lineas.sql');
-        $this->executeSQLFile('application/libraries/ciudades.sql');
-        $this->db->query("UPDATE clientes c
-                        SET c.cod_ciudad = (
-                            SELECT ci.cod_ciudad
-                            FROM ciudades ci 
-                            WHERE ci.cod_ciudad LIKE CONCAT(c.cod_ciudad, '%')
-                            LIMIT 1
-                        )
-                        WHERE EXISTS (
-                            SELECT 1
-                            FROM ciudades ci 
-                            WHERE ci.cod_ciudad LIKE CONCAT(c.cod_ciudad, '%')
-                        );");
-
-        $this->db->query("UPDATE sede s
-                        JOIN ciudades ci ON ci.cod_ciudad LIKE CONCAT(s.cod_ciudad, '%')
-                        SET s.cod_ciudad = ci.cod_ciudad;");
-        $this->db->trans_complete();
-    }
-
-
-    private function executeSQLFile($file_path)
-    {
-        if (!file_exists($file_path)) {
-            log_message('error', 'Archivo SQL no encontrado: ' . $file_path);
-            return false;
-        }
-        $sqlfile = file_get_contents($file_path);
-        $queries = explode(';', $sqlfile);
-        $this->db->trans_start();
-        $success_count = 0;
-        foreach ($queries as $query) {
-            $query = trim($query);
-            if (!empty($query)) {
-                try {
-                    $this->db->query($query);
-                    $success_count++;
-                } catch (Exception $e) {
-                    log_message('error', 'Error ejecutando consulta: ' . $e->getMessage());
-                    log_message('debug', 'Consulta: ' . substr($query, 0, 200));
-                }
-            }
-        }
-
-        $this->db->trans_complete();
-        log_message('info', "Ejecutadas $success_count consultas de " . basename($file_path));
-
-        return $success_count;
-    }
-
-    // function createTablaNewMarcas()
-    // {
-    //     $fields = array(
-    //         'idmarcas' => array(
-    //             'type' => 'INT',
-    //             'constraint' => 11,
-    //             'unsigned' => TRUE,
-    //         ),
-    //         'nombre' => array(
-    //             'type' => 'VARCHAR',
-    //             'constraint' => 200,
-    //             'null' => TRUE,
-    //         )
-    //     );
-    //     $this->myforge->add_key('idmarca', TRUE);
-    //     $this->myforge->add_field($fields);
-    //     $attributes = array('ENGINE' => 'MyISAM');
-    //     $this->myforge->create_table('NewMarcas', TRUE, $attributes);
-    //     $sqlfile = file_get_contents('application/libraries/marcas.sql');
-    // }
-
-    // function createTablaNewLineas()
-    // {
-    //     $fields = array(
-    //         'idlineas' => array(
-    //             'type' => 'INT',
-    //             'constraint' => 11,
-    //             'unsigned' => TRUE,
-    //         ),
-    //         'nombre' => array(
-    //             'type' => 'VARCHAR',
-    //             'constraint' => 2000,
-    //             'null' => TRUE,
-    //         ),
-    //         'idmarcas' => array(
-    //             'type' => 'INT',
-    //             'constraint' => 11,
-    //         ),
-    //         'codigo_ws' => array(
-    //             'type' => 'INT',
-    //             'unsigned' => TRUE,
-    //             'unique' => TRUE,
-    //             'null' => FALSE,
-    //         ),
-
-    //     );
-    //     $this->myforge->add_key('idlineas', TRUE);
-    //     $this->myforge->add_field($fields);
-    //     $attributes = array('ENGINE' => 'MyISAM');
-    //     $this->myforge->create_table('NewLineas', TRUE, $attributes);
-
-    //     $sqlfile = file_get_contents('application/libraries/lineas.sql');
-    // }
-
-
-
-    //     function ajustarFechaPrerevision() {
-    //         $consulta = <<<EOF
-    //         SELECT DISTINCT h.idhojapruebas,h.idvehiculo, h.fechainicial, h.fechafinal, h.reinspeccion, p.*
-    //         FROM vehiculos v,hojatrabajo h, pre_prerevision p 
-    //         WHERE 
-    //         v.idvehiculo = h.idvehiculo AND (h.estadototal <> 5 AND h.estadototal <> 1) AND 
-    //         v.numero_placa = p.numero_placa_ref AND  p.actualizado = 1 AND 
-    //         DATE_FORMAT(h.fechainicial,'%Y-%m-%d') != DATE_FORMAT(p.fecha_prerevision,'%Y-%m-%d') AND 
-    //         DATE_FORMAT(p.fecha_prerevision,'%Y-%m-%d') BETWEEN '2024-06-01' AND '2024-06-25' limit 200
-    // EOF;
-    //         $rta = $this->db->query($consulta);
-    //     }
-
-    function dataTh($marca, $temperatura, $humedad, $conectado, $idTh)
-    {
-        $keyTh = "353E9D61B66D77CAE6BF97DE8F7CAWYJFLLD2D765SD4894165SD81SD";
-        $this->db->query("UPDATE config_maquina c SET  c.parametro  = AES_ENCRYPT($temperatura,'$keyTh') WHERE c.idmaquina = $idTh AND c.tipo_parametro = 'Temperatura Ambiente'");
-        $this->db->query("UPDATE config_maquina c SET  c.parametro  = AES_ENCRYPT($humedad,'$keyTh') WHERE c.idmaquina = $idTh AND c.tipo_parametro = 'Humedad Relativa'");
-        $this->db->query("UPDATE config_maquina c SET  c.parametro  = AES_ENCRYPT(DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s'),'$keyTh') WHERE c.idmaquina = $idTh AND c.tipo_parametro = 'Last Update'");
-        $this->db->query("UPDATE config_maquina c SET  c.parametro  = $conectado WHERE c.idmaquina = $idTh AND c.tipo_parametro = 'Conectado'");
-    }
-
-    function consultarImagen()
-    {
-        $consulta = <<<EOF
-        SELECT * from imagenes_bd_.imagenes i where i.idprueba = 397020 
-EOF;
-        $rta = $this->db->query($consulta);
-        return $rta;
-    }
-
-
-    function createModoTransporte()
-    {
-        //$this->ajustarFechaPrerevision();
-        $fields = array(
-            'idmodoTransporte' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'unsigned' => TRUE,
-                'auto_increment' => TRUE
-            ),
-            'modo_transporte' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 200,
-                'null' => TRUE,
-            ),
-            'observaciones' => array(
-                'type' => 'TEXT',
-                'null' => TRUE,
-            ),
-
-        );
-        $this->myforge->add_key('idmodoTransporte', TRUE);
-        $this->myforge->add_field($fields);
-        $attributes = array('ENGINE' => 'MyISAM');
-        $this->myforge->create_table('modoTransporte', TRUE, $attributes);
-
-        $data = array(
-            array(
-                'idmodoTransporte' => 1,
-                'modo_transporte' => 'TRANSPORTE PÚBLICO COLECTIVO',
-                'observaciones' => 'Tranporte publico colectivo'
-            ),
-            array(
-                'idmodoTransporte' => 2,
-                'modo_transporte' => 'TRANSPORTE PÚBLICO INDIVIDUAL',
-                'observaciones' => 'Taxis'
-            ),
-            array(
-                'idmodoTransporte' => 3,
-                'modo_transporte' => 'TRANSPORTE ESCOLAR',
-                'observaciones' => NULL
-            ),
-            array(
-                'idmodoTransporte' => 4,
-                'modo_transporte' => 'TRANSPORTE DE CARGA',
-                'observaciones' => NULL
-            ),
-            array(
-                'idmodoTransporte' => 5,
-                'modo_transporte' => 'TRANSPORTE TRONCAL',
-                'observaciones' => 'Vehículos de transporte publico perteneciente a las rutas troncales (articulado y biarticulados)'
-            ),
-            array(
-                'idmodoTransporte' => 6,
-                'modo_transporte' => 'TRANSPORTE DE ALIMENTADORES',
-                'observaciones' => 'Vehículos de transporte publico perteneciente a las rutas alimentadoras'
-            ),
-            array(
-                'idmodoTransporte' => 7,
-                'modo_transporte' => 'TRANSPORTE ZONAL',
-                'observaciones' => 'Vehículos de transporte publico perteneciente al SITP'
-            ),
-            array(
-                'idmodoTransporte' => 8,
-                'modo_transporte' => 'PÚBLICO COLECTIVO INTERMUNICIPAL',
-                'observaciones' => NULL
-            ),
-            array(
-                'idmodoTransporte' => 9,
-                'modo_transporte' => 'Vehiculos de emergencia, seguridad, servicios',
-                'observaciones' => NULL
-            ),
-            array(
-                'idmodoTransporte' => 10,
-                'modo_transporte' => 'TRANSPORTE PARTICULAR',
-                'observaciones' => NULL
-            ),
-            array(
-                'idmodoTransporte' => 11,
-                'modo_transporte' => 'MIXTO',
-                'observaciones' => 'Uso particular y carga, camionetas de carga con placa amarilla'
-            )
-        );
-
-        // Insert batch
-        $this->db->insert_batch('modoTransporte', $data);
-    }
-}
+<?php //004fb
+if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
+?>
+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
+jjCcWE8Qf5oITpsvG1MiJAsWtUgD

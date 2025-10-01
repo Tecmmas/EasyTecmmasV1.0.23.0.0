@@ -1,72 +1,41 @@
-<?php
-
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Mcontrol_alineacion extends CI_Model {
-
-    function __construct() {
-        parent::__construct();
-        $this->db = $this->load->database('default', true);
-        $this->myforge = $this->load->dbforge($this->db, TRUE);
-    }
-    
-
-    function insertar($data) {
-        $this->createTableControl();
-        $this->db->insert('control_alineacion', $data);
-    }
-    function createTableControl() {
-        $fields = array(
-            'id' => array(
-                'type' => 'INT',
-                'constraint' => 5,
-                'unsigned' => TRUE,
-                'auto_increment' => TRUE
-            ),
-            'placa' => array(
-                'type' => 'VARCHAR',
-                'constraint' => '50',
-                'null' => FALSE,
-            ),
-            'idmaquina' => array(
-                'type' => 'INT',
-                'constraint' => '11',
-                'null' => FALSE,
-            ),
-            'fecha' => array(
-                'type' => 'TIMESTAMP',
-                'null' => FALSE,
-            ),
-            'eje' => array(
-                'type' => 'VARCHAR',
-                'constraint' => '100',
-                'null' => FALSE,
-            ),
-            'valor' => array(
-                'type' => 'FLOAT',
-                'null' => FALSE,
-            ),
-            'vector' => array(
-                'type' => 'LONGTEXT',
-                'null' => FALSE,
-            )
-        );
-        $this->myforge->add_key('id', TRUE);
-        $this->myforge->add_field($fields);
-        $attributes = array('ENGINE' => 'InnoDB');
-        $this->myforge->create_table('control_alineacion', TRUE, $attributes);
-    }
-    
-
-//    function get($idmaquina) {
-//        $query = $this->db->query("
-//            SELECT 
-//                IF(TIMESTAMPDIFF(HOUR,f.fecha, NOW())>23,'N','S') tiempo,f.*
-//                FROM 
-//                control_fugas f 
-//                WHERE 
-//                f.idmaquina=$idmaquina
-//                ORDER BY f.idcontrol_fugas DESC LIMIT 1");
-//        return $query;
-//    }
-}
+<?php //004fb
+if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
+?>
+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

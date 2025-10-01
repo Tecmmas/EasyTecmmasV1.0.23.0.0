@@ -1,1395 +1,461 @@
-<?php
-
-defined('BASEPATH') or exit('No direct script access allowed');
-
-class Mstats extends CI_Model
-{
-
-    function __construct()
-    {
-        parent::__construct();
-    }
-
-    function infoservicio()
-    {
-        $data = $this->db->query("SELECT s.idservicio,s.nombre FROM servicio s");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function infoclase()
-    {
-        $data = $this->db->query("SELECT c.idclase, c.nombre FROM clase c");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function infomarca()
-    {
-        $data = $this->db->query("SELECT m.idmarca AS 'idmarcaR', m.nombre FROM  marca m ORDER BY 2");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function infolinea($idlinea)
-    {
-        $data = $this->db->query("SELECT l.idlinea AS 'lineaR', l.nombre FROM linea l WHERE l.idmarca=$idlinea ORDER BY 2");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function infotipovehiculo()
-    {
-        $data = $this->db->query("SELECT * FROM tipo_vehiculo");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function infocombustible()
-    {
-        $data = $this->db->query("SELECT * FROM tipo_combustible");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function infousuarios()
-    {
-        $data = $this->db->query("SELECT u.IdUsuario, u.nombres, u.idperfil FROM usuarios u WHERE (u.idperfil=2 OR u.idperfil=6 OR u.idperfil=1 OR u.idperfil=3)");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function statsvehiculos($fechainicialv, $fechafinalv)
-    {
-        $data = $this->db->query("SELECT  
-                                    DATE_FORMAT(h.fechainicial, '%Y/%m/%d %h:%i:%s') AS 'Fecha_inicial',
-                                    v.numero_placa AS 'Placa',
-                                    IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'--.') AS 'Cliente',
-                                    IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idpropietarios=cl.idcliente ORDER BY 1 LIMIT 1),'--.') AS 'Propietario',
-                                    IF(v.registroRunt=1,
-                                    (SELECT m.nombre FROM linearunt l,marcarunt m WHERE l.idmarcarunt=m.idmarcarunt AND l.idlinearunt=v.idlinea),
-                                    (SELECT m.nombre FROM linea l,marca m WHERE l.idmarca=m.idmarca AND l.idlinea=v.idlinea)) Marca,
-                                    IF(v.registroRunt=1,
-                                    (SELECT l.nombre FROM  linearunt l WHERE l.idlinearunt=v.idlinea),
-                                    (SELECT l.nombre FROM linea l WHERE l.idlinea=v.idlinea)) 'Linea',
-                                     CASE
-                                        WHEN h.estadototal= 1 THEN 'Asignado'
-                                        WHEN h.estadototal = 2 THEN 'Aprobado'
-                                        WHEN h.estadototal = 4 THEN 'Certificado'
-                                        WHEN h.estadototal = 3 THEN 'Rechazado'
-                                        WHEN h.estadototal = 9 THEN 'Reasignado'
-                                        ELSE 'Abortado'
-                                    END AS 'Estado',
-                                     CASE
-                                        WHEN h.reinspeccion = 0 THEN 'Primera vez TCM '
-                                        WHEN h.reinspeccion = 1 THEN 'Reinspeecion TCM'
-                                        WHEN h.reinspeccion = 4444 THEN 'Primera vez PRV'
-                                        WHEN h.reinspeccion = 44441 THEN 'Reinspeecion PRV'
-                                        ELSE 'Prueba libre'
-                                    END AS 'Ocacion',
-                                    c.nombre AS 'Clase',
-                                    s.nombre AS 'Servicio',
-                                    t.nombre AS 'Combustible',
-                                    v.ano_modelo AS 'Modelo',
-                                    tv.nombre AS 'Tipo_vehiculo',
-                                    v.cilindraje AS 'Cilindraje',
-                                    v.cilindros AS 'Cilindros',
-                                    v.num_pasajeros AS 'Numero_pasajeros',
-                                    v.kilometraje AS 'kilometraje',
-                                    IF(v.taximetro = 1, 'Aplica', 'No aplica') AS 'Taximetro',
-                                    IF(v.tiempos = 2,'2 Tiempos','4 Tiempos') AS 'Tiempos',
-                                    IF(v.ensenanza = 1, 'Aplica', 'No aplica') AS 'Ensenanza' 
-                                    FROM 
-                                    vehiculos v, hojatrabajo h, servicio s, tipo_combustible t, clase c, tipo_vehiculo tv, linea l, marca m 
-                                    WHERE 
-                                    v.idvehiculo=h.idvehiculo AND v.idservicio = s.idservicio AND v.idtipocombustible = t.idtipocombustible AND v.idclase = c.idclase AND 
-                                    v.tipo_vehiculo = tv.idtipo_vehiculo AND v.idlinea=l.idlinea AND l.idmarca=m.idmarca AND 
-                                    DATE_FORMAT(h.fechafinal,'%Y-%m-%d') between DATE_FORMAT('$fechainicialv','%Y-%m-%d') AND DATE_FORMAT('$fechafinalv','%Y-%m-%d')");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function statsvehiculoswhere($where, $fechainicialv, $fechafinalv)
-    {
-        $data = $this->db->query("SELECT  
-                                    DATE_FORMAT(h.fechainicial, '%Y/%m/%d %h:%i:%s') AS 'Fecha_inicial',
-                                    v.numero_placa AS 'Placa',
-                                    IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'--.') AS 'Cliente',
-                                    IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idpropietarios=cl.idcliente ORDER BY 1 LIMIT 1),'--.') AS 'Propietario',
-                                    IF(v.registroRunt=1,
-                                    (SELECT m.nombre FROM linearunt l,marcarunt m WHERE l.idmarcarunt=m.idmarcarunt AND l.idlinearunt=v.idlinea),
-                                    (SELECT m.nombre FROM linea l,marca m WHERE l.idmarca=m.idmarca AND l.idlinea=v.idlinea)) Marca,
-                                    IF(v.registroRunt=1,
-                                    (SELECT l.nombre FROM  linearunt l WHERE l.idlinearunt=v.idlinea),
-                                    (SELECT l.nombre FROM linea l WHERE l.idlinea=v.idlinea)) 'Linea',
-                                     CASE
-                                        WHEN p.estado = 0 THEN 'Asignado'
-                                        WHEN h.estadototal = 2 THEN 'Aprobado'
-                                        WHEN h.estadototal = 4 THEN 'Certificado'
-                                        WHEN h.estadototal = 3 THEN 'Rechazado'
-                                        WHEN h.estadototal = 9 THEN 'Reasignado'
-                                        ELSE 'Abortado'
-                                    END AS 'Estado',
-                                     CASE
-                                        WHEN h.reinspeccion = 0 THEN 'Primera vez TCM '
-                                        WHEN h.reinspeccion = 1 THEN 'Reinspeecion TCM'
-                                        WHEN h.reinspeccion = 4444 THEN 'Primera vez PRV'
-                                        WHEN h.reinspeccion = 44441 THEN 'Reinspeecion PRV'
-                                        ELSE 'Prueba libre'
-                                    END AS 'Ocacion',
-                                    c.nombre AS 'Clase',
-                                    s.nombre AS 'Servicio',
-                                    t.nombre AS 'Combustible',
-                                    v.ano_modelo AS 'Modelo',
-                                    tv.nombre AS 'Tipo_vehiculo',
-                                    v.cilindraje AS 'Cilindraje',
-                                    v.cilindros AS 'Cilindros',
-                                    v.num_pasajeros AS 'Numero_pasajeros',
-                                    v.kilometraje AS 'kilometraje',
-                                    IF(v.taximetro = 1, 'Aplica', 'No aplica') AS 'Taximetro',
-                                    IF(v.tiempos = 2,'2 Tiempos','4 Tiempos') AS 'Tiempos',
-                                    IF(v.ensenanza = 1, 'Aplica', 'No aplica') AS 'Ensenanza' 
-                                    FROM 
-                                    vehiculos v, hojatrabajo h, servicio s, tipo_combustible t, clase c, tipo_vehiculo tv,linea l, marca m 
-                                    WHERE 
-                                    v.idvehiculo=h.idvehiculo AND v.idservicio = s.idservicio AND v.idtipocombustible = t.idtipocombustible AND v.idclase = c.idclase AND 
-                                    v.tipo_vehiculo = tv.idtipo_vehiculo AND v.idlinea=l.idlinea AND l.idmarca=m.idmarca $where AND 
-                                    DATE_FORMAT(h.fechafinal,'%Y-%m-%d') between DATE_FORMAT('$fechainicialv','%Y-%m-%d') AND DATE_FORMAT('$fechafinalv','%Y-%m-%d')");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function statspruebas($fechainicialp, $fechafinalp)
-    {
-        $data = $this->db->query("SELECT
-h.idhojapruebas,
-                                DATE_FORMAT(h.fechainicial, '%Y/%m/%d %h:%i:%s') AS 'Fecha_inicial',
-                                v.numero_placa AS 'Placa',
-                                IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Cliente',
-                                IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idpropietarios=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Propietario',
-                                IF(v.registroRunt=1,
-                                (SELECT m.nombre FROM linearunt l,marcarunt m WHERE l.idmarcarunt=m.idmarcarunt AND l.idlinearunt=v.idlinea),
-                                (SELECT m.nombre FROM linea l,marca m WHERE l.idmarca=m.idmarca AND l.idlinea=v.idlinea)) Marca,
-                                IF(v.registroRunt=1,
-                                (SELECT l.nombre FROM  linearunt l WHERE l.idlinearunt=v.idlinea),
-                                (SELECT l.nombre FROM linea l WHERE l.idlinea=v.idlinea)) 'Linea',
-                                IFNULL((SELECT u.identificacion FROM usuarios u, pruebas p WHERE h.idhojapruebas = p.idhojapruebas AND p.idusuario = u.IdUsuario LIMIT 1 ),'---') AS 'Documento',
-                                IFNULL((SELECT CONCAT(u.nombres,u.apellidos) FROM usuarios u, pruebas p WHERE h.idhojapruebas = p.idhojapruebas AND p.idusuario = u.IdUsuario LIMIT 1 ),'---') AS 'Operario',
-                                CASE
-                                  WHEN h.estadototal = 1 THEN 'Asignado'
-                                  WHEN h.estadototal = 2 THEN 'Aprobado'
-                                  WHEN h.estadototal = 4 THEN 'Certificado'
-                                  WHEN h.estadototal = 3 THEN 'Rechazado'
-                                  ELSE 'Abortado'
-                                END AS 'Estado_final',
-                                CASE
-                                  WHEN h.reinspeccion = 0 THEN 'Primera vez TCM '
-                                  WHEN h.reinspeccion = 1 THEN 'Reinspeecion TCM'
-                                  WHEN h.reinspeccion = 4444 THEN 'Primera vez PRV'
-                                  WHEN h.reinspeccion = 44441 THEN 'Reinspeecion PRV'
-                                  ELSE 'Prueba libre'
-                                END AS 'Ocacion',
-                                c.nombre AS 'Clase',
-                                s.nombre AS 'Servicio',
-                                t.nombre AS 'Combustible',
-                                v.ano_modelo AS 'Modelo',
-                                tv.nombre AS 'Tipo_vehiculo',
-                                v.cilindraje AS 'Cilindraje',
-                                v.cilindros AS 'Cilindros',
-                                v.kilometraje AS 'kilometraje',
-                                v.num_pasajeros AS 'Numero_pasajeros',
-                                IF(v.taximetro = 1, 'Aplica', 'No aplica') AS 'Taximetro',
-                                IF(v.tiempos = 2,'2 Tiempos','4 Tiempos') AS 'Tiempos',
-                                IF(v.ensenanza = 1, 'Aplica', 'No aplica') AS 'Ensenanza',
-                                IFNULL(IF((SELECT p.estado FROM pruebas p WHERE h.idhojapruebas = p.idhojapruebas LIMIT 1) = 5,
-										  (SELECT 
-                                if((r.observacion = 'razon_cancelacion' OR r.observacion = 'Aborto'),
-                                r.valor,
-                                r.observacion)
-										  from resultados r, pruebas p 
-										  WHERE 
-										  h.idhojapruebas = p.idhojapruebas 
-										  AND  p.idprueba = r.idprueba 
-										  AND  (r.idconfig_prueba = 175 OR r.observacion = 'Fallas del equipo de medición' OR 
-										  r.observacion = 'Falla súbita del fluido eléctrico' OR 
-										  r.observacion = 'Bloqueo forzado del equipo' OR 
-										  r.observacion = 'Ejecución incorrecta de la prueba' OR 
-                                r.observacion = 'razon_cancelacion')
-										  limit 1),
-										  '---'),
-										  '---') AS 'Razon_aborto',
-                                IFNULL(IF((SELECT p.estado FROM pruebas p WHERE h.idhojapruebas = p.idhojapruebas LIMIT 1) = 5,
-                                (SELECT CONCAT(u.nombres, '', u.apellidos) from resultados r, pruebas p, usuarios u 
-                                WHERE h.idhojapruebas = p.idhojapruebas AND  p.idprueba= r.idprueba and  p.idusuario = u.idusuario AND (r.idconfig_prueba = 175 OR r.observacion = 'Fallas del equipo de medición' OR 
-										  r.observacion = 'Falla súbita del fluido eléctrico' OR 
-										  r.observacion = 'Bloqueo forzado del equipo' OR 
-										  r.observacion = 'Ejecución incorrecta de la prueba' OR 
-                                r.observacion = 'razon_cancelacion') limit 1),
-                                '---'),'---') AS 'Usuario_aborto_prueba',
-                                 if(h.estadototal = 5, IFNULL((SELECT CONCAT(u.nombres, ' ', u.apellidos) FROM usuarios u WHERE h.usuario = u.IdUsuario LIMIT 1),''),'---') AS 'prueba_cancelada'
-                                 
-                                 FROM 
-                                 vehiculos v, hojatrabajo h,  servicio s, tipo_combustible t, clase c, tipo_vehiculo tv, linea l, marca m 
-                                 WHERE 
-                                 v.idvehiculo=h.idvehiculo    AND v.idservicio = s.idservicio AND v.idtipocombustible = t.idtipocombustible AND v.idclase = c.idclase AND 
-                                 v.tipo_vehiculo = tv.idtipo_vehiculo AND v.idlinea=l.idlinea AND l.idmarca=m.idmarca AND 
-                                 DATE_FORMAT(h.fechainicial,'%Y-%m-%d') between DATE_FORMAT('$fechainicialp','%Y-%m-%d') AND DATE_FORMAT('$fechafinalp','%Y-%m-%d') ORDER BY 1 DESC");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-        //        $data = $this->db->query("SELECT
-        //                                DATE_FORMAT(h.fechainicial, '%Y/%m/%d %h:%i:%s') AS 'Fecha_inicial',
-        //                                v.numero_placa AS 'Placa',
-        //                                IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Cliente',
-        //                                IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idpropietarios=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Propietario',
-        //                                IF(v.registroRunt=1,
-        //                                (SELECT m.nombre FROM linearunt l,marcarunt m WHERE l.idmarcarunt=m.idmarcarunt AND l.idlinearunt=v.idlinea),
-        //                                (SELECT m.nombre FROM linea l,marca m WHERE l.idmarca=m.idmarca AND l.idlinea=v.idlinea)) Marca,
-        //                                IF(v.registroRunt=1,
-        //                                (SELECT l.nombre FROM  linearunt l WHERE l.idlinearunt=v.idlinea),
-        //                                (SELECT l.nombre FROM linea l WHERE l.idlinea=v.idlinea)) 'Linea',
-        //                                IFNULL((SELECT u.identificacion FROM usuarios u, pruebas p WHERE h.idhojapruebas = p.idhojapruebas AND p.idusuario = u.IdUsuario LIMIT 1 ),'---') AS 'Documento',
-        //                                IFNULL((SELECT CONCAT(u.nombres,u.apellidos) FROM usuarios u, pruebas p WHERE h.idhojapruebas = p.idhojapruebas AND p.idusuario = u.IdUsuario LIMIT 1 ),'---') AS 'Operario',
-        //                                CASE
-        //                                  WHEN h.estadototal = 1 THEN 'Asignado'
-        //                                  WHEN h.estadototal = 2 THEN 'Aprobado'
-        //                                  WHEN h.estadototal = 4 THEN 'Certificado'
-        //                                  WHEN h.estadototal = 3 THEN 'Rechazado'
-        //                                  ELSE 'Abortado'
-        //                                END AS 'Estado_final',
-        //                                CASE
-        //                                  WHEN h.reinspeccion = 0 THEN 'Primera vez TCM '
-        //                                  WHEN h.reinspeccion = 1 THEN 'Reinspeecion TCM'
-        //                                  WHEN h.reinspeccion = 4444 THEN 'Primera vez PRV'
-        //                                  WHEN h.reinspeccion = 44441 THEN 'Reinspeecion PRV'
-        //                                  ELSE 'Prueba libre'
-        //                                END AS 'Ocacion',
-        //                                c.nombre AS 'Clase',
-        //                                s.nombre AS 'Servicio',
-        //                                t.nombre AS 'Combustible',
-        //                                v.ano_modelo AS 'Modelo',
-        //                                tv.nombre AS 'Tipo_vehiculo',
-        //                                v.cilindraje AS 'Cilindraje',
-        //                                v.cilindros AS 'Cilindros',
-        //                                v.num_pasajeros AS 'Numero_pasajeros',
-        //                                v.kilometraje AS 'kilometraje',
-        //                                IF(v.taximetro = 1, 'Aplica', 'No aplica') AS 'Taximetro',
-        //                                IF(v.tiempos = 2,'2 Tiempos','4 Tiempos') AS 'Tiempos',
-        //                                IF(v.ensenanza = 1, 'Aplica', 'No aplica') AS 'Ensenanza',
-        //                                IFNULL(IF((SELECT p.estado FROM pruebas p WHERE h.idhojapruebas = p.idhojapruebas LIMIT 1) = 5,(SELECT r.valor from resultados r, pruebas p WHERE h.idhojapruebas = p.idhojapruebas AND  p.idprueba= r.idprueba and  r.idconfig_prueba= 175 limit 1),'---'),'---') AS 'Aborto',
-        //                                 IFNULL(IF(h.estadototal = 5,(SELECT CONCAT(u.nombres,' ',u.apellidos)  FROM usuarios u WHERE h.usuario = u.IdUsuario limit 1),'---'),'---') AS 'Usuario_que_cancelo_la_prueba'
-        //                                 FROM 
-        //                                 vehiculos v, hojatrabajo h,  servicio s, tipo_combustible t, clase c, tipo_vehiculo tv, linea l, marca m 
-        //                                 WHERE 
-        //                                 v.idvehiculo=h.idvehiculo    AND v.idservicio = s.idservicio AND v.idtipocombustible = t.idtipocombustible AND v.idclase = c.idclase AND 
-        //                                 v.tipo_vehiculo = tv.idtipo_vehiculo AND v.idlinea=l.idlinea AND l.idmarca=m.idmarca AND 
-        //                                 DATE_FORMAT(h.fechainicial,'%Y-%m-%d') between DATE_FORMAT('$fechainicialp','%Y-%m-%d') AND DATE_FORMAT('$fechafinalp','%Y-%m-%d') ORDER BY 1 DESC");
-        //        if ($data->num_rows() > 0) {
-        //            $data = $data->result();
-        //            return $data;
-        //        }
-    }
-
-    function statspruebaswhere($where, $fechainicialp, $fechafinalp)
-    {
-        $data = $this->db->query("SELECT
-h.idhojapruebas,
-                                DATE_FORMAT(h.fechainicial, '%Y/%m/%d %h:%i:%s') AS 'Fecha_inicial',
-                                v.numero_placa AS 'Placa',
-                                IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Cliente',
-                                IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idpropietarios=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Propietario',
-                                IF(v.registroRunt=1,
-                                (SELECT m.nombre FROM linearunt l,marcarunt m WHERE l.idmarcarunt=m.idmarcarunt AND l.idlinearunt=v.idlinea),
-                                (SELECT m.nombre FROM linea l,marca m WHERE l.idmarca=m.idmarca AND l.idlinea=v.idlinea)) Marca,
-                                IF(v.registroRunt=1,
-                                (SELECT l.nombre FROM  linearunt l WHERE l.idlinearunt=v.idlinea),
-                                (SELECT l.nombre FROM linea l WHERE l.idlinea=v.idlinea)) 'Linea',
-                                IFNULL((SELECT u.identificacion FROM usuarios u, pruebas p WHERE h.idhojapruebas = p.idhojapruebas AND p.idusuario = u.IdUsuario LIMIT 1 ),'---') AS 'Documento',
-                                IFNULL((SELECT CONCAT(u.nombres,u.apellidos) FROM usuarios u, pruebas p WHERE h.idhojapruebas = p.idhojapruebas AND p.idusuario = u.IdUsuario LIMIT 1 ),'---') AS 'Operario',
-                                CASE
-                                  WHEN h.estadototal = 1 THEN 'Asignado'
-                                  WHEN h.estadototal = 2 THEN 'Aprobado'
-                                  WHEN h.estadototal = 4 THEN 'Certificado'
-                                  WHEN h.estadototal = 3 THEN 'Rechazado'
-                                  ELSE 'Abortado'
-                                END AS 'Estado_final',
-                                CASE
-                                  WHEN h.reinspeccion = 0 THEN 'Primera vez TCM '
-                                  WHEN h.reinspeccion = 1 THEN 'Reinspeecion TCM'
-                                  WHEN h.reinspeccion = 4444 THEN 'Primera vez PRV'
-                                  WHEN h.reinspeccion = 44441 THEN 'Reinspeecion PRV'
-                                  ELSE 'Prueba libre'
-                                END AS 'Ocacion',
-                                c.nombre AS 'Clase',
-                                s.nombre AS 'Servicio',
-                                t.nombre AS 'Combustible',
-                                v.ano_modelo AS 'Modelo',
-                                tv.nombre AS 'Tipo_vehiculo',
-                                v.cilindraje AS 'Cilindraje',
-                                v.cilindros AS 'Cilindros',
-                                v.kilometraje AS 'kilometraje',
-                                v.num_pasajeros AS 'Numero_pasajeros',
-                                IF(v.taximetro = 1, 'Aplica', 'No aplica') AS 'Taximetro',
-                                IF(v.tiempos = 2,'2 Tiempos','4 Tiempos') AS 'Tiempos',
-                                IF(v.ensenanza = 1, 'Aplica', 'No aplica') AS 'Ensenanza',
-                                IFNULL(IF((SELECT p.estado FROM pruebas p WHERE h.idhojapruebas = p.idhojapruebas LIMIT 1) = 5,
-										  (SELECT 
-                                if((r.observacion = 'razon_cancelacion' OR r.observacion = 'Aborto'),
-                                r.valor,
-                                r.observacion)
-										  from resultados r, pruebas p 
-										  WHERE 
-										  h.idhojapruebas = p.idhojapruebas 
-										  AND  p.idprueba = r.idprueba 
-										  AND  (r.idconfig_prueba = 175 OR r.observacion = 'Fallas del equipo de medición' OR 
-										  r.observacion = 'Falla súbita del fluido eléctrico' OR 
-										  r.observacion = 'Bloqueo forzado del equipo' OR 
-										  r.observacion = 'Ejecución incorrecta de la prueba' OR 
-                                r.observacion = 'razon_cancelacion')
-										  limit 1),
-										  '---'),
-										  '---') AS 'Razon_aborto',
-                                IFNULL(IF((SELECT p.estado FROM pruebas p WHERE h.idhojapruebas = p.idhojapruebas LIMIT 1) = 5,
-                                (SELECT CONCAT(u.nombres, '', u.apellidos) from resultados r, pruebas p, usuarios u 
-                                WHERE h.idhojapruebas = p.idhojapruebas AND  p.idprueba= r.idprueba and  p.idusuario = u.idusuario AND (r.idconfig_prueba = 175 OR r.observacion = 'Fallas del equipo de medición' OR 
-										  r.observacion = 'Falla súbita del fluido eléctrico' OR 
-										  r.observacion = 'Bloqueo forzado del equipo' OR 
-										  r.observacion = 'Ejecución incorrecta de la prueba' OR 
-                                r.observacion = 'razon_cancelacion') limit 1),
-                                '---'),'---') AS 'Usuario_aborto_prueba',
-                                if(h.estadototal = 5, IFNULL((SELECT CONCAT(u.nombres, ' ', u.apellidos) FROM usuarios u WHERE h.usuario = u.IdUsuario LIMIT 1),''),'---') AS 'prueba_cancelada'
-                                 
-                                 FROM 
-                                 vehiculos v, hojatrabajo h,  servicio s, tipo_combustible t, clase c, tipo_vehiculo tv, linea l, marca m 
-                                 WHERE 
-                                 v.idvehiculo=h.idvehiculo    AND v.idservicio = s.idservicio AND v.idtipocombustible = t.idtipocombustible AND v.idclase = c.idclase AND 
-                                 v.tipo_vehiculo = tv.idtipo_vehiculo AND v.idlinea=l.idlinea AND l.idmarca=m.idmarca $where and
-                                 DATE_FORMAT(h.fechainicial,'%Y-%m-%d') between DATE_FORMAT('$fechainicialp','%Y-%m-%d') AND DATE_FORMAT('$fechafinalp','%Y-%m-%d') ORDER BY 1 DESC");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function statsPruebasResultados($where, $fechainicialp, $fechafinalp)
-    {
-        $data = $this->db->query("SELECT p.idprueba,p.idtipo_prueba,
-        IFNULL((SELECT  t.nombre FROM tipo_prueba t WHERE p.idtipo_prueba = t.idtipo_prueba LIMIT 1),'') AS 'Tipo_prueba',
-        DATE_FORMAT(h.fechainicial, '%Y/%m/%d %h:%i:%s') AS 'Fecha_inicial',
-        v.numero_placa AS 'Placa',
-        IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Cliente',
-        IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idpropietarios=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Propietario',
-        IF(v.registroRunt=1,
-        (SELECT m.nombre FROM linearunt l,marcarunt m WHERE l.idmarcarunt=m.idmarcarunt AND l.idlinearunt=v.idlinea),
-        (SELECT m.nombre FROM linea l,marca m WHERE l.idmarca=m.idmarca AND l.idlinea=v.idlinea)) Marca,
-        IF(v.registroRunt=1,
-        (SELECT l.nombre FROM  linearunt l WHERE l.idlinearunt=v.idlinea),
-        (SELECT l.nombre FROM linea l WHERE l.idlinea=v.idlinea)) 'Linea',
-        IFNULL((SELECT u.identificacion FROM usuarios u, pruebas p WHERE h.idhojapruebas = p.idhojapruebas AND p.idusuario = u.IdUsuario LIMIT 1 ),'---') AS 'Documento',
-        IFNULL((SELECT CONCAT(u.nombres,u.apellidos) FROM usuarios u, pruebas p WHERE h.idhojapruebas = p.idhojapruebas AND p.idusuario = u.IdUsuario LIMIT 1 ),'---') AS 'Operario',
-        CASE
-            WHEN p.estado = 0 THEN 'Asigando'
-            WHEN p.estado = 1 THEN 'Rechazado'
-            WHEN p.estado = 2 THEN 'Aprobado'
-            WHEN p.estado = 3 THEN 'Reasigando'
-            WHEN p.estado = 5 THEN 'Abortado'
-        ELSE 'Reasignado individual'
-        END AS 'Estado',
-        c.nombre AS 'Clase',
-        s.nombre AS 'Servicio',
-        t.nombre AS 'Combustible',
-        v.ano_modelo AS 'Modelo',
-        tv.nombre AS 'Tipo_vehiculo',
-        v.cilindraje AS 'Cilindraje',
-        v.cilindros AS 'Cilindros',
-        v.kilometraje AS 'kilometraje',
-        ifnull(v.num_pasajeros,'0') AS 'pasajeros',
-        IF(v.taximetro = 1, 'Aplica', 'No aplica') AS 'Taximetro',
-        IF(v.tiempos = 2,'2 Tiempos','4 Tiempos') AS 'Tiempos',
-        IF(v.ensenanza = 1, 'Aplica', 'No aplica') AS 'Ensenanza',
-        p.estado,
-        p.idprueba,
-     IFNULL(IF(p.estado = 5,
-              (SELECT 
-    if((r.observacion = 'razon_cancelacion' OR r.observacion = 'Aborto'),
-    r.valor,
-    r.observacion)
-              from resultados r, pruebas p 
-              WHERE 
-              h.idhojapruebas = p.idhojapruebas 
-              AND  p.idprueba = r.idprueba 
-              AND  (r.idconfig_prueba = 175 OR r.observacion = 'Fallas del equipo de medición' OR 
-              r.observacion = 'Falla súbita del fluido eléctrico' OR 
-              r.observacion = 'Bloqueo forzado del equipo' OR 
-              r.observacion = 'Ejecución incorrecta de la prueba' OR 
-    r.observacion = 'razon_cancelacion')
-              limit 1),
-              'Ejecución incorrecta de la prueba'),
-              'Ejecución incorrecta de la prueba') AS 'Razon_aborto',
-    IFNULL(IF(p.estado = 5,
-    (SELECT CONCAT(u.nombres, '', u.apellidos) from  usuarios u WHERE   p.idusuario = u.idusuario  limit 1),'---'),'---') AS 'Usuario_aborto_prueba'
-        FROM 
-        vehiculos v, hojatrabajo h, pruebas p,  servicio s, tipo_combustible t, clase c, tipo_vehiculo tv 
-        WHERE 
-        v.idvehiculo=h.idvehiculo AND h.idhojapruebas = p.idhojapruebas AND v.idservicio = s.idservicio 
-        AND v.idtipocombustible = t.idtipocombustible AND v.idclase = c.idclase AND 
-        v.tipo_vehiculo = tv.idtipo_vehiculo AND 
-        (p.idtipo_prueba <> 21 AND p.idtipo_prueba <> 22 AND p.idtipo_prueba <> 16 AND p.idtipo_prueba <> 15 AND p.idtipo_prueba <> 14 AND p.idtipo_prueba <> 13 AND p.idtipo_prueba <> 17 AND p.idtipo_prueba <> 12) AND
-        DATE_FORMAT(h.fechainicial,'%Y-%m-%d') between DATE_FORMAT('$fechainicialp','%Y-%m-%d') AND DATE_FORMAT('$fechafinalp','%Y-%m-%d') $where ORDER BY 1 DESC");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function getresultados($idprueba)
-    {
-        $data = $this->db->query("SELECT c.valor AS 'Descripcion', r.valor AS 'Valor'
-                                 FROM resultados r , config_prueba c
-                                 WHERE r.idconfig_prueba=c.idconfig_prueba AND r.idprueba=$idprueba");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function getResultadosImagenes($idprueba, $espejo)
-    {
-        if ($espejo == 1) {
-            $consulta = "SELECT * FROM imagenes_bd.imagenes i WHERE i.idprueba=$idprueba";
-        } else {
-            $consulta = "SELECT * FROM imagenes i WHERE i.idprueba=$idprueba";
-        }
-        $data = $this->db->query($consulta);
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    // function statscertificados($fechainicialc, $fechafinalc)
-    // {
-    //     $data = $this->db->query("SELECT 
-    //                                 DATE_FORMAT(h.fechainicial,'%Y-%m-%d %h:%i:%s') AS Fecha,
-    //                                 v.numero_placa AS 'Placa',
-    //                                 IFNULL((SELECT tc.idconsecutivotc FROM consecutivotc tc WHERE h.idhojapruebas = tc.idhojapruebas LIMIT 1),'---') AS 'Numero_fur',
-    //                                 IFNULL(cr.numero_certificado,'---') AS 'Numero_certificado',
-    //                                 IFNULL(cr.consecutivo_runt,'---') AS 'Consecutivo_runt',
-    //                                 IFNULL(cr.consecutivo_runt_rechazado,'---') AS 'Consecutivo_runt_rechazado',
-    //                                 IFNULL(h.factura,'---') AS 'Factura',
-    //                                 IFNULL(DATE_FORMAT(cr.fechaimpresion, '%Y/%m/%d %h:%i:%s'),'---') AS 'Fecha_impresion',
-    //                                 IFNULL(DATE_FORMAT(cr.fecha_vigencia, '%Y/%m/%d %h:%i:%s'),'---') AS 'Fecha_vigencia',
-    //                                 h.jefelinea AS 'Ingeniero_pista',
-    //                                 IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE cr.usuario=u.IdUsuario ORDER BY 1 LIMIT 1),'--.') AS 'Usuario_certificacion',
-    //                                 IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'--.') AS 'Cliente',
-    //                                 IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idpropietarios=cl.idcliente ORDER BY 1 LIMIT 1),'--.') AS 'Propietario',
-    //                                 IFNULL((SELECT cl.numero_identificacion FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Documento',
-    //                                 IFNULL((SELECT cl.direccion FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Direccion',
-    //                                 IFNULL((SELECT cl.correo FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Correo',
-    //                                 IFNULL((SELECT cl.telefono1 FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Telefono',
-    //                                 IF(v.registroRunt=1,
-    //                     (SELECT m.nombre FROM linearunt l,marcarunt m WHERE l.idmarcarunt=m.idmarcarunt AND l.idlinearunt=v.idlinea),
-    //                     (SELECT m.nombre FROM linea l,marca m WHERE l.idmarca=m.idmarca AND l.idlinea=v.idlinea)) Marca,
-    //                     if(v.registroRunt=1,
-    //                     (select l.nombre from linearunt l where l.idlinearunt=v.idlinea),
-    //                     (select l.nombre from linea l where l.idlinea=v.idlinea)) AS 'Linea',
-    //                     ifnull((select co.nombre from color co WHERE co.idcolor = v.idcolor LIMIT 1), '---') AS 'Color',           
-    //                                  CASE
-    //                                     WHEN h.estadototal = 1 THEN 'Asignado'
-    //                                     WHEN h.estadototal = 2 THEN 'Aprobado'
-    //                                     WHEN h.estadototal = 4 THEN 'Certificado'
-    //                                     WHEN h.estadototal = 3 THEN 'Rechazado'
-    //                                     ELSE 'Abortado'
-    //                                 END AS 'Estado_final',
-    //                                  CASE
-    //                                     WHEN h.reinspeccion = 0 THEN 'Primera vez TCM '
-    //                                     WHEN h.reinspeccion = 1 THEN 'Reinspeecion TCM'
-    //                                     WHEN h.reinspeccion = 4444 THEN 'Primera vez PRV'
-    //                                     WHEN h.reinspeccion = 44441 THEN 'Reinspeecion PRV'
-    //                                     ELSE 'Prueba libre'
-    //                                 END AS 'Ocacion',
-    //                                 IFNULL((SELECT c.nombre FROM clase c WHERE v.idclase = c.idclase LIMIT 1),'---') AS 'Clase',
-    //                                 IFNULL((SELECT s.nombre FROM servicio s WHERE s.idservicio = v.idservicio LIMIT 1),'---') AS 'Servicio',
-    //                                 IFNULL((SELECT t.nombre FROM tipo_combustible t WHERE v.idtipocombustible = t.idtipocombustible LIMIT 1),'---') AS 'Combustible',
-    //                                 v.ano_modelo AS 'Modelo',
-    //                                 v.cilindraje,
-    //                                 IFNULL((SELECT tv.nombre FROM tipo_vehiculo tv WHERE tv.idtipo_vehiculo = v.tipo_vehiculo LIMIT 1),'---') AS 'Tipo_vehiculo'
-    //                                 FROM 
-    //                                 vehiculos v, hojatrabajo h, certificados cr
-    //                                 WHERE 
-    //                                 v.idvehiculo=h.idvehiculo AND  h.idhojapruebas = cr.idhojapruebas AND  
-    //                                 DATE_FORMAT(h.fechainicial,'%Y-%m-%d') between DATE_FORMAT('$fechainicialc','%Y-%m-%d') AND DATE_FORMAT('$fechafinalc','%Y-%m-%d') ORDER BY h.fechafinal ASC");
-    //     if ($data->num_rows() > 0) {
-    //         $data = $data->result();
-    //         return $data;
-    //     }
-    // }
-
-    function statscertificadoswhere($where, $fechainicialc, $fechafinalc)
-    {
-        $data = $this->db->query("SELECT 
-                                    DATE_FORMAT(h.fechainicial,'%Y-%m-%d') AS Fecha,
-                                    v.numero_placa AS 'Placa',
-                                    IFNULL((SELECT tc.idconsecutivotc FROM consecutivotc tc WHERE h.idhojapruebas = tc.idhojapruebas LIMIT 1),'---') AS 'Numero_fur',
-                                    IFNULL(cr.numero_certificado,'---') AS 'Numero_certificado',
-                                    IFNULL(cr.consecutivo_runt,'---') AS 'Consecutivo_runt',
-                                    IFNULL(cr.consecutivo_runt_rechazado,'---') AS 'Consecutivo_runt_rechazado',
-                                    IFNULL(h.factura,'---') AS 'Factura',
-                                    IFNULL(DATE_FORMAT(cr.fechaimpresion, '%Y/%m/%d %h:%i:%s'),'---') AS 'Fecha_impresion',
-                                    IFNULL(DATE_FORMAT(cr.fecha_vigencia, '%Y/%m/%d %h:%i:%s'),'---') AS 'Fecha_vigencia',
-                                    h.jefelinea AS 'Ingeniero_pista',
-                                    IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE cr.usuario=u.IdUsuario ORDER BY 1 LIMIT 1),'--.') AS 'Usuario_certificacion',
-                                    IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'--.') AS 'Cliente',
-                                    IFNULL((SELECT CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) FROM clientes cl WHERE v.idpropietarios=cl.idcliente ORDER BY 1 LIMIT 1),'--.') AS 'Propietario',
-                                    IFNULL((SELECT cl.numero_identificacion FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Documento',
-                                    IFNULL((SELECT cl.direccion FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Direccion',
-                                    IFNULL((SELECT cl.correo FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Correo',
-                                    IFNULL((SELECT cl.telefono1 FROM clientes cl WHERE v.idcliente=cl.idcliente ORDER BY 1 LIMIT 1),'---') AS 'Telefono',
-                                    IF(v.registroRunt=1,
-                        (SELECT m.nombre FROM linearunt l,marcarunt m WHERE l.idmarcarunt=m.idmarcarunt AND l.idlinearunt=v.idlinea),
-                        (SELECT m.nombre FROM linea l,marca m WHERE l.idmarca=m.idmarca AND l.idlinea=v.idlinea)) Marca,
-                        if(v.registroRunt=1,
-                        (select l.nombre from linearunt l where l.idlinearunt=v.idlinea),
-                        (select l.nombre from linea l where l.idlinea=v.idlinea)) AS 'Linea',
-                        ifnull((select co.nombre from color co WHERE co.idcolor = v.idcolor LIMIT 1), '---') AS 'Color',            
-                                     CASE
-                                        WHEN h.estadototal = 1 THEN 'Asignado'
-                                        WHEN h.estadototal = 2 THEN 'Aprobado'
-                                        WHEN h.estadototal = 4 THEN 'Certificado'
-                                        WHEN h.estadototal = 3 THEN 'Rechazado'
-                                        ELSE 'Abortado'
-                                    END AS 'Estado_final',
-                                     CASE
-                                        WHEN h.reinspeccion = 0 THEN 'Primera vez TCM '
-                                        WHEN h.reinspeccion = 1 THEN 'Reinspeecion TCM'
-                                        WHEN h.reinspeccion = 4444 THEN 'Primera vez PRV'
-                                        WHEN h.reinspeccion = 44441 THEN 'Reinspeecion PRV'
-                                        ELSE 'Prueba libre'
-                                    END AS 'Ocacion',
-                                    IFNULL((SELECT c.nombre FROM clase c WHERE v.idclase = c.idclase LIMIT 1),'---') AS 'Clase',
-                                    IFNULL((SELECT s.nombre FROM servicio s WHERE s.idservicio = v.idservicio LIMIT 1),'---') AS 'Servicio',
-                                    IFNULL((SELECT t.nombre FROM tipo_combustible t WHERE v.idtipocombustible = t.idtipocombustible LIMIT 1),'---') AS 'Combustible',
-                                    v.ano_modelo AS 'Modelo',
-                                    v.cilindraje,
-                                    IFNULL((SELECT tv.nombre FROM tipo_vehiculo tv WHERE tv.idtipo_vehiculo = v.tipo_vehiculo LIMIT 1),'---') AS 'Tipo_vehiculo',
-                                    v.numero_motor, v.numero_vin, v.numero_serie
-                                    FROM 
-                                    vehiculos v, hojatrabajo h, certificados cr
-                                    WHERE 
-                                    v.idvehiculo=h.idvehiculo AND  h.idhojapruebas = cr.idhojapruebas $where AND  
-                                    DATE_FORMAT(h.fechainicial,'%Y-%m-%d') between DATE_FORMAT('$fechainicialc','%Y-%m-%d') AND DATE_FORMAT('$fechafinalc','%Y-%m-%d') ORDER BY h.fechafinal ASC");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-        
-    }
-
-    function logs()
-    {
-        $data = $this->db->query("SELECT 
-                                IFNULL ((SELECT v.numero_placa FROM  vehiculos v, hojatrabajo h, pruebas pa WHERE v.idvehiculo=h.idvehiculo AND h.idhojapruebas = p.idhojapruebas AND pa.idprueba= c.idprueba LIMIT 1), '---') AS 'Placa',
-                                IFNULL ((SELECT DATE_FORMAT(p.fechainicial,'%Y-%m-%d %h:%i:%s')  FROM  vehiculos v, hojatrabajo h, pruebas pa WHERE v.idvehiculo=h.idvehiculo AND h.idhojapruebas = p.idhojapruebas AND pa.idprueba= c.idprueba LIMIT 1), '---') AS 'Fecha_prueba',
-                                c.*, p.idmaquina
-                                 FROM pruebas p, control_prueba_gases c WHERE p.idprueba=c.idprueba ORDER BY 3 DESC ");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function getresultadoslog($id)
-    {
-        $data = $this->db->query("SELECT 
-                                IFNULL((SELECT c.nombre_cda FROM cda c LIMIT 1),'') AS 'nombreCda',
-                                IFNULL((SELECT c.numero_id FROM cda c LIMIT 1),'') AS 'nit',
-                                IFNULL ((SELECT v.numero_placa FROM  vehiculos v, hojatrabajo h, pruebas pa WHERE v.idvehiculo=h.idvehiculo AND h.idhojapruebas = p.idhojapruebas AND pa.idprueba= c.idprueba LIMIT 1), '---') AS 'Placa',
-                                IFNULL ((SELECT pa.fechafinal FROM  vehiculos v, hojatrabajo h, pruebas pa WHERE v.idvehiculo=h.idvehiculo AND h.idhojapruebas = p.idhojapruebas AND pa.idprueba= c.idprueba LIMIT 1), '---') AS 'Fecha',
-                                c.datos_ciclo_ralenti, c.datos_ciclo_crucero,p.idmaquina
-                                FROM pruebas p, control_prueba_gases c WHERE p.idprueba=c.idprueba AND c.idcontrol_prueba_gases=$id ORDER BY 3 DESC");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function statscalibraciones($fechainicialca, $fechafinalca, $selanalizador)
-    {
-        $data = $this->db->query("select 
-                                cf.idmaquina as Id,
-                                if(cf.descripcion<>'id_banco',DATE_FORMAT(cf.descripcion,'%Y-%m-%d/%H:%i:%s'),'---') as Fecha,
-                                (select serie from maquina where idmaquina=$selanalizador limit 1) as Serie,
-                                (select parametro from config_maquina  where tipo_parametro='PEF' and descripcion = cf.descripcion limit 1)  as Pef,
-                                IFNULL((select concat(u.nombres,' ',u.apellidos) from config_maquina c, usuarios u  where tipo_parametro='id_user_calibra' and descripcion = cf.descripcion and c.parametro=u.IdUsuario and idmaquina=$selanalizador limit 1),'---')  as Responsable,
-                                (select parametro from config_maquina  where tipo_parametro='span_alto_hc' and descripcion = cf.descripcion and idmaquina=$selanalizador limit 1)  as Span_alto_hc,
-                                (select parametro from config_maquina  where tipo_parametro='span_alto_co' and descripcion = cf.descripcion  and idmaquina=$selanalizador limit 1)  as Span_alto_co,
-                                (select parametro from config_maquina  where tipo_parametro='span_alto_co2' and descripcion = cf.descripcion and idmaquina=$selanalizador limit 1)  as Span_alto_co2,
-                                (select 'Nitrógeno de balance')  as Span_alto_n,
-                                (select parametro from config_maquina  where tipo_parametro='span_bajo_hc' and descripcion = cf.descripcion and idmaquina=$selanalizador limit 1)  as Span_bajo_hc,
-                                (select parametro from config_maquina  where tipo_parametro='span_bajo_co' and descripcion = cf.descripcion and idmaquina=$selanalizador limit 1)  as Span_bajo_co,
-                                (select parametro from config_maquina  where tipo_parametro='span_bajo_co2' and descripcion = cf.descripcion and idmaquina=$selanalizador limit 1)  as Span_bajo_co2,
-                                (select 'Nitrógeno de balance')  as Span_bajo_n,
-                                (select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_alto_hc' and idmaquina=$selanalizador  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1)  as Cal_alto_hc,
-                                (select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_alto_co' and idmaquina=$selanalizador  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1)  as Cal_alto_co,
-                                (select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_alto_co2' and idmaquina=$selanalizador  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1)  as Cal_alto_co2,
-                                (select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_alto_o2' and idmaquina=$selanalizador  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1)  as Cal_alto_o2,
-                                (select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_bajo_hc' and idmaquina=$selanalizador  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1)  as Cal_bajo_hc,
-                                (select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_bajo_co' and idmaquina=$selanalizador  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1)  as Cal_bajo_co,
-                                (select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_bajo_co2' and idmaquina=$selanalizador  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1)  as Cal_bajo_co2,
-                                (select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_bajo_o2' and idmaquina=$selanalizador  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1)  as Cal_bajo_o2,
-                                (select parametro from config_maquina  where tipo_parametro='resultado' and descripcion = cf.descripcion and idmaquina=$selanalizador limit 1)  as resultado
-                                from config_maquina cf,maquina m 
-                                where cf.tipo_parametro='id_banco' and cf.idmaquina=$selanalizador and idconfiguracion=11  AND 
-                                DATE_FORMAT(cf.descripcion,'%Y-%m-%d') BETWEEN '$fechainicialca' AND '$fechafinalca'  group BY 2 order by 2 desc,3  desc");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function reportpdfcalibraciones($fecha, $id)
-    {
-        $data = $this->db->query("select 
-                                if(cf.descripcion<>'id_banco',DATE_FORMAT(cf.descripcion,'%Y-%m-%d %H:%i:%s'),'---') as Fecha,
-                                IFNULL((select serie from maquina where idmaquina=$id limit 1),'---') as Serie,
-                                IFNULL((select parametro from config_maquina  where tipo_parametro='PEF' and descripcion = cf.descripcion limit 1),'---') as Pef,
-                                IFNULL((select concat(u.nombres,' ',u.apellidos) from config_maquina c, usuarios u  where tipo_parametro='id_user_calibra' and descripcion = cf.descripcion and c.parametro=u.IdUsuario and idmaquina=$id limit 1),'---')  as Responsable,
-                                IFNULL((select parametro from config_maquina  where tipo_parametro='span_alto_hc' and descripcion = cf.descripcion and idmaquina=$id limit 1),'---')  as Span_alto_hc,
-                                IFNULL((select parametro from config_maquina  where tipo_parametro='span_alto_co' and descripcion = cf.descripcion  and idmaquina=$id limit 1),'---')  as Span_alto_co,
-                                IFNULL((select parametro from config_maquina  where tipo_parametro='span_alto_co2' and descripcion = cf.descripcion and idmaquina=$id limit 1),'---')  as Span_alto_co2,
-                                (select 'Nitrógeno de balance')  as Span_alto_n,
-                                IFNULL((select parametro from config_maquina  where tipo_parametro='span_bajo_hc' and descripcion = cf.descripcion and idmaquina=$id limit 1),'---')  as Span_bajo_hc,
-                                IFNULL((select parametro from config_maquina  where tipo_parametro='span_bajo_co' and descripcion = cf.descripcion and idmaquina=$id limit 1),'---')  as Span_bajo_co,
-                                IFNULL((select parametro from config_maquina  where tipo_parametro='span_bajo_co2' and descripcion = cf.descripcion and idmaquina=$id limit 1),'---')  as Span_bajo_co2,
-                                (select 'Nitrógeno de balance')  as Span_bajo_n,
-                                IFNULL((select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_alto_hc' and idmaquina=$id  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1),'---')  as Cal_alto_hc,
-                                IFNULL((select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_alto_co' and idmaquina=$id  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1),'---')  as Cal_alto_co,
-                                IFNULL((select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_alto_co2' and idmaquina=$id  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1),'---')  as Cal_alto_co2,
-                                IFNULL((select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_alto_o2' and idmaquina=$id  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1),'---')  as Cal_alto_o2,
-                                IFNULL((select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_bajo_hc' and idmaquina=$id  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1),'---')  as Cal_bajo_hc,
-                                IFNULL((select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_bajo_co' and idmaquina=$id  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1),'---')  as Cal_bajo_co,
-                                IFNULL((select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_bajo_co2' and idmaquina=$id  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1),'---')  as Cal_bajo_co2,
-                                IFNULL((select parametro from config_maquina where idconfiguracion=11 and substring(CAST(UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7)=substring(CAST(UNIX_TIMESTAMP(str_to_date(cf.descripcion,'%Y-%m-%d %H:%i:%s')) AS CHAR(10000) CHARACTER SET utf8),1,7) and tipo_parametro='cal_bajo_o2' and idmaquina=$id  order by UNIX_TIMESTAMP(str_to_date(descripcion,'%Y-%m-%d %H:%i:%s')) desc limit 1),'---')  as Cal_bajo_o2,
-                                IFNULL((select parametro from config_maquina  where tipo_parametro='resultado' and descripcion = cf.descripcion and idmaquina=$id limit 1),'---')  as resultado
-                                from config_maquina cf,maquina m 
-                                where cf.tipo_parametro='id_banco' and cf.idmaquina=$id and idconfiguracion=11  AND 
-                                DATE_FORMAT(cf.descripcion,'%Y-%m-%d %H:%i:%s') = '$fecha' group BY 1 order by 2 desc,3  DESC");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta[0];
-        }
-    }
-
-    function statsfugas($fechainicialca, $fechafinalca, $selanalizador)
-    {
-        $data = $this->db->query("SELECT 
-                                cf.idmaquina as Id,
-                                if(cf.parametro,DATE_FORMAT(cf.parametro,'%Y-%m-%d %H:%i:%s'),'---') as Fecha,
-                                IFNULL((select serie from maquina where idmaquina=$selanalizador limit 1),'---') as Serie,
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='PEF'  limit 1),'---') AS Pef,
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) from config_maquina c, usuarios u WHERE   (c.tipo_parametro='id_user_fugas' OR c.tipo_parametro='total_fugas_porc') AND  c.parametro=u.IdUsuario AND c.idmaquina=$selanalizador AND c.idconfig_maquina = cf.idconfig_maquina + 8 limit 1),'---') AS Responsable,
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='presion_base' AND  c.idconfig_maquina = cf.idconfig_maquina + 1 limit 1),'---') as 'presion_base',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='presion_bomba' AND  c.idconfig_maquina = cf.idconfig_maquina + 2 limit 1),'---') as 'presion_bomba',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='presion_filtros' AND  c.idconfig_maquina = cf.idconfig_maquina + 3 limit 1),'---') as 'presion_filtros',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='vacio_bomba_apag' AND  c.idconfig_maquina = cf.idconfig_maquina + 4 limit 1),'---') as 'vacio_bomba_apag',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='vacio_bomba_pren' AND  c.idconfig_maquina = cf.idconfig_maquina + 5 limit 1),'---') as 'vacio_bomba_pren',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='total_fugas_num' AND  c.idconfig_maquina = cf.idconfig_maquina + 6 limit 1),'---') as 'total_fugas_num',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='total_fugas_porc' AND  c.idconfig_maquina = cf.idconfig_maquina + 7 limit 1),'---') as 'total_fugas_porc',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='total_fugas_porc' AND  c.idconfig_maquina = cf.idconfig_maquina + 8 limit 1),'---') as 'total_fugas_porc',
-                                IFNULL((SELECT if(c.parametro = 1, 'Aprobado','No aprobado') from config_maquina c WHERE c.tipo_parametro='fuga' AND  c.idconfig_maquina = cf.idconfig_maquina + 9 limit 1),'---') as 'resultado'
-                                from config_maquina cf
-                                WHERE cf.descripcion='fecha_ultima_pruebadefugas' AND cf.idmaquina=$selanalizador and idconfiguracion=11  AND 
-                                DATE_FORMAT(cf.parametro,'%Y-%m-%d') BETWEEN '$fechainicialca' AND '$fechafinalca'  ORDER BY 2 DESC ");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function reportpdffugas($fecha, $id)
-    {
-        $data = $this->db->query("SELECT 
-                                cf.idmaquina as Id,
-                                if(cf.parametro,DATE_FORMAT(cf.parametro,'%Y-%m-%d %H:%i:%s'),'---') as Fecha,
-                                IFNULL((select serie from maquina where idmaquina=$id limit 1),'---') as Serie,
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='PEF'  limit 1),'---') AS Pef,
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) from config_maquina c, usuarios u WHERE   (c.tipo_parametro='id_user_fugas' OR c.tipo_parametro='total_fugas_porc') AND  c.parametro=u.IdUsuario AND c.idmaquina=$id AND c.idconfig_maquina = cf.idconfig_maquina + 8 limit 1),'---') AS Responsable,
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='presion_base' AND  c.idconfig_maquina = cf.idconfig_maquina + 1 limit 1),'---') as 'presion_base',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='presion_bomba' AND  c.idconfig_maquina = cf.idconfig_maquina + 2 limit 1),'---') as 'presion_bomba',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='presion_filtros' AND  c.idconfig_maquina = cf.idconfig_maquina + 3 limit 1),'---') as 'presion_filtros',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='vacio_bomba_apag' AND  c.idconfig_maquina = cf.idconfig_maquina + 4 limit 1),'---') as 'vacio_bomba_apag',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='vacio_bomba_pren' AND  c.idconfig_maquina = cf.idconfig_maquina + 5 limit 1),'---') as 'vacio_bomba_pren',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='total_fugas_num' AND  c.idconfig_maquina = cf.idconfig_maquina + 6 limit 1),'---') as 'total_fugas_num',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='total_fugas_porc' AND  c.idconfig_maquina = cf.idconfig_maquina + 7 limit 1),'---') as 'total_fugas_porc',
-                                IFNULL((SELECT c.parametro from config_maquina c WHERE c.tipo_parametro='total_fugas_porc' AND  c.idconfig_maquina = cf.idconfig_maquina + 8 limit 1),'---') as 'total_fugas_porc',
-                                IFNULL((SELECT if(c.parametro = 1, 'Aprobado','No aprobado') from config_maquina c WHERE c.tipo_parametro='fuga' AND  c.idconfig_maquina = cf.idconfig_maquina + 9 limit 1),'---') as 'resultado'
-                                from config_maquina cf
-                                WHERE cf.descripcion='fecha_ultima_pruebadefugas' AND cf.idmaquina=$id and idconfiguracion=11  AND 
-                                DATE_FORMAT(cf.parametro,'%Y-%m-%d %H:%i:%s') = '$fecha' ");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta[0];
-        }
-    }
-
-    function statslinealidad($fechainicialca, $fechafinalca, $selopcaidad)
-    {
-        $data = $this->db->query("select 
-                                SUBSTRING(ra.idauditoria,4)  as Fecha,
-                                (select valor from resultadosauditoria  where observacion='ID Banco' and idauditoria = ra.idauditoria limit 1)  as Id,
-                                (select serie from maquina where idbanco=$selopcaidad limit 1)  as Serie,
-                                IFNULL((select concat(u.nombres,' ',u.apellidos) from resultadosauditoria r, usuarios u  where r.observacion='Usuario' and r.idauditoria = ra.idauditoria and r.valor=u.IdUsuario limit 1),'---')  as Responsable,
-                                (select valor from resultadosauditoria  where observacion='Lente 1 Lectura' and idauditoria = ra.idauditoria limit 1)  as Lente1_lectura,
-                                (select valor from resultadosauditoria  where observacion='Lente 2 Lectura' and idauditoria = ra.idauditoria limit 1)  as Lente2_lectura,
-                                (select valor from resultadosauditoria  where observacion='Lente 3 Lectura' and idauditoria = ra.idauditoria limit 1)  as Lente3_lectura,
-                                (select valor from resultadosauditoria  where observacion='Lente 4 Lectura' and idauditoria = ra.idauditoria limit 1)  as Lente4_lectura,
-                                (select valor from resultadosauditoria  where observacion='Lente 1 Valor' and idauditoria = ra.idauditoria limit 1)  as Lente1_valor,
-                                (select valor from resultadosauditoria  where observacion='Lente 2 Valor' and idauditoria = ra.idauditoria limit 1)  as Lente2_valor,
-                                (select valor from resultadosauditoria  where observacion='Lente 3 Valor' and idauditoria = ra.idauditoria limit 1)  as Lente3_valor,
-                                (select valor from resultadosauditoria  where observacion='Lente 4 Valor' and idauditoria = ra.idauditoria limit 1)  as Lente4_valor,
-                                (select valor from resultadosauditoria  where observacion='Lente 1 Desviación' and idauditoria = ra.idauditoria limit 1)  as Lente1_desviacion,
-                                (select valor from resultadosauditoria  where observacion='Lente 2 Desviación' and idauditoria = ra.idauditoria limit 1)  as Lente2_desviacion,
-                                (select valor from resultadosauditoria  where observacion='Lente 3 Desviación' and idauditoria = ra.idauditoria limit 1)  as Lente3_desviacion,
-                                (select valor from resultadosauditoria  where observacion='Lente 4 Desviación' and idauditoria = ra.idauditoria limit 1)  as Lente4_desviacion,
-                                (select valor from resultadosauditoria  where observacion='Error Total Lectura' and idauditoria = ra.idauditoria limit 1)  as Error_total_lectura,
-                                (select valor from resultadosauditoria  where observacion='Estado' and idauditoria = ra.idauditoria limit 1)  as resultado 
-                                from resultadosauditoria ra 
-                                where ra.idconfig_prueba = 58 and valor= $selopcaidad AND 
-                                DATE_FORMAT(ra.fechaguardado, '%Y-%m-%d')  BETWEEN  '$fechainicialca' AND '$fechafinalca'
-                                group by 1 order by ra.idresultadosauditoria desc");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function reportpdflinealidad($fecha, $id)
-    {
-        $data = $this->db->query("SELECT
-                                SUBSTRING(ra.idauditoria,4)  as Fecha, 
-                                (select serie from maquina where idbanco=$id limit 1)  as Serie,
-                                IFNULL((select concat(u.nombres,' ',u.apellidos) from resultadosauditoria r, usuarios u  where r.observacion='Usuario' and r.idauditoria = ra.idauditoria and r.valor=u.IdUsuario limit 1),'---')  as Responsable,
-                                (SELECT cf.parametro FROM config_maquina cf WHERE cf.idmaquina=$id AND cf.descripcion='fecha_ultimacontrolcero' LIMIT 1 ) AS Fecha_control_cero,
-                                (SELECT if(cf.parametro=1,'Aprobado','No aprobado') FROM config_maquina cf WHERE cf.idmaquina=$id AND cf.descripcion='verificacion_controldecero' LIMIT 1 ) AS Resultado_control_cero,
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM config_maquina cf, usuarios u WHERE cf.idmaquina=$id AND cf.descripcion='id_user_verificacion_filtros' LIMIT 1 ),'---') AS Usuario_cero,
-                                (select valor from resultadosauditoria  where observacion='Lente 1 Lectura' and idauditoria = ra.idauditoria limit 1)  as Lente1_lectura,
-                                (select valor from resultadosauditoria  where observacion='Lente 2 Lectura' and idauditoria = ra.idauditoria limit 1)  as Lente2_lectura,
-                                (select valor from resultadosauditoria  where observacion='Lente 3 Lectura' and idauditoria = ra.idauditoria limit 1)  as Lente3_lectura,
-                                (select valor from resultadosauditoria  where observacion='Lente 4 Lectura' and idauditoria = ra.idauditoria limit 1)  as Lente4_lectura,
-                                (select valor from resultadosauditoria  where observacion='Lente 1 Valor' and idauditoria = ra.idauditoria limit 1)  as Lente1_valor,
-                                (select valor from resultadosauditoria  where observacion='Lente 2 Valor' and idauditoria = ra.idauditoria limit 1)  as Lente2_valor,
-                                (select valor from resultadosauditoria  where observacion='Lente 3 Valor' and idauditoria = ra.idauditoria limit 1)  as Lente3_valor,
-                                (select valor from resultadosauditoria  where observacion='Lente 4 Valor' and idauditoria = ra.idauditoria limit 1)  as Lente4_valor,
-                                (select valor from resultadosauditoria  where observacion='Lente 1 Desviación' and idauditoria = ra.idauditoria limit 1)  as Lente1_desviacion,
-                                (select valor from resultadosauditoria  where observacion='Lente 2 Desviación' and idauditoria = ra.idauditoria limit 1)  as Lente2_desviacion,
-                                (select valor from resultadosauditoria  where observacion='Lente 3 Desviación' and idauditoria = ra.idauditoria limit 1)  as Lente3_desviacion,
-                                (select valor from resultadosauditoria  where observacion='Lente 4 Desviación' and idauditoria = ra.idauditoria limit 1)  as Lente4_desviacion,
-                                (select valor from resultadosauditoria  where observacion='Error Total Lectura' and idauditoria = ra.idauditoria limit 1)  as Error_total_lectura,
-                                (select valor from resultadosauditoria  where observacion='Estado' and idauditoria = ra.idauditoria limit 1)  as Resultado 
-                                from resultadosauditoria ra 
-                                where ra.idconfig_prueba = 58 and valor= $id AND 
-                                SUBSTRING(ra.idauditoria,4) = '$fecha' 
-                                group by 1 order by ra.idresultadosauditoria DESC");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta[0];
-        }
-    }
-
-    function infousercreacion($iduser)
-    {
-        $data = $this->db->query("SELECT IFNULL(CONCAT(u.nombres,' ',u.apellidos),'---') AS usuario FROM usuarios u WHERE u.IdUsuario=$iduser");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta[0];
-        }
-    }
-
-    public function infocda()
-    {
-        $query = $this->db->get('cda');
-        return $query;
-    }
-
-    public function infosede()
-    {
-        $query = $this->db->query('SELECT s.*, c.nombre AS ciudad, d.nombre AS departamento
-                           FROM sede s, ciudades c, deptos d
-                            WHERE s.cod_ciudad=c.cod_ciudad AND c.cod_depto=d.cod_depto', FALSE);
-        return $query;
-    }
-
-    function get_informe_crm($fechainicial, $fechafinal, $inspeccion)
-    {
-        $data = $this->db->query("SELECT  
-                                    v.numero_placa AS 'Placa',
-                                    tv.nombre AS 'Tipo_vehiculo',
-                                    v.cilindraje AS 'Cilindraje',
-                                    cr.numero_certificado AS 'Certificado',
-                                    DATE_FORMAT(cr.fechaimpresion, '%Y/%m/%d') AS 'Fecha_impresion',
-                                    DATE_FORMAT(cr.fecha_vigencia, '%Y/%m/%d') AS 'Fecha_vigencia', 
-                                    IFNULL(DATE_FORMAT(v.fecha_vencimiento_soat, '%Y/%m/%d'),'---') AS 'Fecha_vencimiento_soat',   
-                                    cl.numero_identificacion AS 'Numero_identidficacion',
-                                    CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) AS 'Cliente',
-                                    cl.telefono1 AS 'Telefono_1',
-                                    IFNULL(cl.telefono2,'---') AS 'Telefono_2',
-                                    IFNULL(cl.correo,'---') AS 'Correo',
-                                    cl.cumpleanos AS 'Cumpleanos',
-                                    c.nombre AS 'Ciudad',
-                                    cl.direccion AS 'Direccion'
-                                    FROM 
-                                    hojatrabajo h,vehiculos v,clientes cl,certificados cr, tipo_vehiculo tv, ciudades c
-                                    WHERE 
-                                    cl.cod_ciudad=c.cod_ciudad AND 
-                                    cr.idhojapruebas=h.idhojapruebas AND 
-                                    h.idvehiculo=v.idvehiculo AND  
-                                    v.idcliente=cl.idcliente AND 
-                                    v.tipo_vehiculo=tv.idtipo_vehiculo AND 
-                                    cr.fechaimpresion is not null AND 
-                                    cr.fecha_vigencia is not NULL AND 
-                                    $inspeccion AND
-                                    DATE_FORMAT(cr.fecha_vigencia,'%Y-%m-%d') between DATE_FORMAT('$fechainicial','%Y-%m-%d') AND DATE_FORMAT('$fechafinal','%Y-%m-%d')");
-        return $data;
-    }
-
-    function get_informe_crm_prev($fechainicial, $fechafinal, $inspeccion, $selectmeses)
-    {
-        $data = $this->db->query("SELECT
-                                    v.numero_placa AS 'Placa',
-                                    tv.nombre AS 'Tipo_vehiculo',
-                                    v.cilindraje AS 'Cilindraje',
-                                    DATE_FORMAT(h.fechafinal, '%Y/%m/%d') AS 'Fecha_impresion',
-                                    DATE_ADD(DATE_FORMAT(h.fechafinal, '%Y/%m/%d'), INTERVAL $selectmeses MONTH) AS 'Fecha_vigencia', 
-                                    DATE_FORMAT(h.fechainicial, '%Y/%m/%d') AS 'Fecha_registro',
-                                    IFNULL(DATE_FORMAT(v.fecha_vencimiento_soat, '%Y/%m/%d'),'---') AS 'Fecha_vencimiento_soat',   
-                                    cl.numero_identificacion AS 'Numero_identidficacion',
-                                    CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) AS 'Cliente',
-                                    cl.telefono1 AS 'Telefono_1',
-                                    IFNULL(cl.telefono2,'---') AS 'Telefono_2',
-                                    IFNULL(cl.correo,'---') AS 'Correo',
-                                    cl.cumpleanos AS 'Cumpleanos',
-                                    c.nombre AS 'Ciudad',
-                                    cl.direccion AS 'Direccion'
-                                    FROM 
-                                    hojatrabajo h,vehiculos v,clientes cl,tipo_vehiculo tv, ciudades c
-                                    WHERE 
-                                    cl.cod_ciudad=c.cod_ciudad AND 
-                                    h.idvehiculo=v.idvehiculo AND  
-                                    v.idcliente=cl.idcliente AND 
-                                    v.tipo_vehiculo=tv.idtipo_vehiculo AND 
-                                    $inspeccion AND
-                                    DATE_ADD(DATE_FORMAT(h.fechafinal, '%Y/%m/%d'), INTERVAL $selectmeses MONTH)
-                                    between DATE_FORMAT('$fechainicial','%Y-%m-%d') AND DATE_FORMAT('$fechafinal','%Y-%m-%d')");
-        return $data;
-    }
-
-    function get_informe_crm_servicio($fechainicial, $fechafinal, $inspeccion, $servicio)
-    {
-        $data = $this->db->query("SELECT  
-                                    v.numero_placa AS 'Placa',
-                                    tv.nombre AS 'Tipo_vehiculo',
-                                    v.cilindraje AS 'Cilindraje',
-                                    cr.numero_certificado AS 'Certificado',
-                                    DATE_FORMAT(cr.fechaimpresion, '%Y/%m/%d') AS 'Fecha_impresion',
-                                    DATE_FORMAT(cr.fecha_vigencia, '%Y/%m/%d') AS 'Fecha_vigencia', 
-                                    IFNULL(DATE_FORMAT(v.fecha_vencimiento_soat, '%Y/%m/%d'),'---') AS 'Fecha_vencimiento_soat',   
-                                    cl.numero_identificacion AS 'Numero_identidficacion',
-                                    CONCAT(cl.nombre1,' ',cl.nombre2,' ',cl.apellido1,' ',cl.apellido2) AS 'Cliente',
-                                    cl.telefono1 AS 'Telefono_1',
-                                    IFNULL(cl.telefono2,'---') AS 'Telefono_2',
-                                    IFNULL(cl.correo,'---') AS 'Correo',
-                                    cl.cumpleanos AS 'Cumpleanos',
-                                    c.nombre AS 'Ciudad',
-                                    cl.direccion AS 'Direccion'
-                                    FROM 
-                                    hojatrabajo h,vehiculos v,clientes cl,certificados cr, tipo_vehiculo tv, ciudades c
-                                    WHERE 
-                                    cl.cod_ciudad=c.cod_ciudad AND 
-                                    cr.idhojapruebas=h.idhojapruebas AND 
-                                    h.idvehiculo=v.idvehiculo AND  
-                                    v.idcliente=cl.idcliente AND 
-                                    v.tipo_vehiculo=tv.idtipo_vehiculo AND 
-                                    cr.fechaimpresion is not null AND 
-                                    cr.fecha_vigencia is not NULL AND 
-                                    $inspeccion AND
-                                    v.idservicio = $servicio AND
-                                    DATE_FORMAT(cr.fecha_vigencia,'%Y-%m-%d') between DATE_FORMAT('$fechainicial','%Y-%m-%d') AND DATE_FORMAT('$fechafinal','%Y-%m-%d')");
-        return $data;
-    }
-
-    // nuevos informes de fugas y calibraciones
-    function statscalibracionesnuevo($fechainicialca, $fechafinalca, $selanalizador)
-    {
-        $data = $this->db->query("SELECT 
-                                c.idmaquina AS Id,
-                                IFNULL((SELECT m.serie FROM maquina m WHERE c.idmaquina = m.idmaquina LIMIT 1),'---') AS Serie,
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d %H:%i:%s') AS Fecha,
-                                c.pef AS Pef,
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE c.usuario=u.IdUsuario LIMIT 1),'---') AS Responsable,
-                                IFNULL(c.span_alto_hc,'---') AS Span_alto_hc,
-                                IFNULL(c.span_alto_co,'---') AS Span_alto_co,
-                                IFNULL(c.span_alto_co2,'---') AS Span_alto_co2,
-                                IFNULL((select 'Nitrógeno de balance'),'---') AS Span_alto_n,
-                                IFNULL(c.span_bajo_hc,'---') AS Span_bajo_hc,
-                                IFNULL(c.span_bajo_co,'---') AS Span_bajo_co,
-                                IFNULL(c.span_bajo_co2,'---') AS Span_bajo_co2,
-                                IFNULL((select 'Nitrógeno de balance'),'---') AS Span_bajo_n,
-                                IFNULL(c.cal_alto_hc,'---') AS Cal_alto_hc,
-                                IFNULL(c.cal_alto_co,'---') AS Cal_alto_co,
-                                IFNULL(c.cal_alto_co2,'---') AS Cal_alto_co2,
-                                IFNULL(c.cal_alto_o2,'---') AS Cal_alto_o2,
-                                IFNULL(c.cal_bajo_hc,'---') AS Cal_bajo_hc,
-                                IFNULL(c.cal_bajo_co,'---') AS Cal_bajo_co,
-                                IFNULL(c.cal_bajo_co2,'---') AS Cal_bajo_co2,
-                                IFNULL(c.cal_bajo_o2,'---') AS Cal_bajo_o2,
-                                IF(c.resultado = 'S','APROBADO','NO APROBADO') AS resultado
-                                FROM control_calibracion c
-                                WHERE c.idmaquina = $selanalizador AND 
-                                DATE_FORMAT(c.Fecha,'%Y-%m-%d') between DATE_FORMAT('$fechainicialca','%Y-%m-%d') AND DATE_FORMAT('$fechafinalca','%Y-%m-%d') ORDER BY 3 DESC ");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function reportpdfcalibracionesnuevo($fecha, $id)
-    {
-        $data = $this->db->query("SELECT 
-                                IFNULL((SELECT m.serie FROM maquina m WHERE c.idmaquina = m.idmaquina LIMIT 1),'---') AS Serie,
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d %H:%i:%s') AS Fecha,
-                                c.pef AS Pef,
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE c.usuario=u.IdUsuario LIMIT 1),'---') AS Responsable,
-                                IFNULL(c.span_alto_hc,'---') AS Span_alto_hc,
-                                IFNULL(c.span_alto_co,'---') AS Span_alto_co,
-                                IFNULL(c.span_alto_co2,'---') AS Span_alto_co2,
-                                IFNULL((select 'Nitrógeno de balance'),'---') AS Span_alto_n,
-                                IFNULL(c.span_bajo_hc,'---') AS Span_bajo_hc,
-                                IFNULL(c.span_bajo_co,'---') AS Span_bajo_co,
-                                IFNULL(c.span_bajo_co2,'---') AS Span_bajo_co2,
-                                IFNULL((select 'Nitrógeno de balance'),'---') AS Span_bajo_n,
-                                IFNULL(c.cal_alto_hc,'---') AS Cal_alto_hc,
-                                IFNULL(c.cal_alto_co,'---') AS Cal_alto_co,
-                                IFNULL(c.cal_alto_co2,'---') AS Cal_alto_co2,
-                                IFNULL(c.cal_alto_o2,'---') AS Cal_alto_o2,
-                                IFNULL(c.cal_bajo_hc,'---') AS Cal_bajo_hc,
-                                IFNULL(c.cal_bajo_co,'---') AS Cal_bajo_co,
-                                IFNULL(c.cal_bajo_co2,'---') AS Cal_bajo_co2,
-                                IFNULL(c.cal_bajo_o2,'---') AS Cal_bajo_o2,
-                                IF(c.resultado = 'S','APROBADO','NO APROBADO') AS resultado
-                                FROM control_calibracion c
-                                WHERE c.idmaquina = $id AND 
-                                DATE_FORMAT(c.Fecha,'%Y-%m-%d %H:%i:%s') = '$fecha' ORDER BY 1 DESC LIMIT 1");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta[0];
-        }
-    }
-
-    function statsfugasnuevo($fechainicialca, $fechafinalca, $selanalizador)
-    {
-        $data = $this->db->query("SELECT 
-                                c.idmaquina AS Id,
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d %H:%i:%s') AS Fecha,
-                                IFNULL((SELECT m.serie FROM maquina m WHERE c.idmaquina = m.idmaquina LIMIT 1),'---') AS Serie,
-                                (SELECT cl.pef FROM control_calibracion cl WHERE cl.idmaquina=c.idmaquina AND c.idmaquina= $selanalizador ORDER BY 1 DESC LIMIT  1) AS Pef,  
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE c.usuario=u.IdUsuario LIMIT 1),'---') AS Responsable,
-                                IFNULL(c.presion_base,'---') AS presion_base, 
-                                IFNULL(c.presion_bomba,'---') AS presion_bomba,
-                                IFNULL(c.presion_filtros,'---') AS presion_filtros, 
-                                IFNULL(c.presion_bombaoff,'---') AS vacio_bomba_apag, 
-                                IFNULL(c.presion_bombaon,'---') AS vacio_bomba_pren, 
-                                IFNULL(c.num_fuga,'---') AS total_fugas_num,
-                                IFNULL(c.por_num_fuga,'---') AS total_fugas_porc,
-                                IF(c.aprobado = 'S','Aprobado','No aprobado') AS resultado
-                                FROM control_fugas c
-                                WHERE c.idmaquina=$selanalizador AND 
-                                DATE_FORMAT(c.Fecha,'%Y-%m-%d') between DATE_FORMAT('$fechainicialca','%Y-%m-%d') AND DATE_FORMAT('$fechafinalca','%Y-%m-%d') ORDER BY 2 DESC ");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function statsverificacion($fechainicialca, $fechafinalca, $selanalizador)
-    {
-        $data = $this->db->query("SELECT c.idcontrol_verificacion,c.idmaquina, c.auditor1, c.auditor2, c.fecha AS fecha,
-                                c.serie, c.noSerieBench, c.ip, c.ciclo, c.span
-                                FROM control_verificacion c
-                                WHERE c.idmaquina=$selanalizador AND
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d') between DATE_FORMAT('$fechainicialca','%Y-%m-%d') AND DATE_FORMAT('$fechafinalca','%Y-%m-%d') ORDER BY 1 DESC ");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function dataVerificacion($id)
-    {
-        $data = $this->db->query("SELECT c.auditor1, c.datos FROM control_verificacion c WHERE c.idcontrol_verificacion=$id");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function reportpdffugasnuevo($fecha, $id)
-    {
-        $data = $this->db->query("SELECT 
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d %H:%i:%s') AS Fecha,
-                                IFNULL((SELECT m.serie FROM maquina m WHERE c.idmaquina = m.idmaquina LIMIT 1),'---') AS Serie,
-                                (SELECT cl.pef FROM control_calibracion cl WHERE cl.idmaquina=c.idmaquina AND c.idmaquina= $id ORDER BY 1 DESC LIMIT  1) AS Pef,  
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE c.usuario=u.IdUsuario LIMIT 1),'---') AS Responsable,
-                                IFNULL(c.presion_base,'---') AS presion_base, 
-                                IFNULL(c.presion_bomba,'---') AS presion_bomba,
-                                IFNULL(c.presion_filtros,'---') AS presion_filtros, 
-                                IFNULL(c.presion_bombaoff,'---') AS vacio_bomba_apag, 
-                                IFNULL(c.presion_bombaon,'---') AS vacio_bomba_pren, 
-                                IFNULL(c.num_fuga,'---') AS total_fugas_num,
-                                IFNULL(c.por_num_fuga,'---') AS total_fugas_porc,
-                                IF(c.aprobado = 'S','Aprobado','No aprobado') AS resultado
-                                FROM control_fugas c
-                                WHERE c.idmaquina=$id AND 
-                                DATE_FORMAT(c.Fecha,'%Y-%m-%d %H:%i:%s') = '$fecha' ORDER BY 1 DESC LIMIT 1");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta[0];
-        }
-    }
-
-    function linealidadNuevo($fechainicialca, $fechafinalca, $selopcaidad)
-    {
-        $data = $this->db->query("SELECT 
-                                c.idmaquina AS 'Id',
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d %H:%i:%s') AS Fecha,
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE c.usuario = u.IdUsuario), '---') AS 'Usuario',
-                                IFNULL(c.valor1, '---') AS 'Valor1',
-                                IFNULL(c.valor2, '---') AS 'Valor2',
-                                IFNULL(c.valor3, '---') AS 'Valor3',
-                                IFNULL(c.valor4, '---') AS 'Valor4',
-                                IFNULL(c.lectura1, '---') AS 'Lectura1',
-                                IFNULL(c.lectura2, '---') AS 'Lectura2',
-                                IFNULL(c.lectura3, '---') AS 'Lectura3',
-                                IFNULL(c.lectura4, '---') AS 'Lectura4',
-                                IFNULL(c.desviacion1, '---') AS 'Desviacion1',
-                                IFNULL(c.desviacion2, '---') AS 'Desviacion2',
-                                IFNULL(c.desviacion3, '---') AS 'Desviacion3',
-                                IFNULL(c.desviacion4, '---') AS 'Desviacion4',
-                                IF(c.aprobado= 'S', 'Aprobado', 'Rechazado') AS 'Resultado'
-                                FROM control_linealidad c
-                                WHERE c.idmaquina=$selopcaidad AND 
-                                DATE_FORMAT(c.Fecha,'%Y-%m-%d') between DATE_FORMAT('$fechainicialca','%Y-%m-%d') AND DATE_FORMAT('$fechafinalca','%Y-%m-%d') ORDER BY 2 DESC");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta;
-        }
-    }
-
-    function reportpdflinealidadNuevo($fecha, $id)
-    {
-        $data = $this->db->query("SELECT 
-                                c.id AS 'Id',
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d %H:%i:%s') AS Fecha,
-                                (select serie from maquina where idbanco=2 limit 1)  as Serie,
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE c.usuario = u.IdUsuario), '---') AS 'Responsable',
-                                IFNULL(c.valor1, '---') AS 'Lente1_valor',
-                                IFNULL(c.valor2, '---') AS 'Lente2_valor',
-                                IFNULL(c.valor3, '---') AS 'Lente3_valor',
-                                IFNULL(c.valor4, '---') AS 'Lente4_valor',
-                                IFNULL(c.lectura1, '---') AS 'Lente1_lectura',
-                                IFNULL(c.lectura2, '---') AS 'Lente2_lectura',
-                                IFNULL(c.lectura3, '---') AS 'Lente3_lectura',
-                                IFNULL(c.lectura4, '---') AS 'Lente4_lectura',
-                                IFNULL(c.desviacion1, '---') AS 'Lente1_desviacion',
-                                IFNULL(c.desviacion2, '---') AS 'Lente2_desviacion',
-                                IFNULL(c.desviacion3, '---') AS 'Lente3_desviacion',
-                                IFNULL(c.desviacion4, '---') AS 'Lente4_desviacion',
-                                IF(c.aprobado= 'S', 'Aprobada', 'Rechazado') AS 'Resultado' 
-                                FROM control_linealidad c
-                                WHERE c.idmaquina=$id AND 
-                                DATE_FORMAT(c.Fecha,'%Y-%m-%d %H:%i:%s') = '$fecha' ORDER BY 1 DESC LIMIT 1");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta[0];
-        }
-    }
-
-    function controlceroNuevo($fechainicialca, $fechafinalca, $selopcaidad)
-    {
-        $data = $this->db->query("SELECT 
-                                c.idmaquina AS 'Id',
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d %H:%i:%s') AS 'Fecha',
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE c.usuario = u.IdUsuario), '---') AS 'Usuario',
-                                IFNULL(c.valor_antes, '---') AS 'Valorantes',
-                                IFNULL(c.valor_despues, '---') AS 'Valordespues',
-                                IF(c.aprobado= 'S', 'Aprobada', 'Rechazado') AS 'Resultado'
-                                FROM control_cero c
-                                WHERE c.idmaquina=$selopcaidad AND 
-                                DATE_FORMAT(c.Fecha,'%Y-%m-%d') between DATE_FORMAT('$fechainicialca','%Y-%m-%d') AND DATE_FORMAT('$fechafinalca','%Y-%m-%d') ORDER BY 2 DESC");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta;
-        }
-    }
-
-    function controlceroNuevoPdf($fecha, $id)
-    {
-        $data = $this->db->query("SELECT 
-                                c.idcontrol_cero AS 'Id',
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d %H:%i:%s') AS 'Fecha',
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE c.usuario = u.IdUsuario), '---') AS 'Usuario',
-                                IFNULL(c.valor_antes, '---') AS 'Valorantes',
-                                IFNULL(c.valor_despues, '---') AS 'Valordespues',
-                                IF(c.aprobado= 'S', 'Aprobada', 'Rechazado') AS 'Resultado'
-                                FROM control_cero c
-                                WHERE c.idmaquina=$id AND 
-                                DATE_FORMAT(c.Fecha,'%Y-%m-%d %H:%i:%s') = '$fecha' ORDER BY 1 DESC LIMIT 1");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta[0];
-        }
-    }
-
-    function tiempoRespuesta($fechainicialca, $fechafinalca, $selopcaidad)
-    {
-        $data = $this->db->query("SELECT c.*
-                                FROM control_respuesta c 
-                                WHERE c.idmaquina = $selopcaidad AND 
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d') between DATE_FORMAT('$fechainicialca','%Y-%m-%d') AND DATE_FORMAT('$fechafinalca','%Y-%m-%d') ORDER BY 1 DESC");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta;
-        }
-    }
-
-    function resTiempoRespuesta($id)
-    {
-        $data = $this->db->query("SELECT  c.datos, c.idmaquina, c.fecha, c.placa,
-IFNULL((SELECT cd.nombre_cda FROM cda cd),'') AS 'cda',
-IFNULL((SELECT cd.numero_id FROM cda cd),'') AS 'nit' FROM control_respuesta c WHERE c.idcontrol_respuesta=$id");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    //bitacoras
-
-    function isertBitacora($data)
-    {
-        if ($query = $this->db->insert('bitacora_operador', $data)) {
-            return 1;
-        }
-    }
-
-    function bitacorasOpen($idusuario)
-    {
-        $data = $this->db->query("SELECT b.*,
-                                IFNULL((SELECT u.nombres FROM usuarios u WHERE u.IdUsuario=b.idusuario LIMIT 1),'---') AS 'user' 
-                                FROM bitacora_operador b WHERE b.estado=1 AND b.idusuario=$idusuario ORDER BY b.fecha_apertura ASC ");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    function updateBitacoras($fechacierre, $descripcion, $idbitacora)
-    {
-        $data = $this->db->query("UPDATE bitacora_operador b 
-                                SET b.fecha_apertura=b.fecha_apertura, b.fecha_cierre = '$fechacierre', b.estado = 2, b.comentario = CONCAT('Descripcion inicial: ', b.comentario, '----', 'Descripcion cierre: ', '$descripcion')  
-                                WHERE b.id=$idbitacora");
-        return 1;
-    }
-
-    function getBitacoraInicioOperaciona($idusuario, $idmaquina)
-    {
-        $data = $this->db->query("SELECT * 
-                                FROM bitacora_operador b
-                                WHERE 
-                                DATE_FORMAT(b.fecha_apertura, '%Y-%m-%d')  = CURDATE() AND b.comentario LIKE '%inicio op%' AND  b.idmaquina = $idmaquina and b.idusuario = $idusuario");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        } else {
-            return [];
-        }
-    }
-
-    function getBitacoras()
-    {
-        $data = $this->db->query("SELECT b.id,b.idmaquina, 
-                                IFNULL((SELECT CONCAT(m.nombre,'--',m.marca,'--',m.serie) FROM maquina m WHERE b.idmaquina = m.idmaquina LIMIT 1),'---') AS nombre,
-                                b.fecha_apertura, b.fecha_cierre,
-                                IFNULL((SELECT CONCAT(u.nombres, ' ', u.apellidos) FROM usuarios u WHERE b.idusuario = u.IdUsuario LIMIT 1),'---') AS usuario,
-                                b.comentario, b.tipo, b.gravedad,
-                                IF(b.estado = 1, 'Abierto', 'Cerrado') AS estado
-                                FROM bitacora_operador b  ORDER BY 1 DESC");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        }
-    }
-
-    //iniciar agop
-
-    function infoCal($idconf_maquina)
-    {
-        $data = $this->db->query("SELECT 
-                                c.idcontrol_calibracion AS Id,
-                                c.idmaquina AS Idmaquina,
-                                IFNULL((SELECT m.serie FROM maquina m WHERE c.idmaquina = m.idmaquina LIMIT 1),'---') AS Serie,
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d %H:%i:%s') AS Fecha,
-                                c.pef AS Pef,
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE c.usuario=u.IdUsuario LIMIT 1),'---') AS Responsable,
-                                IFNULL(c.span_alto_hc,'---') AS Span_alto_hc,
-                                IFNULL(c.span_alto_co,'---') AS Span_alto_co,
-                                IFNULL(c.span_alto_co2,'---') AS Span_alto_co2,
-                                IFNULL((select 'Nitrógeno de balance'),'---') AS Span_alto_n,
-                                IFNULL(c.span_bajo_hc,'---') AS Span_bajo_hc,
-                                IFNULL(c.span_bajo_co,'---') AS Span_bajo_co,
-                                IFNULL(c.span_bajo_co2,'---') AS Span_bajo_co2,
-                                IFNULL((select 'Nitrógeno de balance'),'---') AS Span_bajo_n,
-                                IFNULL(c.cal_alto_hc,'---') AS Cal_alto_hc,
-                                IFNULL(c.cal_alto_co,'---') AS Cal_alto_co,
-                                IFNULL(c.cal_alto_co2,'---') AS Cal_alto_co2,
-                                IFNULL(c.cal_alto_o2,'---') AS Cal_alto_o2,
-                                IFNULL(c.cal_bajo_hc,'---') AS Cal_bajo_hc,
-                                IFNULL(c.cal_bajo_co,'---') AS Cal_bajo_co,
-                                IFNULL(c.cal_bajo_co2,'---') AS Cal_bajo_co2,
-                                IFNULL(c.cal_bajo_o2,'---') AS Cal_bajo_o2,
-                                IFNULL(c.presion_base,'---') AS Presion_base,
-                                IFNULL(c.presion_bomba,'---') AS Presion_bomba,
-                                IF(c.resultado = 'S','APROBADO','NO APROBADO') AS resultado
-                                FROM control_calibracion c
-                                WHERE c.idmaquina = $idconf_maquina  ORDER BY 1 DESC LIMIT 1");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data[0];
-        } else {
-            return [];
-        }
-    }
-
-    function insertCal($data)
-    {
-        if ($query = $this->db->insert('control_calibracion', $data)) {
-            return 1;
-        }
-    }
-
-    function infoOpa($idconf_maquina)
-    {
-        $data = $this->db->query("SELECT * FROM control_linealidad c WHERE c.idmaquina = $idconf_maquina ORDER BY 1 DESC LIMIT 1
-                                ");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data[0];
-        } else {
-            return [];
-        }
-    }
-
-    function insertFug($data)
-    {
-        if ($query = $this->db->insert('control_fugas', $data)) {
-            return 1;
-        }
-    }
-    function infoFug($idconf_maquina)
-    {
-        $data = $this->db->query("SELECT 
-                                c.idmaquina AS Id,
-                                DATE_FORMAT(c.fecha,'%Y-%m-%d %H:%i:%s') AS Fecha,
-                                IFNULL((SELECT m.serie FROM maquina m WHERE c.idmaquina = m.idmaquina LIMIT 1),'---') AS Serie,
-                                (SELECT cl.pef FROM control_calibracion cl WHERE cl.idmaquina=c.idmaquina AND c.idmaquina= $idconf_maquina ORDER BY 1 DESC LIMIT  1) AS Pef,  
-                                IFNULL((SELECT CONCAT(u.nombres,' ',u.apellidos) FROM usuarios u WHERE c.usuario=u.IdUsuario LIMIT 1),'---') AS Responsable,
-                                IFNULL(c.presion_base,'---') AS presion_base, 
-                                IFNULL(c.presion_bomba,'---') AS presion_bomba,
-                                IFNULL(c.presion_filtros,'---') AS presion_filtros, 
-                                IFNULL(c.presion_bombaoff,'---') AS vacio_bomba_apag, 
-                                IFNULL(c.presion_bombaon,'---') AS vacio_bomba_pren, 
-                                IFNULL(c.num_fuga,'---') AS total_fugas_num,
-                                IFNULL(c.por_num_fuga,'---') AS total_fugas_porc,
-                                IF(c.aprobado = 'S','Aprobado','No aprobado') AS resultado
-                                FROM control_fugas c
-                                WHERE c.idmaquina=$idconf_maquina ORDER BY 1 DESC LIMIT 1
-                                ");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data[0];
-        } else {
-            return [];
-        }
-    }
-
-    function insertOpa($data)
-    {
-        if ($query = $this->db->insert('control_linealidad', $data)) {
-            return 1;
-        }
-    }
-
-    function informePesv($fechainicial, $fechafinal)
-    {
-        $data = $this->db->query("
-            SELECT 
-                p.fechainicial, v.numero_placa as 'numeroPlaca',
-                IFNULL((SELECT c.nombre FROM clase c WHERE v.idclase = c.idclase LIMIT 1),'') AS 'Clase',
-                IFNULL((SELECT CONCAT(u.nombres,'', u.apellidos) FROM usuarios u WHERE u.IdUsuario =  p.idusuario),'') AS 'Inspector',
-                IFNULL((SELECT u.identificacion FROM  usuarios u WHERE u.IdUsuario =  p.idusuario),'') AS 'Identificacion',
-                '' AS 'AuxPrerevision',
-                '' AS 'IdentificacionP',
-                if((h.estadototal = 2 OR h.estadototal = 4),'Aprobado','Rechazada') AS 'AprobadoReprobado',
-                IFNULL(( SELECT cr.numero_certificado FROM certificados cr WHERE h.idhojapruebas = cr.idhojapruebas LIMIT 1),'') AS 'ConsecutivoRunt'
-                FROM vehiculos v, hojatrabajo h, pruebas p 
-                WHERE 
-                v.idvehiculo = h.idvehiculo AND h.idhojapruebas = p.idhojapruebas 
-                AND (h.reinspeccion = 0 OR h.reinspeccion = 1) AND p.idtipo_prueba = 8 AND 
-                DATE_FORMAT(p.fechafinal,'%Y-%m-%d') between DATE_FORMAT('$fechainicial','%Y-%m-%d') AND DATE_FORMAT('$fechafinal','%Y-%m-%d') ORDER BY 1 ASC 
-                                ");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        } else {
-            return [];
-        }
-    }
-
-    function informePesvPrere($placa)
-    {
-        $data = $this->db->query("
-            SELECT
-            pr.*,
-                IFNULL((SELECT CONCAT(u.nombres,'', u.apellidos) FROM usuarios u WHERE u.IdUsuario =  pr.valor),'')  AS 'AuxPrerevisionPre',
-                IFNULL((SELECT u.identificacion FROM usuarios u WHERE u.IdUsuario =  pr.valor),'')  AS 'IdentificacionPre'
-                FROM pre_prerevision p, pre_dato pr, pre_atributo pe
-WHERE 
-p.idpre_prerevision = pr.idpre_prerevision AND pr.idpre_atributo = pe.idpre_atributo AND 
-p.numero_placa_ref = '$placa' AND pe.id LIKE '%usuario_registro%' order BY 1 DESC LIMIT 1
-                                ");
-        if ($data->num_rows() > 0) {
-            $data = $data->result();
-            return $data;
-        } else {
-            return [];
-        }
-    }
-}
+<?php //004fb
+if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
+?>
+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

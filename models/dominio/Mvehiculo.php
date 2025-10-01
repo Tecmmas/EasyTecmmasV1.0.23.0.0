@@ -1,935 +1,408 @@
-<?php
-
-defined('BASEPATH') or exit('No direct script access allowed');
-
-class Mvehiculo extends CI_Model
-{
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    public function get($data)
-    {
-        $this->db->where("idvehiculo", $data['idvehiculo']);
-        $query = $this->db->get('vehiculos');
-        return $query;
-    }
-
-    public function getXplacaLite($placa)
-    {
-        $this->db->where("numero_placa", $placa);
-        $query = $this->db->get('vehiculos');
-        return $query;
-    }
-
-    public function update($data)
-    {
-        $this->db->set("diseno", $data['diseno']);
-        $this->db->set("imagen", $data['imagen']);
-        $this->db->where("idvehiculo", $data['idvehiculo']);
-        echo $this->db->update('vehiculos');
-    }
-
-    public function quitarAILinea()
-    {
-        $this->db->query("ALTER TABLE `linearunt`
-	CHANGE COLUMN `idlineaRUNT` `idlineaRUNT` INT(11) NOT NULL AUTO_INCREMENT FIRST;");
-    }
-
-    //    function get($data) {
-    //        $this->db->where("idvehiculo", $data['idvehiculo']);
-    //        $this->db->where("numero_placa", $placa);
-    //        $query = $this->db->get('vehiculos');
-    //        return $query;
-    //    }
-    //
-    //    function getXplacaLite($placa) {
-    //        $this->db->where("numero_placa", $placa);
-    //        $query = $this->db->get('vehiculos');
-    //        return $query;
-    //    }
-    //
-    //    function update($data) {
-    //        $this->db->set("diseno", $data['diseno']);
-    //        $this->db->set("imagen", $data['imagen']);
-    //        $this->db->where("idvehiculo", $data['idvehiculo']);
-    //        echo $this->db->update('vehiculos');
-    //    }
-    //
-    //    function quitarAILinea() {
-    //        $this->db->query("ALTER TABLE `linearunt`
-    //    CHANGE COLUMN `idlineaRUNT` `idlineaRUNT` INT(11) NOT NULL AUTO_INCREMENT FIRST;");
-    //    }
-
-    public function guardarVehiculo($vehiculo)
-    {
-        $this->db->trans_start();
-        $r = $this->getXplacaLite($vehiculo['numero_placa']);
-        // if ($this->BuscarLinea($vehiculo['idlinea'])) {
-            // $json = file_get_contents('application/libraries/linea.json', true);
-            // $lin = json_decode($json, true);
-            // foreach ($lin as $l) {
-            //     if ($l['idlinea'] == $vehiculo['idlinea']) {
-            //         $linearunt['idlineaRUNT'] = $l["idlinea"];
-            //         $linearunt['idmarcaRUNT'] = $l["idmarca"];
-            //         $linearunt['codigo'] = $l["codigo"];
-            //         $linearunt['nombre'] = $l["nombre"];
-            //         $this->insertarLineaRunt_($linearunt);
-
-            //         if (!$rtaMar = $this->BuscarMarca($linearunt['idmarcaRUNT'])) {
-            //             $json = file_get_contents('application/libraries/marca.json', true);
-            //             $mar = json_decode($json, true);
-            //             foreach ($mar as $m) {
-            //                 if ($m['codigo'] == $linearunt['idmarcaRUNT']) {
-            //                     $marcarunt['idmarcaRUNT'] = $m["codigo"];
-            //                     $marcarunt['nombre'] = $m["nombre"];
-            //                     $this->InsertarMarcaRunt($marcarunt);
-            //                 }
-            //             }
-            //         }
-            //         break;
-            //     }
-            // }
-        // }
-        if (!$rtaCol = $this->BuscarColor($vehiculo['idcolor'])) {
-            $json = file_get_contents('recursos/color.json', true);
-            $col = json_decode($json, true);
-            foreach ($col as $c) {
-                if ($c['codigo'] == $vehiculo['idcolor']) {
-                    $colorrunt['idcolorrunt'] = $c['codigo'];
-                    $colorrunt['nombre'] = $c['nombre'];
-                    $this->InsertarColorRunt($colorrunt);
-                }
-            }
-        }
-        //
-        if ($r->num_rows() !== 0) {
-            unset($vehiculo['diametro_escape']);
-            $this->db->where('numero_placa', $vehiculo['numero_placa']);
-            echo $this->db->update('vehiculos', $vehiculo);
-        } else {
-            echo $this->db->insert('vehiculos', $vehiculo);
-        }
-        //
-        $rtaPre = $this->BuscarPrerevision($vehiculo['numero_placa'], '1');
-        $idpre_prerevision = "";
-        if ($rtaPre->num_rows() > 0) {
-            $r = $rtaPre->result();
-            $pr = $r[0];
-            $idpre_prerevision = $pr->idpre_prerevision;
-        } else {
-            $rtaPre = $this->BuscarPrerevision($vehiculo['numero_placa'], '0');
-            if ($rtaPre->num_rows() > 0) {
-                $r = $rtaPre->result();
-                $pr = $r[0];
-                $idpre_prerevision = $pr->idpre_prerevision;
-            }
-        }
-        $servicio = $vehiculo['idservicio'];
-        $placa = $vehiculo['numero_placa'];
-        $this->db->query("UPDATE visor v SET v.servicio = $servicio , v.fecha = v.fecha WHERE v.placa = '$placa'");
-        if ($idpre_prerevision !== "") {
-            if ("1" == $pr->actualizado) {
-                $histoVehiculo['histo_propietario'] = $vehiculo['idpropietarios'];
-                $histoVehiculo['histo_servicio'] = $vehiculo['idservicio'];
-                $histoVehiculo['histo_licencia'] = $vehiculo['numero_tarjeta_propiedad'];
-                $histoVehiculo['histo_color'] = $vehiculo['idcolor'];
-                $histoVehiculo['histo_combustible'] = $vehiculo['idtipocombustible'];
-                $histoVehiculo['histo_kilometraje'] = $vehiculo['kilometraje'];
-                $histoVehiculo['histo_blindaje'] = $vehiculo['blindaje'];
-                $histoVehiculo['histo_polarizado'] = $vehiculo['polarizado'];
-                $histoVehiculo['usuario_registro'] = $vehiculo['usuario'];
-                $histoVehiculo['histo_cliente'] = $vehiculo['idcliente'];
-                $histoVehiculo['numero_certificado_gas'] = $vehiculo['chk_3'];
-                $histoVehiculo['fecha_final_certgas'] = $vehiculo['fecha_final_certgas'];
-                $histoVehiculo['fecha_vencimiento_soat'] = $vehiculo['fecha_vencimiento_soat'];
-                $histoVehiculo['nombre_empresa'] = $vehiculo['nombre_empresa'];
-                $histoVehiculo['idpre_prerevision'] = $pr->idpre_prerevision;
-                $histoVehiculo['tipo_inspeccion'] = $pr->tipo_inspeccion;
-                $histoVehiculo['reinspeccion'] = $pr->reinspeccion;
-                $this->actualizarHistoVehiculo($histoVehiculo);
-            } else {
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('histo_propietario'), $vehiculo['idpropietarios']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('histo_servicio'), $vehiculo['idservicio']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('histo_licencia'), $vehiculo['numero_tarjeta_propiedad']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('histo_color'), $vehiculo['idcolor']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('histo_combustible'), $vehiculo['idtipocombustible']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('histo_kilometraje'), $vehiculo['kilometraje']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('histo_blindaje'), $vehiculo['blindaje']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('histo_polarizado'), $vehiculo['polarizado']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('usuario_registro'), $vehiculo['usuario']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('histo_cliente'), $vehiculo['idcliente']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('chk-3'), $vehiculo['chk_3']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('fecha_final_certgas'), $vehiculo['fecha_final_certgas']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('fecha_vencimiento_soat'), $vehiculo['fecha_vencimiento_soat']);
-                $this->updatePreDato($idpre_prerevision, $this->BuscarPreAtributo('nombre_empresa'), $vehiculo['nombre_empresa']);
-            }
-        }
-        $this->db->trans_complete();
-    }
-
-    public function actualizarHistoVehiculo($histoVehiculo)
-    {
-        $pre_prerevision['actualizado'] = '1';
-        $this->db->where('idpre_prerevision', $histoVehiculo['idpre_prerevision']);
-        $this->db->update("pre_prerevision", $pre_prerevision);
-
-        $this->db->where('idpre_prerevision', $histoVehiculo['idpre_prerevision']);
-        echo $this->db->update("histo_vehiculo", $histoVehiculo);
-    }
-
-    public function BuscarPrerevision($numero_placa, $reinspeccion)
-    {
-        if ($reinspeccion == '1' || $reinspeccion == '0') {
-            $tipo_inspeccion = '1';
-        } else if ($reinspeccion == '4444' || $reinspeccion == '44441') {
-            $tipo_inspeccion = '2';
-            if ($reinspeccion == '4444') {
-                $reinspeccion = '0';
-            } else {
-                $reinspeccion = '1';
-            }
-        } else {
-            $reinspeccion = '0';
-            $tipo_inspeccion = '3';
-        }
-        $data = $this->db->query("
-            SELECT
-                *
-                FROM
-                pre_prerevision pp
-                WHERE
-                pp.numero_placa_ref='$numero_placa' AND
-                pp.reinspeccion='$reinspeccion' AND
-                pp.tipo_inspeccion='$tipo_inspeccion' and
-                DATE_FORMAT(pp.fecha_prerevision,'%Y%M%d') = DATE_FORMAT(now(),'%Y%M%d') limit 1");
-        return $data;
-    }
-
-    public function BuscarPreAtributo($id)
-    {
-        $data = $this->db->query("
-            SELECT
-                pa.idpre_atributo
-                FROM
-                pre_atributo pa
-                WHERE
-                pa.id='$id' limit 1");
-        if ($data->num_rows() > 0) {
-            $rta = $data->result();
-            return $rta[0]->idpre_atributo;
-        } else {
-            return false;
-        }
-    }
-
-    public function insertarPrerevision($numero_placa, $reinspeccion)
-    {
-        if ($reinspeccion == '1' || $reinspeccion == '0') {
-            $tipo_inspeccion = '1';
-        } else if ($reinspeccion == '4444' || $reinspeccion == '44441') {
-            $tipo_inspeccion = '2';
-            if ($reinspeccion == '4444') {
-                $reinspeccion = '0';
-            } else {
-                $reinspeccion = '1';
-            }
-        } else {
-            $reinspeccion = '0';
-            $tipo_inspeccion = '3';
-        }
-        $pre_prerevision['consecutivo'] = 'OFC';
-        $pre_prerevision['numero_placa_ref'] = $numero_placa;
-        $pre_prerevision['tipo_inspeccion'] = $tipo_inspeccion;
-        $pre_prerevision['reinspeccion'] = $reinspeccion;
-        $pre_prerevision['actualizado'] = '1';
-        $this->db->insert('pre_prerevision', $pre_prerevision);
-        $pre_prerevision['idpre_prerevision'] = $this->db->insert_id();
-        return $pre_prerevision;
-    }
-
-    public function insertPreDato($idpre_prerevision, $idpre_atributo, $valor)
-    {
-        $pre_dato['idpre_prerevision'] = $idpre_prerevision;
-        $pre_dato['idpre_atributo'] = $idpre_atributo;
-        $pre_dato['idpre_zona'] = '0';
-        if ($valor == null) {
-            $valor = "1";
-        }
-
-        $pre_dato['valor'] = $valor;
-        $this->db->insert('pre_dato', $pre_dato);
-    }
-
-    public function updatePreDato($idpre_prerevision, $idpre_atributo, $valor)
-    {
-        $this->db->set('valor', $valor, true);
-        $this->db->where('idpre_prerevision', $idpre_prerevision);
-        $this->db->where('idpre_atributo', $idpre_atributo);
-        $this->db->update('pre_dato');
-    }
-
-    public function getXplaca($placa)
-    {
-        $query = <<<EOF
-                                select
-                                    v.idvehiculo,
-                                    v.numero_placa,
-                                    IFNULL((SELECT cli.idcliente FROM clientes cli WHERE cli.idcliente=v.idcliente LIMIT 1),'') idcliente,
-                                    IFNULL((SELECT cli.numero_identificacion FROM clientes cli WHERE cli.idcliente=v.idcliente LIMIT 1),'') documento_cliente,
-                                    IFNULL((SELECT CONCAT(ifnull(cli.nombre1,''),' ',ifnull(cli.nombre2,'')) FROM clientes cli WHERE cli.idcliente=v.idcliente LIMIT 1),'') nombre_cliente,
-                                    IFNULL((SELECT CONCAT(ifnull(cli.apellido1,''),' ',ifnull(cli.apellido2,'')) FROM clientes cli WHERE cli.idcliente=v.idcliente LIMIT 1),'') apellido_cliente,
-                                    IFNULL((SELECT cli.telefono1 FROM clientes cli WHERE cli.idcliente=v.idcliente LIMIT 1),'') telefono_cliente,
-                                    IFNULL((SELECT pro.idcliente FROM clientes pro WHERE pro.idcliente=v.idpropietarios LIMIT 1),'') idpropietario,
-                                    IFNULL((SELECT pro.numero_identificacion FROM clientes pro WHERE pro.idcliente=v.idpropietarios LIMIT 1),'') documento_propietario,
-                                    IFNULL((SELECT CONCAT(ifnull(pro.nombre1,''),' ',ifnull(pro.nombre2,'')) FROM clientes pro WHERE pro.idcliente=v.idpropietarios LIMIT 1),'') nombre_propietario,
-                                    IFNULL((SELECT CONCAT(ifnull(pro.apellido1,''),' ',ifnull(pro.apellido2,'')) FROM clientes pro WHERE pro.idcliente=v.idpropietarios LIMIT 1),'') apellido_propietario,
-                                    IFNULL((SELECT pro.telefono1 FROM clientes pro WHERE pro.idcliente=v.idpropietarios LIMIT 1),'') telefono_propietario,
-        			                     IFNULL((SELECT CONCAT('<option value="',s.idservicio,'">',upper(s.nombre),'</option>') FROM servicio s WHERE s.idservicio=v.idservicio),'<option value="0">SIN LINEA</option>') idservicio,
-                                   
-                                    CASE 
-        WHEN v.migrateLineaMarca <> 1 THEN
-            IF(v.registrorunt = '0',
-                IFNULL((SELECT upper(l.nombre) FROM linea l WHERE l.idlinea = v.idlinea LIMIT 1), 'SIN LINEA'),
-                IFNULL((SELECT upper(lr.nombre) FROM linearunt lr WHERE lr.idlinearunt = v.idlinea LIMIT 1), 'SIN LINEA')
-            )
-        ELSE 
-            IFNULL((SELECT upper(nl.nombre) FROM newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1), 'SIN LINEA')
-    END as idlinea,
-    
-    -- ID de línea RUNT corregido:
-    CASE 
-        WHEN v.migrateLineaMarca <> 1 THEN
-            IF(v.registrorunt = '0',
-                IFNULL((SELECT l.idlinea FROM linea l WHERE l.idlinea = v.idlinea LIMIT 1), 0),
-                IFNULL((SELECT lr.idlinearunt FROM linearunt lr WHERE lr.idlinearunt = v.idlinea LIMIT 1), 0)
-            )
-        ELSE 
-            IFNULL((SELECT nl.idlineas FROM newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1), 0)
-    END AS idlineaRUNT,
-    
-    -- Marca corregida:
-    CASE 
-        WHEN v.migrateLineaMarca <> 1 THEN
-            IF(v.registrorunt = '0',
-                IFNULL((SELECT upper(m.nombre) FROM marca m 
-                       WHERE m.idmarca = (SELECT l.idmarca FROM linea l WHERE l.idlinea = v.idlinea LIMIT 1) 
-                       LIMIT 1), 'SIN MARCA'),
-                IFNULL((SELECT upper(mr.nombre) FROM marcarunt mr 
-                       WHERE mr.idmarcarunt = (SELECT lr.idmarcarunt FROM linearunt lr WHERE lr.idlinearunt = v.idlinea LIMIT 1) 
-                       LIMIT 1), 'SIN MARCA')
-            )
-        ELSE 
-            IFNULL((SELECT upper(nm.nombre) FROM newmarcas nm 
-                   WHERE nm.idmarcas = (SELECT nl.idmarcas FROM newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1) 
-                   LIMIT 1), 'SIN MARCA')
-    END AS idmarca,
-    
-    -- ID de marca RUNT corregido:
-    CASE 
-        WHEN v.migrateLineaMarca <> 1 THEN
-            IF(v.registrorunt = '0',
-                IFNULL((SELECT m.idmarca FROM marca m 
-                       WHERE m.idmarca = (SELECT l.idmarca FROM linea l WHERE l.idlinea = v.idlinea LIMIT 1) 
-                       LIMIT 1), 0),
-                IFNULL((SELECT mr.idmarcarunt FROM marcarunt mr 
-                       WHERE mr.idmarcarunt = (SELECT lr.idmarcarunt FROM linearunt lr WHERE lr.idlinearunt = v.idlinea LIMIT 1) 
-                       LIMIT 1), 0)
-            )
-        ELSE 
-            IFNULL((SELECT nm.idmarcas FROM newmarcas nm 
-                   WHERE nm.idmarcas = (SELECT nl.idmarcas FROM newlineas nl WHERE nl.idlineas = v.idlinea LIMIT 1) 
-                   LIMIT 1), 0)
-    END AS idmarcaRUNT,
-                                   
-                        	        
-                                   
-                                   
-                                    IFNULL((SELECT CONCAT('<option value="',c.idclase,'">',upper(c.nombre),'</option>') FROM clase c WHERE c.idclase=v.idclase),'<option value="1">AUTOMOVIL</option>') idclase,
-                                    IFNULL((SELECT col.nombre FROM colorrunt col WHERE col.idcolorRUNT=v.idcolor),"SIN COLOR") idcolor,
-                                    IFNULL((SELECT col.idcolorRUNT FROM colorrunt col WHERE col.idcolorRUNT=v.idcolor),0) idcolorrunt,
-                                    IFNULL((SELECT CONCAT('<option value="',tc.idtipocombustible,'">',upper(tc.nombre),'</option>') FROM tipo_combustible tc WHERE tc.idtipocombustible=v.idtipocombustible),'<option value="2">GASOLINA</option>') idcombustible,
-                                    v.ano_modelo,
-                                    v.numero_motor, 
-                                    v.numero_serie,
-                                    v.numero_tarjeta_propiedad,
-                                    v.cilindraje,
-                                    CONCAT('<option value="',v.cilindros,'">',upper(v.cilindros),'</option>') cilindros,
-                                    v.potencia_motor,
-                                    IFNULL((SELECT CONCAT('<option value="',tv.idtipo_vehiculo,'">',upper(tv.nombre),'</option>') FROM tipo_vehiculo tv WHERE tv.idtipo_vehiculo=v.tipo_vehiculo),'<option value="1">LIVIANO</option>') tipo_vehiculo,
-                                    if(v.taximetro=0,CONCAT("<option value='0'>NO</option>"),CONCAT("<option value='1'>SI</option>")) taximetro,
-                                    CONCAT('<option value="',v.tiempos,'">',v.tiempos,'</option>') tiempos,
-                                    if(v.ensenanza=0,CONCAT("<option value='0'>NO</option>"),CONCAT("<option value='1'>SI</option>")) ensenanza,
-                                    IFNULL((SELECT CONCAT('<option value="',p.idpais,'">',p.nombre,'</option>') FROM paises p WHERE p.idpais=v.idpais),'<option value="90">COLOMBIA</option>') idpais,
-                                    v.fecha_matricula,
-                                    if(v.blindaje=0,CONCAT("<option value='0'>NO</option>"),CONCAT("<option value='1'>SI</option>")) blindaje,
-                                    if(v.polarizado=0,CONCAT("<option value='0'>NO</option>"),CONCAT("<option value='1'>SI</option>")) polarizado,
-                                    v.numsillas,
-                                    v.num_pasajeros,
-                                    v.numero_vin,
-                                    v.numero_vin numero_chasis,
-                                    CONCAT('<option value="',v.numero_llantas,'">',v.numero_llantas,'</option>') numero_llantas,
-                                    CONCAT('<option value="',v.numero_exostos,'">',upper(v.numero_exostos),'</option>') numero_exostos,
-                                    if(v.scooter=0,CONCAT("<option value='0'>NO</option>"),CONCAT("<option value='1'>SI</option>")) scooter,
-                                    CONCAT('<option value="',v.numejes,'">',v.numejes,'</option>') numejes,
-                                    v.kilometraje,
-                                    IFNULL((SELECT car.idcarroceria FROM carroceria car WHERE car.idcarroceria=v.diseno),'0') idcarroceriarunt,
-                                    IFNULL((SELECT upper(car.nombre) FROM carroceria car WHERE car.idcarroceria=v.diseno),'SIN CARROCERIA') diseno,
-                                    ifnull(v.fecha_final_certgas,'') fecha_final_certgas,
-                                    ifnull(v.fecha_vencimiento_soat,'') fecha_vencimiento_soat,
-                                    if(v.chk_3='SI',CONCAT("<option value='SI'>SI</option>"),if(v.chk_3='NO',CONCAT("<option value='NO'>NO</option>"),CONCAT("<option value='NA'>NO APLICA</option>"))) chk_3,
-                                    ifnull(v.nombre_empresa,'') nombre_empresa,
-                                    v.migrateLineaMarca
-                                    from
-                                    vehiculos   v
-                                    where
-                                    v.numero_placa = '$placa' limit 1
-EOF;
-        return $this->db->query($query);
-    }
-    //     public function getXplaca($placa)
-    //     {
-    //         $query = <<<EOF
-    //                                 select
-    //                                     v.idvehiculo,
-    //                                     v.numero_placa,
-    //                                     IFNULL((SELECT cli.idcliente FROM clientes cli WHERE cli.idcliente=v.idcliente LIMIT 1),'') idcliente,
-    //                                     IFNULL((SELECT cli.numero_identificacion FROM clientes cli WHERE cli.idcliente=v.idcliente LIMIT 1),'') documento_cliente,
-    //                                     IFNULL((SELECT CONCAT(ifnull(cli.nombre1,''),' ',ifnull(cli.nombre2,'')) FROM clientes cli WHERE cli.idcliente=v.idcliente LIMIT 1),'') nombre_cliente,
-    //                                     IFNULL((SELECT CONCAT(ifnull(cli.apellido1,''),' ',ifnull(cli.apellido2,'')) FROM clientes cli WHERE cli.idcliente=v.idcliente LIMIT 1),'') apellido_cliente,
-    //                                     IFNULL((SELECT cli.telefono1 FROM clientes cli WHERE cli.idcliente=v.idcliente LIMIT 1),'') telefono_cliente,
-    //                                     IFNULL((SELECT pro.idcliente FROM clientes pro WHERE pro.idcliente=v.idpropietarios LIMIT 1),'') idpropietario,
-    //                                     IFNULL((SELECT pro.numero_identificacion FROM clientes pro WHERE pro.idcliente=v.idpropietarios LIMIT 1),'') documento_propietario,
-    //                                     IFNULL((SELECT CONCAT(ifnull(pro.nombre1,''),' ',ifnull(pro.nombre2,'')) FROM clientes pro WHERE pro.idcliente=v.idpropietarios LIMIT 1),'') nombre_propietario,
-    //                                     IFNULL((SELECT CONCAT(ifnull(pro.apellido1,''),' ',ifnull(pro.apellido2,'')) FROM clientes pro WHERE pro.idcliente=v.idpropietarios LIMIT 1),'') apellido_propietario,
-    //                                     IFNULL((SELECT pro.telefono1 FROM clientes pro WHERE pro.idcliente=v.idpropietarios LIMIT 1),'') telefono_propietario,
-    //         			                IFNULL((SELECT CONCAT('<option value="',s.idservicio,'">',upper(s.nombre),'</option>') FROM servicio s WHERE s.idservicio=v.idservicio),'<option value="0">SIN LINEA</option>') idservicio,
-    // 				                    IFNULL((SELECT upper(lr.nombre) FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea),'SIN LINEA') idlinea,
-    // 				                    IFNULL((SELECT lr.idlineaRUNT FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea),0) idlineaRUNT,
-    //                 		            IFNULL((SELECT upper(mr.nombre) FROM marcarunt mr WHERE mr.idmarcaRUNT=(SELECT lr.idmarcarunt FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea)),'SIN MARCA') idmarca,
-    //                         	        IFNULL((SELECT mr.idmarcaRUNT FROM marcarunt mr WHERE mr.idmarcaRUNT=(SELECT lr.idmarcarunt FROM linearunt lr WHERE lr.idlineaRUNT=v.idlinea)),0) idmarcaRUNT,
-    //                                     IFNULL((SELECT CONCAT('<option value="',c.idclase,'">',upper(c.nombre),'</option>') FROM clase c WHERE c.idclase=v.idclase),'<option value="1">AUTOMOVIL</option>') idclase,
-    //                                     IFNULL((SELECT col.nombre FROM colorrunt col WHERE col.idcolorRUNT=v.idcolor),"SIN COLOR") idcolor,
-    //                                     IFNULL((SELECT col.idcolorRUNT FROM colorrunt col WHERE col.idcolorRUNT=v.idcolor),0) idcolorrunt,
-    //                                     IFNULL((SELECT CONCAT('<option value="',tc.idtipocombustible,'">',upper(tc.nombre),'</option>') FROM tipo_combustible tc WHERE tc.idtipocombustible=v.idtipocombustible),'<option value="2">GASOLINA</option>') idcombustible,
-    //                                     v.ano_modelo,
-    //                                     v.numero_motor,
-    //                                     v.numero_serie,
-    //                                     v.numero_tarjeta_propiedad,
-    //                                     v.cilindraje,
-    //                                     CONCAT('<option value="',v.cilindros,'">',upper(v.cilindros),'</option>') cilindros,
-    //                                     v.potencia_motor,
-    //                                     IFNULL((SELECT CONCAT('<option value="',tv.idtipo_vehiculo,'">',upper(tv.nombre),'</option>') FROM tipo_vehiculo tv WHERE tv.idtipo_vehiculo=v.tipo_vehiculo),'<option value="1">LIVIANO</option>') tipo_vehiculo,
-    //                                     if(v.taximetro=0,CONCAT("<option value='0'>NO</option>"),CONCAT("<option value='1'>SI</option>")) taximetro,
-    //                                     CONCAT('<option value="',v.tiempos,'">',v.tiempos,'</option>') tiempos,
-    //                                     if(v.ensenanza=0,CONCAT("<option value='0'>NO</option>"),CONCAT("<option value='1'>SI</option>")) ensenanza,
-    //                                     IFNULL((SELECT CONCAT('<option value="',p.idpais,'">',p.nombre,'</option>') FROM paises p WHERE p.idpais=v.idpais),'<option value="90">COLOMBIA</option>') idpais,
-    //                                     v.fecha_matricula,
-    //                                     if(v.blindaje=0,CONCAT("<option value='0'>NO</option>"),CONCAT("<option value='1'>SI</option>")) blindaje,
-    //                                     if(v.polarizado=0,CONCAT("<option value='0'>NO</option>"),CONCAT("<option value='1'>SI</option>")) polarizado,
-    //                                     v.numsillas,
-    //                                     v.num_pasajeros,
-    //                                     v.numero_vin,
-    //                                     v.numero_vin numero_chasis,
-    //                                     CONCAT('<option value="',v.numero_llantas,'">',v.numero_llantas,'</option>') numero_llantas,
-    //                                     CONCAT('<option value="',v.numero_exostos,'">',upper(v.numero_exostos),'</option>') numero_exostos,
-    //                                     if(v.scooter=0,CONCAT("<option value='0'>NO</option>"),CONCAT("<option value='1'>SI</option>")) scooter,
-    //                                     CONCAT('<option value="',v.numejes,'">',v.numejes,'</option>') numejes,
-    //                                     v.kilometraje,
-    //                                     IFNULL((SELECT car.idcarroceria FROM carroceria car WHERE car.idcarroceria=v.diseno),'0') idcarroceriarunt,
-    //                                     IFNULL((SELECT upper(car.nombre) FROM carroceria car WHERE car.idcarroceria=v.diseno),'SIN CARROCERIA') diseno,
-    //                                     ifnull(v.fecha_final_certgas,'') fecha_final_certgas,
-    //                                     ifnull(v.fecha_vencimiento_soat,'') fecha_vencimiento_soat,
-    //                                     if(v.chk_3='SI',CONCAT("<option value='SI'>SI</option>"),if(v.chk_3='NO',CONCAT("<option value='NO'>NO</option>"),CONCAT("<option value='NA'>NO APLICA</option>"))) chk_3,
-    //                                     ifnull(v.nombre_empresa,'') nombre_empresa,
-    //                                     v.migrateLineaMarca
-    //                                     from
-    //                                     vehiculos   v
-    //                                     where
-    //                                     v.numero_placa = '$placa' limit 1
-    // EOF;
-    //         return $this->db->query($query);
-    //     }
-
-    public function addColumFVS()
-    {
-        if ($this->evaluarColumna('fecha_vencimiento_soat') == 0) {
-            $query = $this->db->query("ALTER TABLE `vehiculos`
-            ADD COLUMN `fecha_vencimiento_soat` DATE NULL AFTER `registrorunt`;");
-            echo $query;
-        }
-    }
-
-    public function addchk_3()
-    {
-        if ($this->evaluarColumna('chk_3') == 0) {
-            $query = $this->db->query("ALTER TABLE `vehiculos`
-            ADD COLUMN `chk_3` VARCHAR(5) NULL DEFAULT 'NA' AFTER `fecha_vencimiento_soat`;");
-            echo $query;
-        }
-    }
-
-    public function addColumnFFCert()
-    {
-        if ($this->evaluarColumna('fecha_final_certgas') == 0) {
-            $query = $this->db->query("ALTER TABLE `vehiculos`
-            ADD COLUMN `fecha_final_certgas` DATE NULL AFTER `chk_3`;");
-            echo $query;
-        }
-    }
-
-    public function evaluarColumna($campo)
-    {
-        $query = $this->db->query("SELECT count(*) dat FROM information_schema.COLUMNS
-                                    WHERE COLUMN_NAME = '$campo'
-                                    and TABLE_NAME = 'vehiculos'");
-        $rta = $query->result();
-        return $rta[0]->dat;
-    }
-
-    public function BuscarTablaMarca()
-    {
-        $data = $this->db->query("
-            show tables like '%marcarunt%' ");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return false;
-        }
-    }
-
-    public function BuscarTablaLinea()
-    {
-        $data = $this->db->query("
-            show tables like '%linearunt%' ");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return false;
-        }
-    }
-
-    public function BuscarTablaColor()
-    {
-        $data = $this->db->query("
-            show tables like '%colorrunt%' ");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return false;
-        }
-    }
-
-    public function BuscarTablaObservaciones()
-    {
-        $data = $this->db->query("
-            show tables like '%observaciones%' ");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return false;
-        }
-    }
-
-    public function BuscarRegistroRunt()
-    {
-        $data = $this->db->query("
-            show columns from vehiculos where Field='registrorunt'");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return false;
-        }
-    }
-
-    public function CrearTablaMarca()
-    {
-        if (!$this->BuscarTablaMarca()) {
-            try {
-                $query = "CREATE TABLE `marcarunt` (
-                            `idmarcaRUNT` INT(11) NOT NULL,
-                            `nombre` VARCHAR(100) NOT NULL,
-                            PRIMARY KEY (`idmarcaRUNT`))
-                            ENGINE = MyISAM;";
-                $this->db->query($query);
-            } catch (Exception $ex) {
-                echo ($ex->getMessage());
-                return false;
-            }
-        }
-    }
-
-    public function CrearTablaLinea()
-    {
-        if (!$this->BuscarTablaLinea()) {
-            try {
-                $query = "CREATE TABLE `linearunt` (
-                            `idlineaRUNT` INT(11) NOT NULL AUTO_INCREMENT,
-                            `idmarcaRUNT` INT(11) NOT NULL,
-                            `codigo` INT(11) NOT NULL,
-                            `nombre` VARCHAR(100) NOT NULL,
-                            PRIMARY KEY (`idlineaRUNT`))
-                            ENGINE = MyISAM;";
-                $this->db->query($query);
-            } catch (Exception $ex) {
-                echo ($ex->getMessage());
-                return false;
-            }
-        }
-    }
-
-    public function CrearTablaColor()
-    {
-        if (!$this->BuscarTablaColor()) {
-            try {
-                $query = "CREATE TABLE `colorrunt` (
-                            `idcolorRUNT` INT NOT NULL,
-                            `nombre` VARCHAR(100) NOT NULL,
-                            PRIMARY KEY (`idcolorRUNT`))ENGINE = MyISAM";
-                $this->db->query($query);
-            } catch (Exception $ex) {
-                echo ($ex->getMessage());
-                return false;
-            }
-        }
-    }
-
-    public function CrearTablaObservaciones()
-    {
-        if (!$this->BuscarTablaObservaciones()) {
-            try {
-                $query = "CREATE TABLE `observaciones` (
-                                `id` INT(11) NOT NULL AUTO_INCREMENT,
-                                `codigo` VARCHAR(50) NOT NULL,
-                                `observacion` TEXT NOT NULL,
-                                PRIMARY KEY (`id`)
-                        )
-                        COLLATE='utf8_general_ci'
-                        ENGINE=MyISAM";
-                $this->db->query($query);
-            } catch (Exception $ex) {
-                echo ($ex->getMessage());
-                return false;
-            }
-        }
-    }
-
-    public function CrearRegistroRunt()
-    {
-        if (!$this->BuscarRegistroRunt()) {
-            try {
-                $query = "ALTER TABLE `vehiculos`
-                        ADD COLUMN `registrorunt` VARCHAR(1) NULL DEFAULT '0' AFTER `numejes`;";
-                $this->db->query($query);
-            } catch (Exception $ex) {
-                echo ($ex->getMessage());
-                return false;
-            }
-        }
-    }
-
-    //    function CrearDispatadoresRUNT() {
-    //            try {
-    //                $query = <<<EOF
-    //DROP TRIGGER IF EXISTS insert_linea;
-    //DELIMITER $$
-    //CREATE TRIGGER insert_linea
-    //AFTER INSERT
-    //ON linearunt FOR EACH ROW
-    //BEGIN
-    //IF NOT EXISTS (SELECT idlinea FROM linea WHERE idlinea=NEW.idlineaRUNT) THEN
-    //INSERT INTO linea (idlinea,idmarca,nombre,idmintrans)
-    //VALUES(NEW.idlinearunt,NEW.idmarcaRUNT,NEW.nombre,NEW.codigo);
-    //END IF;
-    //END$$
-    //DELIMITER ;
-    //EOF;
-    //                $this->db->query($query);
-    //            } catch (Exception $ex) {
-    //                echo($ex->getMessage());
-    //                return false;
-    //            }
-    //    }
-
-    public function InsertarColorRunt($colorrunt)
-    {
-        $this->db->insert('colorrunt', $colorrunt);
-    }
-
-    public function BuscarColor($idcolor)
-    {
-        $data = $this->db->query("
-            SELECT
-                idcolorRUNT
-            FROM
-                colorrunt c
-            WHERE
-                c.idcolorRUNT=$idcolor");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return false;
-        }
-    }
-
-    public function InsertarMarcaRunt($marcarunt)
-    {
-        $this->db->insert('marcarunt', $marcarunt);
-    }
-
-    public function BuscarMarca($idmarca)
-    {
-        $data = $this->db->query("
-            SELECT
-                idmarcaRUNT
-            FROM
-                marcarunt m
-            WHERE
-                m.idmarcaRUNT=$idmarca");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return false;
-        }
-    }
-
-    public function InsertarLineaRunt($linearunt)
-    {
-        if (!$this->BuscarLinea($linearunt['idmarcaRUNT'], $linearunt['codigo'])) {
-
-            $this->db->insert('linearunt', $linearunt);
-        }
-    }
-
-    public function InsertarLineaRunt2($linearunt)
-    {
-        $rta = $this->BuscarLinea($linearunt['idmarcaRUNT'], $linearunt['codigo']);
-        if (!$rta) {
-            $this->db->insert('linearunt', $linearunt);
-            //            return $this->db->insert_id();
-        } else {
-            $rta = $rta->result();
-            return $rta[0]->idlineaRunt;
-        }
-    }
-
-    public function BuscarLinea($idlinearunt)
-    {
-        $data = $this->db->query("
-           SELECT
-                l.idlineas
-            FROM
-                newlineas l
-            WHERE
-                l.idlineas=$idlinearunt
-                ");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return false;
-        }
-    }
-    // public function BuscarLinea($idlinearunt)
-    // {
-    //     $data = $this->db->query("
-    //         SELECT
-    //             idlineaRunt
-    //         FROM
-    //             linearunt l
-    //         WHERE
-    //             l.idlineaRUNT=$idlinearunt");
-    //     if ($data->num_rows() > 0) {
-    //         return $data;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
-    public function BuscarLineaNombre($nombre)
-    {
-        $data = $this->db->query("
-            SELECT
-                idlineaRunt
-            FROM
-                linearunt l
-            WHERE
-                l.nombre='$nombre'");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return false;
-        }
-    }
-
-    public function getVehiculoRegistroRunt1()
-    {
-        $data = $this->db->query("SELECT v.idlinea,lr.idlineaRUNT,lr.nombre FROM vehiculos v,linearunt lr WHERE v.registrorunt=1 AND lr.idlineaRUNT=v.idlinea group by 1");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return false;
-        }
-    }
-
-    public function getVehiculoRegistroRunt2()
-    {
-        $data = $this->db->query("SELECT v.idlinea FROM vehiculos v WHERE v.registrorunt=1 group by 1");
-        if ($data->num_rows() > 0) {
-            return $data;
-        } else {
-            return false;
-        }
-    }
-
-    public function actualizarIdlineaRunt($idlineaOld, $idlineaNew)
-    {
-        $this->db->set('idlinea', $idlineaNew, true);
-        $this->db->where('idlinea', $idlineaOld);
-        $this->db->where('registrorunt', '1');
-        $this->db->update('vehiculos');
-    }
-
-    public function actualizarPropietario($idpropietario, $numero_placa)
-    {
-        $this->db->set('idpropietarios', $idpropietario, true);
-        $this->db->where('numero_placa', $numero_placa);
-        $this->db->update('vehiculos');
-    }
-
-    public function actualizarCliente($idcliente, $numero_placa)
-    {
-        $this->db->set('idcliente', $idcliente, true);
-        $this->db->where('numero_placa', $numero_placa);
-        $this->db->update('vehiculos');
-    }
-
-    public function actualizarAplicaRes2703($autoregulado, $numero_placa)
-    {
-        if ($autoregulado == 'true') {
-            $this->db->set('aplicares2703', '1', true);
-        } else {
-            $this->db->set('aplicares2703', '0', true);
-        }
-        $this->db->where('numero_placa', $numero_placa);
-        $this->db->update('vehiculos');
-    }
-
-    public function actualizarAutoregulado($autoregulado, $numero_placa)
-    {
-        if ($autoregulado == 'true') {
-            $this->db->set('autoregulado', '1', true);
-        } else {
-            $this->db->set('autoregulado', '0', true);
-        }
-        $this->db->where('numero_placa', $numero_placa);
-        $this->db->update('vehiculos');
-    }
-
-    public function borrarLineaRunt()
-    {
-        $this->db->empty_table('linearunt');
-    }
-
-    public function insertarLineaRunt_($linearunt)
-    {
-        $this->db->insert('linearunt', $linearunt);
-    }
-
-    public function getXCRT()
-    {
-        $query = <<<EOF
-              SELECT
-                *
-                FROM hojatrabajo h, vehiculos v
-                WHERE
-                v.idvehiculo=h.idvehiculo AND
-                DATE_FORMAT(h.fechainicial,'%Y-%m-%d') BETWEEN '2019-01-01' AND  '2024-11-31' AND
-                (h.reinspeccion=0 OR h.reinspeccion=1) AND
-                v.imagen<>'OK'
-                ORDER BY h.fechainicial
-                LIMIT 1
-EOF;
-        return $this->db->query($query);
-    }
-
-    public function guardarCRT($data)
-    {
-        $this->db->set('idlinea', $data['idlinearunt'], true);
-        $this->db->set('idcolor', $data['idcolorrunt'], true);
-        $this->db->set('imagen', 'OK', true);
-        $this->db->where('numero_placa', $data['numero_placa']);
-        return $this->db->update('vehiculos');
-    }
-
-    public function BuscarxIdprueba($idprueba)
-    {
-        $placa = "";
-        $query = <<<EOF
-             SELECT v.numero_placa placa FROM hojatrabajo h,pruebas p,vehiculos v WHERE v.idvehiculo=h.idvehiculo AND p.idhojapruebas=h.idhojapruebas AND p.idprueba=$idprueba
-EOF;
-        $query2 = $this->db->query($query);
-        if ($query2->num_rows() > 0) {
-            $rta = $query2->result();
-            $placa = $rta[0]->placa;
-        }
-        return $placa;
-    }
-
-    public function getNewLineas($idlinea)
-    {
-        $lineas = false;
-        $marcas = false;
-        $query = $this->db->query("SELECT * FROM newlineas WHERE idlineas = $idlinea");
-        if ($query->num_rows() > 0) {
-            $res =  $query->result();
-            $lineas = true;
-        } else {
-            $lineas = false;
-        }
-
-        $idmarcas = $res[0]->idmarcas;
-        $query = $this->db->query("SELECT * FROM newmarcas WHERE idmarcas = $idmarcas");
-        if ($query->num_rows() > 0) {
-            $marcas = true;
-        } else {
-            $marcas = false;
-        }
-        return array('lineas' => $lineas, 'marcas' => $marcas);
-        // return array('lineas' => $lineas, 'marcas' => $marcas);
-    }
-
-    public function insertNewLineasMarcas(
-        $lineas,
-        $marcas,
-        $idlineas,
-        $nombre,
-        $codigo_ws,
-        $idmarcas,
-        $nombreMarca
-    ) {
-
-        if (!$lineas) {
-            // echo "No existen lineas";
-            $this->db->insert('newlineas', array(
-                'idlineas' => $idlineas,
-                'nombre' => $nombre,
-                'idmarcas' => $idmarcas,
-                'codigo_ws' => $codigo_ws
-            ));
-        }
-
-        if (!$marcas) {
-            $this->db->insert('newmarcas', array(
-                'idmarcas' => $idmarcas,
-                'nombre' => $nombreMarca
-            ));
-        }
-
-        return true;
-    }
-}
-
-
-
+<?php //004fb
+if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
+?>
+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

@@ -1,185 +1,80 @@
-<?php
-
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-class MPruebas extends CI_Model {
-
-    function __construct() {
-        parent::__construct();
-    }
-
-    function consultarPlaca($placa) {
-        $query = <<<EOF
-            SELECT 
-            v.numero_placa,
-            v.aplicares2703,
-            v.autoregulado,
-            tp.nombre tipo_vehiculo,
-            v.tipo_vehiculo idtipo_vehiculo,
-            tc.idtipocombustible,
-            tc.nombre tipo_combustible,
-            cla.nombre clase,
-            v.idclase,
-            v.idservicio,
-            ifnull(
-            (SELECT 
-            h.idhojapruebas
-            FROM 
-            hojatrabajo h
-            WHERE 
-            h.estadototal=7 AND
-            h.reinspeccion = 0 AND
-            v.idvehiculo=h.idvehiculo AND
-            v.numero_placa = '$placa' AND
-            TIMESTAMPDIFF(minute,h.fechainicial,NOW())<=22320 LIMIT 1)
-            ,IFNULL((SELECT 
-            '2'
-            FROM 
-            hojatrabajo h
-            WHERE 
-            h.estadototal=1 AND
-            (h.reinspeccion = 0 or h.reinspeccion = 1) AND
-            v.idvehiculo=h.idvehiculo AND
-            v.numero_placa = '$placa' AND
-            DATEDIFF(NOW(),h.fechainicial)=0  LIMIT 1)
-            ,'0')) RTEMecReins,
-            ifnull(
-            (SELECT 
-            h.idhojapruebas
-            FROM 
-            hojatrabajo h
-            WHERE 
-            h.estadototal=3 AND
-            h.reinspeccion = 4444 AND
-            v.idvehiculo=h.idvehiculo AND
-            v.numero_placa = '$placa' AND
-            TIMESTAMPDIFF(minute,h.fechainicial,NOW())<=22320 LIMIT 1)
-            ,IFNULL((SELECT 
-            '2'
-            FROM 
-            hojatrabajo h
-            WHERE 
-            h.estadototal=1 AND
-            (h.reinspeccion = 4444 or h.reinspeccion = 44441) AND
-            v.idvehiculo=h.idvehiculo AND
-            v.numero_placa = '$placa' AND
-            DATEDIFF(NOW(),h.fechainicial)=0  LIMIT 1)
-            ,'0')) PreventivaReins,
-            (SELECT 
-               COUNT(*)
-            from 
-                visor v
-            where 
-               v.reinspeccion='8888' and
-               v.placa = '$placa' and
-                v.estadototal = 1 and v.sicov = 0 and v.certificado = 0 AND 
-                 (
-                v.luces = 0 OR 
-                v.gases = 0 OR 
-                v.opacidad = 0 OR 
-                v.sonometro = 0 OR 
-                v.visual = 0 OR 
-                v.camara0 = 0 OR 
-                v.camara1 = 0 OR 
-                v.alineacion = 0 OR 
-                v.frenos = 0 OR 
-                v.suspension = 0 OR 
-                v.taximetro = 0
-                ) and
-                date_format(fecha,"%Y-%m-%d") =CURDATE() LIMIT 1
-                ) PruebaLibreReins,
-            v.taximetro,
-            v.idvehiculo,
-            if(v.registrorunt='0',(select l.nombre from linea l where l.idlinea=v.idlinea limit 1),(select l.nombre from linearunt l where l.idlinearunt=v.idlinea limit 1)) linea,
-            if(v.registrorunt='0',(select m.nombre from linea l,marca m where l.idlinea=v.idlinea and l.idmarca=m.idmarca limit 1),(select m.nombre from linearunt l,marcarunt m where l.idlinearunt=v.idlinea and m.idmarcarunt=l.idmarcarunt limit 1)) marca,
-            v.ano_modelo,
-            if(v.registrorunt='0',(select co.nombre from color co where co.idcolor=v.idcolor limit 1),(select co.nombre from colorrunt co where co.idcolorrunt=v.idcolor limit 1)) color
-            FROM
-            vehiculos v,tipo_vehiculo tp,clase cla,tipo_combustible tc
-            WHERE 
-            v.numero_placa = '$placa' AND
-            tp.idtipo_vehiculo=v.tipo_vehiculo AND
-            cla.idclase=v.idclase and
-            tc.idtipocombustible=v.idtipocombustible
-EOF;
-        $rta = $this->db->query($query);
-        return $rta;
-    }
-
-    function getUltimaFactura() {
-        $query = <<<EOF
-            select factura 
-            from hojatrabajo 
-            where factura<>'0' and 
-                  factura<>'' and 
-                  factura REGEXP '^[0-9]+$' 
-                  order by idhojapruebas desc limit 1
-EOF;
-        $rta = $this->db->query($query);
-        $r = $rta->result();
-        return $r[0]->factura;
-    }
-
-    function validarPrerevision($numero_placa) {
-        $query = <<<EOF
-            SELECT
-            * 
-            FROM 
-                pre_prerevision pp 
-            WHERE
-                pp.numero_placa_ref = '$numero_placa' AND
-                DATE_FORMAT(pp.fecha_prerevision,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d') AND
-                pp.tipo_inspeccion=1
-EOF;
-        $rta = $this->db->query($query);
-        return $rta->num_rows();
-    }
-
-    function validarFactura($noFactura) {
-        $query = <<<EOF
-            select *
-            from hojatrabajo 
-            where factura='$noFactura'
-EOF;
-        $rta = $this->db->query($query);
-        return $rta->num_rows();
-    }
-
-    function getPruebas($idhojaprueba) {
-        $query = <<<EOF
-            SELECT 
-                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=1 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") luxometro,
-                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=2 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") opacidad,
-                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=3 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") gases,
-                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=6 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") taximetro,
-                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=7 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") frenometro,
-                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=9 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") suspension,
-                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=10 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") alineacion,
-                IFNULL((SELECT p.estado FROM pruebas p WHERE p.idhojapruebas=$idhojaprueba AND p.idtipo_prueba=4 AND p.estado<>5 AND p.estado<>9 ORDER BY 1 DESC LIMIT 1),"3") sonometro,
-                IFNULL((SELECT h.pin0 FROM hojatrabajo h WHERE h.idhojapruebas=$idhojaprueba AND h.estadototal<>5 ORDER BY 1 DESC LIMIT 1),"") pin
-EOF;
-        $rta = $this->db->query($query);
-        return $rta;
-    }
-
-    function getEvalTH() {
-        $query = $this->db->query("
-            SELECT 
-            COUNT(*) res
-            FROM 
-            config_maquina c,maquina m 
-            WHERE 
-            c.idmaquina=m.idmaquina AND 
-            m.idtipo_prueba=12 AND
-            c.tipo_parametro='Last Update' AND
-            DATE_FORMAT(c.parametro, '%Y-%m-%d')=CURDATE() AND
-            (JSON_CONTAINS(JSON_OBJECT(
-            'idmaquina',CAST(c.idmaquina AS CHAR(100000)),
-            'tipo_parametro',CAST(c.tipo_parametro AS CHAR(100000)),
-            'parametro',CAST(c.parametro AS CHAR(100000)),
-            'idconfiguracion',CAST(c.idconfiguracion AS CHAR(100000))),
-            AES_DECRYPT(c.descripcion,'3b9a9ca61545411284988f889b9f3d33')))=0");
-        return $query;
-    }
-
-}
+<?php //004fb
+if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
+?>
+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

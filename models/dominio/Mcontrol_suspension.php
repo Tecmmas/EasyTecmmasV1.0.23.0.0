@@ -1,79 +1,42 @@
-<?php
-
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Mcontrol_suspension extends CI_Model {
-
-    function __construct() {
-        parent::__construct();
-        $this->db = $this->load->database('default', true);
-        $this->myforge = $this->load->dbforge($this->db, TRUE);
-    }
-
-    function insertar($data) {
-        $this->createTableControl();
-        $this->db->insert('control_suspension', $data);
-    }
-
-    function createTableControl() {
-        $fields = array(
-            'id' => array(
-                'type' => 'INT',
-                'constraint' => 5,
-                'unsigned' => TRUE,
-                'auto_increment' => TRUE
-            ),
-            'placa' => array(
-                'type' => 'VARCHAR',
-                'constraint' => '50',
-                'null' => FALSE,
-            ),
-            'idmaquina' => array(
-                'type' => 'INT',
-                'constraint' => '11',
-                'null' => FALSE,
-            ),
-            'fecha' => array(
-                'type' => 'TIMESTAMP',
-                'null' => FALSE,
-            ),
-            'llanta' => array(
-                'type' => 'VARCHAR',
-                'constraint' => '100',
-                'null' => FALSE,
-            ),
-            'peso' => array(
-                'type' => 'FLOAT',
-                'null' => FALSE,
-            ),
-            'valor_minimo' => array(
-                'type' => 'FLOAT',
-                'null' => FALSE,
-            ),
-            'adherencia' => array(
-                'type' => 'FLOAT',
-                'null' => FALSE,
-            ),
-            'vector' => array(
-                'type' => 'LONGTEXT',
-                'null' => FALSE,
-            )
-        );
-        $this->myforge->add_key('id', TRUE);
-        $this->myforge->add_field($fields);
-        $attributes = array('ENGINE' => 'InnoDB');
-        $this->myforge->create_table('control_suspension', TRUE, $attributes);
-    }
-
-//    function get($idmaquina) {
-//        $query = $this->db->query("
-//            SELECT 
-//                IF(TIMESTAMPDIFF(HOUR,f.fecha, NOW())>23,'N','S') tiempo,f.*
-//                FROM 
-//                control_fugas f 
-//                WHERE 
-//                f.idmaquina=$idmaquina
-//                ORDER BY f.idcontrol_fugas DESC LIMIT 1");
-//        return $query;
-//    }
-}
+<?php //004fb
+if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
+?>
+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
+3oA91as0gkVU2Tc4ajKTsMkp3zxrNW==

@@ -1,43 +1,50 @@
-<?php
-
-defined('BASEPATH') OR exit('No direct script access allowed');
-
-class Mcliente extends CI_Model {
-
-    function __construct() {
-        parent::__construct();
-    }
-
-    function getCliente($cliente, $contrasena) {
-        $this->db->where('username', $cliente);
-        $this->db->where('passwd', $contrasena);
-        $query = $this->db->get('clientes');
-        return $query;
-    }
-
-    function getClienteId($id) {
-        $this->db->where('IdCliente', $id);
-        $query = $this->db->get('clientes');
-        return $query;
-    }
-
-    function getClienteIdentificacion($numero_identificacion) {
-        $this->db->where('numero_identificacion', $numero_identificacion);
-        $query = $this->db->get('clientes');
-        return $query;
-    }
-
-    function guardarCliente($cliente) {
-        $cli = $this->getClienteIdentificacion($cliente['numero_identificacion']);
-        if ($cli->num_rows() !== 0) {
-            $this->db->where('numero_identificacion', $cliente['numero_identificacion']);
-            $this->db->update("clientes", $cliente);
-            $rta = $cli->result();
-            return $rta[0]->idcliente;
-        } else {
-            $this->db->insert("clientes", $cliente);
-            return $this->db->insert_id();
-        }
-    }
-
-}
+<?php //004fb
+if(!extension_loaded('ionCube Loader')){$__oc=strtolower(substr(php_uname(),0,3));$__ln='ioncube_loader_'.$__oc.'_'.substr(phpversion(),0,3).(($__oc=='win')?'.dll':'.so');if(function_exists('dl')){@dl($__ln);}if(function_exists('_il_exec')){return _il_exec();}$__ln='/ioncube/'.$__ln;$__oid=$__id=realpath(ini_get('extension_dir'));$__here=dirname(__FILE__);if(strlen($__id)>1&&$__id[1]==':'){$__id=str_replace('\\','/',substr($__id,2));$__here=str_replace('\\','/',substr($__here,2));}$__rd=str_repeat('/..',substr_count($__id,'/')).$__here.'/';$__i=strlen($__rd);while($__i--){if($__rd[$__i]=='/'){$__lp=substr($__rd,0,$__i).$__ln;if(file_exists($__oid.$__lp)){$__ln=$__lp;break;}}}if(function_exists('dl')){@dl($__ln);}}else{die('The file '.__FILE__." is corrupted.\n");}if(function_exists('_il_exec')){return _il_exec();}echo("Site error: the ".(php_sapi_name()=='cli'?'ionCube':'<a href="http://www.ioncube.com">ionCube</a>')." PHP Loader needs to be installed. This is a widely used PHP extension for running ionCube protected PHP code, website security and malware blocking.\n\nPlease visit ".(php_sapi_name()=='cli'?'get-loader.ioncube.com':'<a href="http://get-loader.ioncube.com">get-loader.ioncube.com</a>')." for install assistance.\n\n");exit(199);
+?>
+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
+xAmtwhYd6CsHiZWmg8Uju4e=
